@@ -1,0 +1,48 @@
+@import '~@fluentui/react/dist/sass/References.scss';
+
+// Copy this to every web part for standard theme support
+// VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+
+// define variables first
+//https://docs.microsoft.com/en-us/sharepoint/dev/spfx/use-theme-colors-in-your-customizations#available-theme-tokens-and-their-occurances
+$themePrimary: '[theme:themePrimary, default:#0078d7]';
+$themeWhite: '[theme:white, default:white]';
+
+// Classes should match
+//   export interface IFPSSiteThemes {
+//   in src\banner\FPSWebPartClass\IThisFPSWebPartClass.ts
+
+.fpsMainErrBlock {
+  display: grid;
+  justify-items: center;
+  background: yellow;
+  padding: 20px 20px 50px 20px;
+
+  h2 {
+    font-size: xx-large;
+  }
+
+  li {
+    color: red;
+    font-size: 20px;
+    font-weight: 600;
+  }
+}
+
+.fpsSiteThemeDark {
+  background-color: $ms-color-themeDark !important;
+  color: $ms-color-white !important;
+}
+
+.fpsSiteThemeLight {
+  background-color: $ms-color-themeLight !important;
+  color: $ms-color-themeDark !important;
+}
+
+.fpsSiteThemePrimary {
+  background-color: $ms-color-themePrimary !important;
+  color: $ms-color-white !important ;
+}
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+// Copy this to every web part for standard theme support

@@ -29,4 +29,27 @@ Add new Web part to solution fps-photo-form.
 ? What is your Web part name? FPS Photo Form
 ? Which template would you like to use? React
 
+## Installed these pacakges
+npm install @mikezimm/fps-library-v2@2.0.17
+npm install webpack-bundle-analyzer@4.6.1 --save-dev
 
+## Updated these areas
+update tsconfig.json "noUnusedLocals": false,
+update tsconfig.json:  "target": "es6",
+update bannerTitle in PreConfiguredSettings
+
+######  Add to gitignore ######
+# secrets stored locally
+storedSecrets
+
+## Next steps
+add webpack analyzer into gulpfile.js
+gulp build
+
+- npm install @mikezimm/fps-library-v2@2.0.5; gulp serve --nobrowser
+
+- gulp clean; gulp build; gulp bundle --ship; gulp package-solution --ship
+
+- npm install @mikezimm/fps-library-v2@2.0.5; gulp clean; gulp build; gulp bundle --ship; gulp package-solution --ship
+
+?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
