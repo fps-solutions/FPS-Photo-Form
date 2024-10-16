@@ -61,7 +61,7 @@ require('@mikezimm/fps-styles/dist/FPSPinMe.css');
 require('@mikezimm/fps-styles/dist/FPSHeadings.css');
 require('@mikezimm/fps-styles/dist/PropPanelHelp.css');
 require('@mikezimm/fps-styles/dist/performance.css');
-import { analyticsList } from './CoreFPS/Analytics';
+import { analyticsList, AnalyticsOptions } from './CoreFPS/Analytics';
 
 /***
 *    d88888b d8888b. .d8888.      d8888b. d8888b. d88888b .d8888. d88888b d888888b .d8888.
@@ -86,7 +86,7 @@ import { SpecialFinalPageGroups } from '@mikezimm/fps-library-v2/lib/banner/feat
 // import { FPSImportPropsGroup } from "@mikezimm/fps-library-v2/lib/banner/features/ImportExport/ImportFunctions";
 
 import { exportIgnorePropsWP, importBlockPropsWP, WebPartAnalyticsChanges, WebPartPanelChanges,  } from './IFpsPhotoFormWebPartProps';
-import { gitCoreFPS1173, } from '@mikezimm/fps-library-v2/lib/components/atoms/Links/RepoLinks/LinksCore';
+import { gitPhotoForm, } from '@mikezimm/fps-library-v2/lib/components/atoms/Links/RepoLinks/gitPhotoForm';
 //  import { IFpsOldVsNewWebPartProps } from './IFpsOldVsNewWebPartProps';
 import { runFPSSuperOnInit } from '@mikezimm/fps-library-v2/lib/banner/FPSWebPartClass/runSuperOnInit';
 import { runFPSWebPartRender } from '@mikezimm/fps-library-v2/lib/banner/FPSWebPartClass/runWebPartRender';
@@ -124,9 +124,9 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     this._environmentMessage = await this._getEnvironmentMessage();
 
-    this._repoLink = gitCoreFPS1173; //Set as any but will get created in FPSSuperOnOnit
+    this._repoLink = gitPhotoForm; //Set as any but will get created in FPSSuperOnOnit
     this._analyticsListX = analyticsList;
-    // this._analyticsOptionsX = AnalyticsOptions;  // Add this if you have multiple lists
+    this._analyticsOptionsX = AnalyticsOptions;  // Add this if you have multiple lists
 
     this._fpsSiteThemes = stylesFPS;
     this._exportIgnorePropsWP = exportIgnorePropsWP;

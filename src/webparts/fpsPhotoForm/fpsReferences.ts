@@ -46,7 +46,7 @@ export { sortObjectArrayByNumberKey, } from '@mikezimm/fps-library-v2/lib/logic/
 // export { getNumberArrayFromString } from '@mikezimm/fps-library-v2/lib/logic/Strings/arraysFromString';
 
 
-export { gitCoreFPS1173 } from '@mikezimm/fps-library-v2/lib/components/atoms/Links/RepoLinks/LinksCore';
+export { gitPhotoForm } from '@mikezimm/fps-library-v2/lib/components/atoms/Links/RepoLinks/gitPhotoForm';
 
 
 /**
