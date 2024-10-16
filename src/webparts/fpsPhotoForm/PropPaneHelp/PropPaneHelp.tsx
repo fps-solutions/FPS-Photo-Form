@@ -4,9 +4,9 @@ import { PivotItem, } from '@fluentui/react/lib/Pivot';
 
 export function getWebPartHelpElementBoxTiles (  ): JSX.Element {
 
-  const WebPartHelpElement = <PivotItem headerText={ 'CoreFPS1173' } >
+  const WebPartHelpElement = <PivotItem headerText={ 'Photo Form' } >
     <div className={ 'fps-pph-content' }>
-        <div className={ 'fps-pph-topic' }>Box Tiles</div>
+        <div className={ 'fps-pph-topic' }>Photo Form</div>
       </div>
     </PivotItem>;
 

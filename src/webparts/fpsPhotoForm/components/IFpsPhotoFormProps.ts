@@ -5,6 +5,8 @@ import { IFPSCorePinMeReactComponentState } from '@mikezimm/fps-core-v7/lib/bann
 
 import { ILoadPerformance } from '../fpsReferences';
 
+export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
+
 export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps {
   description: string;
   isDarkTheme: boolean;

@@ -97,15 +97,12 @@ import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPar
 import { FPSListItemPickerGroup, } from '@mikezimm/fps-library-v2/lib/banner/components/ItemPicker/FPSListItemPickerGroup';
 import { onwebUrlPickerValueChanged } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/functions/onWebUrlPickerValueChanged';
 import { onListPickerChanged } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/functions/onListPickerChanged';
-import { onListItemPickerChanged } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/functions/onListItemPickerChanged';
 import { onListItemPropPaneStart } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/functions/onListItemPropPaneStart';
 
 import { panelVersionNumber } from './HelpPanel/About';
 import { FPSCert } from './CoreFPS/fpsCert';
 import { IFPSCert } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IFPSCert';
 import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
-
-
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -150,7 +147,6 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // this._FieldPanelListProp = 'listTitle';
 
     this._allowSiteThemeChoice = true;  // Should be set true by default in fps-library-v2 1.0.78
-    this._allowPinMe = true;
     this._panelVersion = panelVersionNumber;
 
     // Consume the new ThemeProvider service
@@ -290,9 +286,9 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // If required add approvedSites into approvedSites[] or set to just [] to allow any site
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await onwebUrlPickerValueChanged( this as any, propertyPath, oldValue, newValue, [], );
+    await onwebUrlPickerValueChanged( this as any, propertyPath, oldValue, newValue, [], '100' );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await onListPickerChanged( this as any, propertyPath, oldValue, newValue, );
+    await onListPickerChanged( this as any, false, propertyPath, oldValue, newValue, );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // await onListItemPickerChanged( this as any, propertyPath, oldValue, newValue, );
 
@@ -309,7 +305,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     const { enableLockProps, propsEasyMode } = this.properties;
 
-    let groups: IPropertyPaneGroup[] = [ WebPartInfoGroup( thisAsAny, WPInfoLabel, PropertyPaneWebPartInformation ) ];
+    const groups: IPropertyPaneGroup[] = [ WebPartInfoGroup( thisAsAny, WPInfoLabel, PropertyPaneWebPartInformation ) ];
 
     // LOOCKPROOPS REFACTOR:  ADD THIS Loop for LockProps Message group
     if ( enableLockProps === true ) {
@@ -323,18 +319,18 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
       const FPSGroups: IPropertyPaneGroup[] = getAllDefaultFPSFeatureGroups ( thisAsAny );
 
+      groups.push( FPSListItemPickerGroup( 'List Picker', false, thisAsAny ) );
+
       // LOOCKPROOPS REFACTOR:  ADD THIS Loop for all other groups
       if ( propsEasyMode !== true ) {
         // Custom groups for this webpart
-        groups = [ ...groups, FPSListItemPickerGroup( 'File Picker', thisAsAny ), ];
-
-        groups.push(...FPSGroups);
+        // groups = [ ...groups, ];
 
       } else {
-        groups.push(...FPSGroups);
         // groups.push(FPSImportPropsGroup);
-      }
 
+      }
+      groups.push(...FPSGroups);
     }
 
     return {

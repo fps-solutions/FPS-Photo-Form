@@ -8,7 +8,7 @@ import {
   IPropertyPaneGroup,
   PropertyPaneToggle,
   IPropertyPaneField,
-  PropertyPaneTextField,
+  // PropertyPaneTextField,
 } from '@microsoft/sp-property-pane';
 
 // import * as strings from 'PivotTiles20WebPartStrings';
@@ -19,8 +19,8 @@ import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPar
 export function buildEasyModeGroup( thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const thisProps: any = thisWPClass.properties as IFpsPhotoFormWebPartProps;
-  const { enableTabs } = thisProps;
+  // const thisProps: any = thisWPClass.properties as IFpsPhotoFormWebPartProps;
+  // const { enableTabs } = thisProps;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupFields: IPropertyPaneField<any>[] = [];

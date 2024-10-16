@@ -3,7 +3,7 @@
   "solution": {
     "name": "fps-photo-form-client-side-solution",
     "id": "836911c3-e3de-4861-9b6d-5509dc95c5bb",
-    "version": "1.0.0.0",
+    "version": "0.0.1.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "fps-photo-form Feature",
         "description": "The feature that activates elements of the fps-photo-form solution.",
         "id": "e51c3d80-4c2a-4543-ad36-b67bb26dea31",
-        "version": "1.0.0.0"
+        "version": "0.0.1.0"
       }
     ]
   },
