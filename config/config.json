@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "fps-photo-form-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/fpsPhotoForm/FpsPhotoFormWebPart.js",
+          "manifest": "./src/webparts/fpsPhotoForm/FpsPhotoFormWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "FpsPhotoFormWebPartStrings": "lib/webparts/fpsPhotoForm/loc/{locale}.js"
+  }
+}

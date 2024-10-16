@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "fps-photo-form-client-side-solution",
+    "id": "836911c3-e3de-4861-9b6d-5509dc95c5bb",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.17.3"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "FPS Photo Form description"
+      },
+      "longDescription": {
+        "default": "FPS Photo Form description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "fps-photo-form Feature",
+        "description": "The feature that activates elements of the fps-photo-form solution.",
+        "id": "e51c3d80-4c2a-4543-ad36-b67bb26dea31",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/fps-photo-form.sppkg"
+  }
+}

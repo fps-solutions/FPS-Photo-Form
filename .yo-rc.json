@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "14.17.6",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.9.1"
+    },
+    "version": "1.17.3",
+    "libraryName": "fps-photo-form",
+    "libraryId": "836911c3-e3de-4861-9b6d-5509dc95c5bb",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "FPS Photo Form",
+    "solutionShortDescription": "FPS Photo Form description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
