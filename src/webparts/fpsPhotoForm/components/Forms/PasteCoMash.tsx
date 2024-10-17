@@ -7,7 +7,7 @@ const ListTitle: string = 'PhotoFormMC';
 
 export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
-    const [formData, setFormData] = useState({ title: '' });
+    const [formData, setFormData] = useState({ title: '', x: 0, y: 0, z: 0 });
 
     // Handle pasting the image from the clipboard
     const handlePaste = (e: ClipboardEvent) => {
@@ -152,6 +152,22 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
                 <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
             </div>
+            <div style={{ margin: '1em' }}>
+                <label>X</label>
+                <input type="number" value={formData.x} onChange={e => setFormData({ ...formData, x: Number(e.target.value) })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
+            </div>
+            <div style={{ margin: '1em' }}>
+                <label>Y</label>
+                <input type="number" value={formData.y} onChange={e => setFormData({ ...formData, y: Number(e.target.value) })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
+            </div>
+            <div style={{ margin: '1em' }}>
+                <label>Z</label>
+                <input type="number" value={formData.z} onChange={e => setFormData({ ...formData, z: Number(e.target.value) })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
+            </div>
+
             <div style={{ margin: '1em' }}>
                 <button type="submit">Submit</button>
             </div>
