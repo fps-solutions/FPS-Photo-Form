@@ -1,33 +1,12 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl'
 
-const FileUpload: React.FC = () => {
+const FileUpload3: React.FC = () => {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
 
-    useEffect(() => {
-        const handlePaste = (e: ClipboardEvent) => {
-            const clipboardItems = e.clipboardData?.items;
-            for (let i = 0; i < clipboardItems?.length; i++) {
-                if (clipboardItems[i].type.indexOf('image') !== -1) {
-                    const file = clipboardItems[i].getAsFile();
-                    const reader = new FileReader();
-                    reader.onloadend = function () {
-                        setImageSrc(reader.result as string);
-                        uploadToSharePoint(reader.result as string);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        };
-
-        document.addEventListener('paste', handlePaste);
-        return () => {
-            document.removeEventListener('paste', handlePaste);
-        };
-    }, []);
-
-    const uploadToSharePoint = async (base64Image: string) => {
-        const siteUrl = "https://your-sharepoint-site-url";
+    const uploadToSharePoint = useCallback(async (base64Image: string) => {
+        const siteUrl = "https://fuzzypawstech.sharepoint.com/sites/PhotoFormWebpart";
         const libraryRelativeUrl = "SiteAssets";
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const fileName = `image_${timestamp}.png`;
@@ -39,28 +18,62 @@ const FileUpload: React.FC = () => {
         }
         const blob = new Blob([new Uint8Array(array)], { type: 'image/png' });
 
-        const fileReader = new FileReader();
-        fileReader.onload = async () => {
-            const buffer = fileReader.result as ArrayBuffer;
+        return new Promise<void>((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.onloadend = async () => {
+                const buffer = fileReader.result as ArrayBuffer;
 
-            const response = await fetch(`${siteUrl}/_api/web/GetFolderByServerRelativeUrl('${libraryRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json; odata=verbose',
-                    'X-RequestDigest': document.getElementById('__REQUESTDIGEST')!.value,
-                    'Content-Length': buffer.byteLength.toString()
-                },
-                body: buffer
-            });
+                try {
+                  const requestDigest = await getThisFPSDigestValueFromUrl(siteUrl);
 
-            if (response.ok) {
-                console.log('File uploaded successfully');
-            } else {
-                console.error('File upload failed');
+                    const response = await fetch(`${siteUrl}/_api/web/GetFolderByServerRelativeUrl('${libraryRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
+                        method: 'POST',
+                        headers: {
+                            'Accept': 'application/json; odata=verbose',
+                            'X-RequestDigest': requestDigest,
+                            'Content-Length': buffer.byteLength.toString()
+                        },
+                        body: buffer
+                    });
+
+                    if (response.ok) {
+                        console.log('File uploaded successfully');
+                        resolve();
+                    } else {
+                        console.error('File upload failed');
+                        reject(new Error('File upload failed'));
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    reject(error);
+                }
+            };
+            fileReader.readAsArrayBuffer(blob);
+        });
+    }, []);
+
+    useEffect(() => {
+        const handlePaste = (e: ClipboardEvent) => {
+            const clipboardItems = e.clipboardData?.items;
+            for (let i = 0; i < clipboardItems?.length; i++) {
+                if (clipboardItems[i].type.indexOf('image') !== -1) {
+                    const file = clipboardItems[i].getAsFile();
+                    const reader = new FileReader();
+                    reader.onloadend = async function () {
+                        const base64Image = reader.result as string;
+                        setImageSrc(base64Image);
+                        await uploadToSharePoint(base64Image);
+                    };
+                    reader.readAsDataURL(file);
+                }
             }
         };
-        fileReader.readAsArrayBuffer(blob);
-    };
+
+        document.addEventListener('paste', handlePaste);
+        return () => {
+            document.removeEventListener('paste', handlePaste);
+        };
+    }, [uploadToSharePoint]);
 
     return (
         <div>
@@ -69,4 +82,4 @@ const FileUpload: React.FC = () => {
     );
 };
 
-export default FileUpload;
+export default FileUpload3;

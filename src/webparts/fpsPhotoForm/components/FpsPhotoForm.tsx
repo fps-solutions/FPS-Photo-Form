@@ -22,6 +22,7 @@ import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsRe
 import ScreenshotForm from './Forms/Paste';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import FileUpload from './Forms/Paste2';
+import FileUpload3 from './Forms/Paste3';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -273,7 +274,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
               /> */}
 
-              <FileUpload />
+              <FileUpload3 />
 
               {/* <div className={styles.welcome}>
                 <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
