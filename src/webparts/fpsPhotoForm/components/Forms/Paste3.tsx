@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl'
 
-const FileUpload3: React.FC = () => {
+const FileUpload: React.FC = () => {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
+    const fileReaderRef = useRef<FileReader | null>(null);
 
     const uploadToSharePoint = useCallback(async (base64Image: string) => {
         const siteUrl = "https://fuzzypawstech.sharepoint.com/sites/PhotoFormWebpart";
@@ -25,7 +26,6 @@ const FileUpload3: React.FC = () => {
 
                 try {
                   const requestDigest = await getThisFPSDigestValueFromUrl(siteUrl);
-
                     const response = await fetch(`${siteUrl}/_api/web/GetFolderByServerRelativeUrl('${libraryRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
                         method: 'POST',
                         headers: {
@@ -52,6 +52,12 @@ const FileUpload3: React.FC = () => {
         });
     }, []);
 
+    const handleUploadClick = async () => {
+        if (imageSrc) {
+            await uploadToSharePoint(imageSrc);
+        }
+    };
+
     useEffect(() => {
         const handlePaste = (e: ClipboardEvent) => {
             const clipboardItems = e.clipboardData?.items;
@@ -59,10 +65,9 @@ const FileUpload3: React.FC = () => {
                 if (clipboardItems[i].type.indexOf('image') !== -1) {
                     const file = clipboardItems[i].getAsFile();
                     const reader = new FileReader();
-                    reader.onloadend = async function () {
+                    reader.onloadend = function () {
                         const base64Image = reader.result as string;
                         setImageSrc(base64Image);
-                        await uploadToSharePoint(base64Image);
                     };
                     reader.readAsDataURL(file);
                 }
@@ -73,13 +78,14 @@ const FileUpload3: React.FC = () => {
         return () => {
             document.removeEventListener('paste', handlePaste);
         };
-    }, [uploadToSharePoint]);
+    }, []);
 
     return (
         <div>
+            {imageSrc && <button onClick={handleUploadClick}>Save to SharePoint</button>}
             {imageSrc && <img src={imageSrc} alt="Pasted Image" style={{ maxWidth: '100%', height: 'auto' }} />}
         </div>
     );
 };
 
-export default FileUpload3;
+export default FileUpload;
