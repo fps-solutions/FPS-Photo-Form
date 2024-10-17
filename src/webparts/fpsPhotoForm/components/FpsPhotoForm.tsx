@@ -277,6 +277,11 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
               <ScreenshotFormMash
                 SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
+                ListTitle={ 'PhotoFormMC' }
+                LibraryName={ 'SiteAssets' }
+                Category1s={ [ 'Overworld', 'Nether', 'End' ] }
+                Category2s={ [ 'Desert', 'Jungle', 'Mountain' ] }
+                Category3s={ [ 'Village', 'Mineshaft', 'Base', 'Wreck' ] }
               />
 
               {/* <div className={styles.welcome}>

@@ -5,9 +5,28 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 // Constants for the list title
 const ListTitle: string = 'PhotoFormMC';
 
-export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
+export interface IPhotoFormForm  {
+  SiteUrl: string;
+  ListTitle: string;
+  LibraryName: string;
+  Category1s: string[];
+  Category2s: string[];
+  Category3s: string[];
+}
+
+// interface FileUploadProps {
+//   siteUrl: string;
+// }
+
+// const FileUpload: React.FC<FileUploadProps> = ({ siteUrl }) => {
+
+const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
+  const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
+// export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
-    const [formData, setFormData] = useState({ title: '', x: 0, y: 0, z: 0 });
+    const [formData, setFormData] = useState({ category1: 0, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 });
+    const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
+    const [cats2Title, setCats2Title ] = useState<boolean>(false);
 
     // Handle pasting the image from the clipboard
     const handlePaste = (e: ClipboardEvent) => {
@@ -58,7 +77,7 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
             fileReader.onloadend = async () => {
                 const buffer = fileReader.result as ArrayBuffer;
                 try {
-                    const response = await fetch(`${SiteUrl}/_api/web/GetFolderByServerRelativeUrl('SiteAssets')/Files/add(url='${fileName}', overwrite=true)`, {
+                    const response = await fetch(`${SiteUrl}/_api/web/GetFolderByServerRelativeUrl('${LibraryName}')/Files/add(url='${fileName}', overwrite=true)`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json; odata=verbose',
@@ -116,7 +135,13 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
         }
 
         const listItemResponse = await createListItem(formData.title);
-        const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}.png`;
+        let fileDesc = [ `${ Category1s[formData.category1 ]}` ];
+        fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
+        formData.category2.map( idx => { if ( formData.title.indexOf( Category2s[ idx ] ) < 0 ) fileDesc.push( Category2s[ idx ] ); });
+        formData.category3.map( idx => { if ( formData.title.indexOf( Category3s[ idx ] ) < 0 ) fileDesc.push( Category3s[ idx ] ); });
+        fileDesc.push( `${formData.title}` );
+
+        const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}_${ fileDesc.join('_') }.png`;
         const blob = base64ToBlob(imageData);
         const imageUrl = await uploadImageToLibrary(blob, fileName);
 
@@ -147,10 +172,35 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
                     <li>SiteAssets library {`Titled as "Site Assets" with the space - should be default`}</li>
                 </ul>
             </div>
+
+            <div style={{ margin: '1em', display: 'flex', gap: '1em' }}>
+              <div style={{ margin: '1em' }}>
+                <label>Category 1</label>
+                <div>
+                  {Category1s.map((category, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, category1: index })}
+                      style={{ margin: '0.5em', background: formData.category1 === index ? 'darkgreen' : '', color: formData.category1 === index ? 'white' : '',  }}
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+
             <div style={{ margin: '1em' }}>
                 <label>Title</label>
                 <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
+            </div>
+            <div style={{ margin: '1em' }}>
+                <label>Comments</label>
+                <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: '100%', height: '100px' }} />
             </div>
             <div style={{ margin: '1em' }}>
                 <label>X</label>
@@ -180,3 +230,5 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
         </form>
     );
 }
+
+export default ScreenshotFormMash;
