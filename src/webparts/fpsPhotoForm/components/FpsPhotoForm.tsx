@@ -19,6 +19,8 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
+import ScreenshotForm from './Forms/Paste';
+
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
 
@@ -264,20 +266,25 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
         {/* { TestElement } */}
 
         { checkCert( bannerProps ) === true ? <div>
-            <div className={styles.welcome}>
-              <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
-                src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-              <h2>Well done, {escape(userDisplayName)}!</h2>
-              <div>{environmentMessage}</div>
-              <div>Web part property value: <strong>{escape(description)}</strong></div>
-            </div>
-            <div>
-              <h3>Welcome to SharePoint Framework!</h3>
-              <p>
-                The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-              </p>
 
-            </div></div> : undefined }
+              <ScreenshotForm />
+
+              {/* <div className={styles.welcome}>
+                <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
+                  src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
+                <h2>Well done, {escape(userDisplayName)}!</h2>
+                <div>{environmentMessage}</div>
+                <div>Web part property value: <strong>{escape(description)}</strong></div>
+              </div>
+              <div>
+                <h3>Welcome to SharePoint Framework!</h3>
+                <p>
+                  The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
+                </p>
+
+              </div> */}
+
+            </div> : undefined }
           </section>
 
     );
