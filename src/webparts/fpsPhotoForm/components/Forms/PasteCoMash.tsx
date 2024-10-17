@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, FormEvent, useEffect, useCallback } from 'react';
+import { useState, FormEvent, useEffect, } from 'react';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl'
 
 // Constants for the list title
@@ -84,7 +84,7 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     };
 
     // Update list item with image URL
-    const updateListItemWithImage = async (itemId: number, imageUrl: string) => {
+    const updateListItemWithImage = async (itemId: number, imageUrl: string):Promise<void> => {
         const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
         const body = { ScreenshotUrl: imageUrl }; // Assuming ScreenshotUrl is the name of your image column
         try {
@@ -129,7 +129,7 @@ export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     };
 
     useEffect(() => {
-        const handleClipboard = (e: ClipboardEvent) => handlePaste(e);
+        const handleClipboard = (e: ClipboardEvent): void => handlePaste(e);
         document.addEventListener('paste', handleClipboard);
         return () => {
             document.removeEventListener('paste', handleClipboard);
