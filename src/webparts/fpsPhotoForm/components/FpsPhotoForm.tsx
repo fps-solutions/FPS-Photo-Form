@@ -274,7 +274,9 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
               /> */}
 
-              <FileUpload3 />
+              <FileUpload3
+                siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
+              />
 
               {/* <div className={styles.welcome}>
                 <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}

@@ -1,16 +1,20 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl'
+import { useState, useEffect, useCallback } from 'react';
+import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 
-const FileUpload: React.FC = () => {
+interface FileUploadProps {
+    siteUrl: string;
+}
+
+const FileUpload: React.FC<FileUploadProps> = ({ siteUrl }) => {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
-    const fileReaderRef = useRef<FileReader | null>(null);
 
     const uploadToSharePoint = useCallback(async (base64Image: string) => {
-        const siteUrl = "https://fuzzypawstech.sharepoint.com/sites/PhotoFormWebpart";
         const libraryRelativeUrl = "SiteAssets";
         const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
         const fileName = `image_${timestamp}.png`;
+
+        const requestDigest = await getThisFPSDigestValueFromUrl(siteUrl);
 
         const binary = atob(base64Image.split(',')[1]);
         const array = [];
@@ -25,7 +29,6 @@ const FileUpload: React.FC = () => {
                 const buffer = fileReader.result as ArrayBuffer;
 
                 try {
-                  const requestDigest = await getThisFPSDigestValueFromUrl(siteUrl);
                     const response = await fetch(`${siteUrl}/_api/web/GetFolderByServerRelativeUrl('${libraryRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
                         method: 'POST',
                         headers: {
@@ -50,7 +53,7 @@ const FileUpload: React.FC = () => {
             };
             fileReader.readAsArrayBuffer(blob);
         });
-    }, []);
+    }, [siteUrl]);
 
     const handleUploadClick = async () => {
         if (imageSrc) {
