@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 
+// THIS DOES SAVE IMAGE TO local drive and it is correct!
+
 const FileUpload: React.FC = () => {
     const [imageSrc, setImageSrc] = useState<string | null>(null);
 
