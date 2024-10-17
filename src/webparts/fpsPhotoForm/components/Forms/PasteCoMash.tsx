@@ -161,6 +161,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         };
     }, []);
 
+    const numberFields = ['x', 'y', 'z'];
+
     return (
         <form onSubmit={handleSubmit} onPaste={handlePaste as any}>
             <div style={{ margin: '1em' }}>
@@ -202,6 +204,27 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em', width: '100%', height: '100px' }} />
             </div>
+
+            {numberFields.map(field => (
+              <div key={field} style={{ margin: '1em' }}>
+                <label>{field.toUpperCase()}</label>
+                <input
+                  type="text"
+                  value={formData[ `${field}` as 'x' ]}
+                  onChange={e => {
+                    const value = e.target.value;
+                    if (value === '' || /^-?\d*\.?\d*$/.test(value)) {
+                      setFormData({ ...formData, [field]: value });
+                    }
+                  }}
+                  onBlur={() => {
+                    setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'x' ]) });
+                  }}
+                  style={{ paddingLeft: '.5em', marginLeft: '1em' }}
+                />
+              </div>
+            ))}
+{/*
             <div style={{ margin: '1em' }}>
                 <label>X</label>
                 <input type="number" value={formData.x} onChange={e => setFormData({ ...formData, x: Number(e.target.value) })}
@@ -216,7 +239,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 <label>Z</label>
                 <input type="number" value={formData.z} onChange={e => setFormData({ ...formData, z: Number(e.target.value) })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div>
+            </div> */}
 
             <div style={{ margin: '1em' }}>
                 <button type="submit">Submit</button>
