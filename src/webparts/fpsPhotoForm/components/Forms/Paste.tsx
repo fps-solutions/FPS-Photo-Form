@@ -45,7 +45,9 @@ export default function ScreenshotForm() {
   const updateListItemWithImage = async (itemId: number, imageData: string) => {
     const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
 
-    // Send the base64 image data directly as a string for the Image column
+    // Log the base64 image data before sending it
+    console.log('Updating image data with base64:', imageData);
+
     const body = {
       Screenshot: imageData // Directly pass base64 image data as a string
     };
