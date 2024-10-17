@@ -46,6 +46,16 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     // Create list item in SharePoint
     const createListItem = async (title: string): Promise<any> => {
         const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+
+        const saveItem = {
+          Title: title,
+          Category1: Category1s[ formData.category1 ],
+          CoordX: formData.x,
+          CoordY: formData.y,
+          CoordZ: formData.z,
+          Notes: formData.comments,
+        }
+
         const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items`, {
             method: 'POST',
             headers: {
@@ -53,7 +63,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 'Content-Type': 'application/json',
                 'X-RequestDigest': requestDigest
             },
-            body: JSON.stringify({ Title: title })
+            body: JSON.stringify( saveItem )
         });
         const data = await response.json();
         return data;
