@@ -23,6 +23,7 @@ import ScreenshotForm from './Forms/Paste';
 import { WebPartContext } from '@microsoft/sp-webpart-base';
 import FileUpload from './Forms/Paste2';
 import FileUpload3 from './Forms/Paste3';
+import ScreenshotFormMash from './Forms/PasteCoMash';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -274,8 +275,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
               /> */}
 
-              <FileUpload3
-                siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
+              <ScreenshotFormMash
+                SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
               />
 
               {/* <div className={styles.welcome}>
