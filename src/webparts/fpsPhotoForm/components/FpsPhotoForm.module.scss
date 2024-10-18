@@ -32,3 +32,112 @@
     }
   }
 }
+
+.button, .submitButton {
+  margin: 0.5em;
+  padding: 0.5em 1em;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.button.selected {
+  // border-color: yellow; /* Highlight border color */
+  // box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); /* Optional: Add a glow effect */
+
+  border-color: #373737; /* Darker border color */
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Inset shadow for pressed effect */
+  transform: translate(1px, 3px); /* Slightly move the button down */
+}
+.submitButton {
+  transition: all 0.5s ease;
+  font-size: x-large;
+  padding: 1em 2em;
+  margin-left: 0px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+.submitButton:hover {
+  // border-color: yellow; /* Highlight border color */
+  // box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); /* Optional: Add a glow effect */
+  background: rgb(122, 255, 122);
+  border-color: #373737; /* Darker border color */
+}
+
+.fpsPhotoFormGrid {
+  margin: 1em 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "title"
+    "category1"
+    "coordinates"
+    "comments"
+    "category2"
+    "category3"
+    "summary"
+    "submit"
+    "imagePreview"
+    "spacer";
+  gap: 1em;
+}
+
+.fpsPhotoFormGrid > * {
+  align-self: start;
+}
+
+@media (min-width: 1000px) {
+  .fpsPhotoFormGrid {
+    grid-template-columns: 1fr 1fr 175px 175px;
+    grid-template-areas:
+      "category1 category1 category2 category3"
+      "title title category2 category3"
+      "coordinates coordinates category2 category3"
+      "comments comments category2 category3"
+      "summary summary category2 category3"
+      "submit imagePreview category2 category3"
+      "spacer spacer category2 category3";
+  }
+}
+
+.title {
+  grid-area: title;
+}
+
+.comments {
+  grid-area: comments;
+}
+
+.coordinates {
+  display: flex;
+  grid-area: coordinates;
+}
+
+.category1 {
+  grid-area: category1;
+}
+
+.category2 {
+  grid-area: category2;
+}
+
+.category3 {
+  grid-area: category3;
+}
+
+.submit {
+  grid-area: submit;
+}
+
+.imagePreview {
+  grid-area: imagePreview;
+}
+
+.summary {
+  grid-area: summary;
+}
+
+.spacer {
+  grid-area: spacer;
+  height: 200px;
+}
