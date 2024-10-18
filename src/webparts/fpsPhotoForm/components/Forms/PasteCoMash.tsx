@@ -73,8 +73,14 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         const saveItem = {
           Title: title,
           Category1: Category1s[ formData.category1 ],
-          Category2: formData.category2.map( idx => Category2s[ idx ] ),
-          Category3: formData.category3.map( idx => Category3s[ idx ] ),
+          Category2: {
+            "__metadata": { "type": "Collection(Edm.String)" },
+            "results": formData.category2.map( idx => Category2s[ idx ] )
+          },
+          Category3:  {
+            "__metadata": { "type": "Collection(Edm.String)" },
+            "results": formData.category3.map( idx => Category3s[ idx ] )
+          },
           CoordX: formData.x,
           CoordY: formData.y,
           CoordZ: formData.z,
