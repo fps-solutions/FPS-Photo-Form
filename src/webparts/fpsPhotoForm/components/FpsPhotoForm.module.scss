@@ -51,6 +51,10 @@
 }
 .submitButton {
   transition: all 0.5s ease;
+  font-size: x-large;
+  padding: 1em 2em;
+  margin-left: 0px;
+  font-weight: 600;
   border: 1px solid transparent;
 }
 .submitButton:hover {

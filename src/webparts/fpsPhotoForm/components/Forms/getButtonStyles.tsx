@@ -57,7 +57,7 @@ const ButtonStylesMinecraftBiomes = [
   },
   {
     label: 'Moo Shroom',
-    styles: { background: '#bc8f8f', color: 'red' }
+    styles: { background: '#bc8f8f', color: 'darkred' }
   },
 ];
 const ButtonStylesMinecraftDimensions = [

@@ -278,7 +278,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
             <div className={ styles.comments }style={{  }}>
                 <label>Comments</label>
                 <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: '100%', height: '100px' }} />
+                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
             </div>
 
 
@@ -353,7 +353,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 </div>
               </div>
 
-              <div className={ styles.submit } style={{ margin: '1em' }}>
+              <div className={ styles.submit } style={{ margin: '1em 1em 1em 0em' }}>
                 <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
               </div>
               {imageData && (
