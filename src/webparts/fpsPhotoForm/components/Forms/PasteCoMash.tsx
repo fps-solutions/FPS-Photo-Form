@@ -1,9 +1,31 @@
 import * as React from 'react';
 import { useState, FormEvent, useEffect, } from 'react';
-import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl'
+import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 
-// Constants for the list title
-const ListTitle: string = 'PhotoFormMC';
+import styles from '../FpsPhotoForm.module.scss';
+
+const ButtonStyles = [
+  {
+    label: 'Overworld',
+    styles: { background: 'green', color: 'white' }
+  },
+  {
+    label: 'Nether',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'End',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+];
+
+export function getButtonStyles( label: string ): any {
+  let results = {};
+  ButtonStyles.map( but => {
+    if ( but.label === label ) results = but.styles;
+  });
+  return results;
+}
 
 export interface IPhotoFormForm  {
   SiteUrl: string;
@@ -171,6 +193,36 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         };
     }, []);
 
+    const handleCategory2Click = (index: number) => {
+      setFormData(prevFormData => {
+        const indexInArray = prevFormData.category2.indexOf(index);
+        let newCategory2;
+        if (indexInArray > -1) {
+          // Remove the index if it's already in the array
+          newCategory2 = prevFormData.category2.filter(i => i !== index);
+        } else {
+          // Add the index if it's not in the array
+          newCategory2 = [...prevFormData.category2, index];
+        }
+        return { ...prevFormData, category2: newCategory2 };
+      });
+    };
+
+    const handleCategory3Click = (index: number) => {
+      setFormData(prevFormData => {
+        const indexInArray = prevFormData.category3.indexOf(index);
+        let newCategory3;
+        if (indexInArray > -1) {
+          // Remove the index if it's already in the array
+          newCategory3 = prevFormData.category3.filter(i => i !== index);
+        } else {
+          // Add the index if it's not in the array
+          newCategory3 = [...prevFormData.category3, index];
+        }
+        return { ...prevFormData, category3: newCategory3 };
+      });
+    };
+
     const numberFields = ['x', 'y', 'z'];
 
     return (
@@ -191,10 +243,11 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 <div>
                   {Category1s.map((category, index) => (
                     <button
+                      className={ formData.category1 === index ? [ styles.button, styles.selected ].join(' ') : styles.button }
                       key={index}
                       type="button"
                       onClick={() => setFormData({ ...formData, category1: index })}
-                      style={{ margin: '0.5em', background: formData.category1 === index ? 'darkgreen' : '', color: formData.category1 === index ? 'white' : '',  }}
+                      style={ {...{ }, ...getButtonStyles( Category1s[ index ] ) } }
                     >
                       {category}
                     </button>
@@ -202,7 +255,6 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 </div>
               </div>
             </div>
-
 
             <div style={{ margin: '1em' }}>
                 <label>Title</label>
@@ -260,6 +312,41 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                     <img src={imageData} alt="Pasted Image" style={{ maxWidth: '300px' }} />
                 </div>
             )}
+
+              <div style={{ margin: '1em' }} className={ styles.category2Buttons }>
+                <label>Category 2</label>
+                <div>
+                {Category2s.map((category, index) => (
+                  <button
+                    className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
+                    key={index}
+                    type="button"
+                    onClick={() => handleCategory2Click(index)}
+                    style={ {...{ }, ...getButtonStyles( Category2s[ index ] ) } }
+                  >
+                    {category}
+                  </button>
+                ))}
+                </div>
+              </div>
+
+              <div style={{ margin: '1em' }} className={ styles.category3Buttons }>
+                <label>Category 3</label>
+                <div>
+                {Category3s.map((category, index) => (
+                  <button
+                    className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
+                    key={index}
+                    type="button"
+                    onClick={() => handleCategory3Click(index)}
+                    style={ {...{ }, ...getButtonStyles( Category3s[ index ] ) } }
+                  >
+                    {category}
+                  </button>
+                ))}
+                </div>
+              </div>
+
         </form>
     );
 }
