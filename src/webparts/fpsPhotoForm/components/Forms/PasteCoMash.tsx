@@ -72,6 +72,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         const saveItem = {
           Title: title,
           Category1: Category1s[ formData.category1 ],
+          Category2: formData.category2.map( idx => Category2s[ idx ] ),
+          Category3: formData.category3.map( idx => Category3s[ idx ] ),
           CoordX: formData.x,
           CoordY: formData.y,
           CoordZ: formData.z,
@@ -226,7 +228,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     const numberFields = ['x', 'y', 'z'];
 
     return (
-        <form onSubmit={handleSubmit} onPaste={handlePaste as any}>
+        <form className={ }
+          onSubmit={handleSubmit} onPaste={handlePaste as any}>
             <div style={{ margin: '1em' }}>
                 <h4>Expecting the following site structure</h4>
                 <ul>
@@ -286,22 +289,6 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 />
               </div>
             ))}
-{/*
-            <div style={{ margin: '1em' }}>
-                <label>X</label>
-                <input type="number" value={formData.x} onChange={e => setFormData({ ...formData, x: Number(e.target.value) })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div>
-            <div style={{ margin: '1em' }}>
-                <label>Y</label>
-                <input type="number" value={formData.y} onChange={e => setFormData({ ...formData, y: Number(e.target.value) })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div>
-            <div style={{ margin: '1em' }}>
-                <label>Z</label>
-                <input type="number" value={formData.z} onChange={e => setFormData({ ...formData, z: Number(e.target.value) })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div> */}
 
             <div style={{ margin: '1em' }}>
                 <button type="submit">Submit</button>
