@@ -280,8 +280,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 ListTitle={ 'PhotoFormMC' }
                 LibraryName={ 'SiteAssets' }
                 Category1s={ [ 'Overworld', 'Nether', 'End' ] }
-                Category2s={ [ 'Desert', 'Jungle', 'Mountain' ] }
-                Category3s={ [ 'Village', 'Mineshaft', 'Base', 'Wreck' ] }
+                Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
+                Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
               />
 
               {/* <div className={styles.welcome}>

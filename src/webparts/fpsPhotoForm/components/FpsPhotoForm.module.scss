@@ -61,6 +61,7 @@
 }
 
 .fpsPhotoFormGrid {
+  margin: 1em 20px;
   display: grid;
   grid-template-columns: 1fr;
   grid-template-areas:
@@ -70,9 +71,15 @@
     "comments"
     "category2"
     "category3"
+    "summary"
     "submit"
-    "imagePreview";
+    "imagePreview"
+    "spacer";
   gap: 1em;
+}
+
+.fpsPhotoFormGrid > * {
+  align-self: start;
 }
 
 @media (min-width: 1000px) {
@@ -83,7 +90,9 @@
       "title title category2 category3"
       "coordinates coordinates category2 category3"
       "comments comments category2 category3"
-      "submit imagePreview category2 category3";
+      "summary summary category2 category3"
+      "submit imagePreview category2 category3"
+      "spacer spacer category2 category3";
   }
 }
 
@@ -118,4 +127,13 @@
 
 .imagePreview {
   grid-area: imagePreview;
+}
+
+.summary {
+  grid-area: summary;
+}
+
+.spacer {
+  grid-area: spacer;
+  height: 200px;
 }

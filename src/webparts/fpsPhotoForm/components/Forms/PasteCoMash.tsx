@@ -3,8 +3,73 @@ import { useState, FormEvent, useEffect, } from 'react';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 
 import styles from '../FpsPhotoForm.module.scss';
+import { divProperties } from 'office-ui-fabric-react';
 
-const ButtonStyles = [
+const ButtonStylesMinecraftBiomes = [
+
+  {
+    label: 'Desert',
+    styles: { background: 'yellow', color: 'black' }
+  },
+  {
+    label: 'Jungle',
+    styles: { background: 'green', color: 'lime' }
+  },
+  {
+    label: 'Bamboo',
+    styles: { background: 'green', color: 'yellow' }
+  },
+  {
+    label: 'Mountain',
+    styles: { background: 'gray', color: 'white' }
+  },
+  {
+    label: 'Island',
+    styles: { background: 'green', color: 'white' }
+  },
+  {
+    label: 'Lush',
+    styles: { background: 'green', color: 'lightorange' }
+  },
+  {
+    label: 'Snow',
+    styles: { background: 'white', color: 'black', fontSize: 'larger', fontWeight: 700 }
+  },
+  {
+    label: 'Ocean',
+    styles: { background: 'lightblue', color: 'darkblue' }
+  },
+  {
+    label: 'Warm Ocean',
+    styles: { background: 'Aquamarine', color: 'magenta' }
+  },
+  {
+    label: 'Dark Oak',
+    styles: { background: '#321414', color: 'lightgreen' }
+  },
+  {
+    label: 'Tiaga',
+    styles: { background: '#321414', color: 'lightgreen' }
+  },
+  {
+    label: 'Mineshaft',
+    styles: { background: '#F7DC6F', color: '#6e2c00' }
+  },
+  {
+    label: 'Base',
+    styles: { background: 'black', color: 'pink' }
+  },
+  {
+    label: 'Wreck',
+    styles: { background: 'darkblue', color: 'yellow' }
+  },
+  {
+    label: 'Moo Shroom',
+    styles: { background: '#bc8f8f', color: 'red' }
+  },
+];
+
+const ButtonStylesMinecraftDimensions = [
   {
     label: 'Overworld',
     styles: { background: 'green', color: 'white' }
@@ -17,6 +82,61 @@ const ButtonStyles = [
     label: 'End',
     styles: { background: 'gray', color: 'yellow' }
   },
+];
+
+const ButtonStylesMinecraftStructures = [
+  {
+    label: 'Village',
+    styles: { background: '', color: '' }
+  },
+  {
+    label: 'Mineshaft',
+    styles: { background: 'darkgray', color: 'lightbrown' }
+  },
+  {
+    label: 'Wreck',
+    styles: { background: '', color: '' }
+  },
+  {
+    label: 'Nether Portal',
+    styles: { background: 'black', color: 'mediumpurple' }
+  },
+  {
+    label: 'Trials',
+    styles: { background: '#b85233', color: '#33b873' }
+  },
+  {
+    label: 'End Portal',
+    styles: { background: '#004b49', color: 'khaki' }
+  },
+  {
+    label: 'Buzz Base',
+    styles: { background: '', color: '' }
+  },
+  {
+    label: 'Cat Base',
+    styles: { background: 'black', color: 'pink' }
+  },
+  {
+    label: 'Wreck',
+    styles: { background: 'darkblue', color: 'yellow' }
+  },
+  {
+    label: 'Geode',
+    styles: { background: '#9A5CC6', color: 'yellow' }
+  },
+  {
+    label: 'Ancient City',
+    styles: { background: 'black', color: 'khaki' }
+  },
+  {
+    label: 'End City',
+    styles: { background: 'black', color: 'khaki' }
+  },
+];
+
+const ButtonStyles = [
+  ...ButtonStylesMinecraftDimensions, ...ButtonStylesMinecraftBiomes, ...ButtonStylesMinecraftStructures
 ];
 
 export function getButtonStyles( label: string ): any {
@@ -36,12 +156,6 @@ export interface IPhotoFormForm  {
   Category3s: string[];
 }
 
-// interface FileUploadProps {
-//   siteUrl: string;
-// }
-
-// const FileUpload: React.FC<FileUploadProps> = ({ siteUrl }) => {
-
 const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
   const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
@@ -50,6 +164,11 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
     const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
     const [cats2Title, setCats2Title ] = useState<boolean>(false);
+
+    // Update wasSubmitted to false whenever formData changes
+    useEffect(() => {
+      setWasSubmitted(false);
+    }, [formData]);
 
     // Handle pasting the image from the clipboard
     const handlePaste = (e: ClipboardEvent) => {
@@ -68,36 +187,56 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
     // Create list item in SharePoint
     const createListItem = async (title: string): Promise<any> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+      const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
 
-        const saveItem = {
+      const saveItem = {
           Title: title,
-          Category1: Category1s[ formData.category1 ],
-          Category2: {
-            "__metadata": { "type": "Collection(Edm.String)" },
-            "results": formData.category2.map( idx => Category2s[ idx ] )
-          },
-          Category3:  {
-            "__metadata": { "type": "Collection(Edm.String)" },
-            "results": formData.category3.map( idx => Category3s[ idx ] )
-          },
+          Category1: Category1s[formData.category1],
+          Category2: formData.category2.map(idx => Category2s[idx]),
+          Category3: formData.category3.map(idx => Category3s[idx]),
+
+          // NOTE for SE:  You may need this more complex object
+          // Category2: {
+          //   "__metadata": { "type": "Collection(Edm.String)" },
+          //   "results": formData.category2.map(idx => Category2s[idx])
+          // },
+          // Category3: {
+          //     "__metadata": { "type": "Collection(Edm.String)" },
+          //     "results": formData.category3.map(idx => Category3s[idx])
+          // },
+
           CoordX: formData.x,
           CoordY: formData.y,
           CoordZ: formData.z,
           Notes: formData.comments,
-        }
+      };
 
-        const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-RequestDigest': requestDigest
-            },
-            body: JSON.stringify( saveItem )
-        });
-        const data = await response.json();
-        return data;
+      console.log('Save Item:', saveItem);
+
+      try {
+          const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items`, {
+              method: 'POST',
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json',
+                  'X-RequestDigest': requestDigest
+              },
+              body: JSON.stringify(saveItem)
+          });
+
+          if (!response.ok) {
+              const errorText = await response.text();
+              console.error('Error response:', errorText);
+              throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
+          }
+
+          const data = await response.json();
+          console.log('Response Data:', data);
+          return data;
+      } catch (error) {
+          console.error('Error creating list item:', error);
+          throw error;
+      }
     };
 
     // Convert base64 image to a Blob
@@ -183,8 +322,9 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         fileDesc.push( `${formData.title}` );
 
         const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}_${ fileDesc.join('_') }.png`;
+        const shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
         const blob = base64ToBlob(imageData);
-        const imageUrl = await uploadImageToLibrary(blob, fileName);
+        const imageUrl = await uploadImageToLibrary(blob, shortFileName);
 
         if (imageUrl) {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
@@ -251,20 +391,21 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 </ul>
             </div> */}
 
-            <div className={ styles.title }style={{ margin: '1em' }}>
+            <div className={ styles.title }style={{  }}>
                 <label>Title</label>
                 <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
             </div>
 
-            <div className={ styles.category1 } style={{ margin: '1em', display: 'flex', gap: '1em' }}>
-              <div style={{ margin: '1em' }}>
+            <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
+              <div style={{ }}>
                 <label>Category 1</label>
                 <div>
                   {Category1s.map((category, index) => (
                     <button
                       className={ formData.category1 === index ? [ styles.button, styles.selected ].join(' ') : styles.button }
                       key={index}
+                      title={ category }
                       type="button"
                       onClick={() => setFormData({ ...formData, category1: index })}
                       style={ {...{ }, ...getButtonStyles( Category1s[ index ] ) } }
@@ -276,7 +417,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               </div>
             </div>
 
-            <div className={ styles.comments }style={{ margin: '1em' }}>
+            <div className={ styles.comments }style={{  }}>
                 <label>Comments</label>
                 <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em', width: '100%', height: '100px' }} />
@@ -286,7 +427,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
             <div className={ styles.coordinates }>
               {numberFields.map(field => (
-                <div key={field} style={{ margin: '1em' }}>
+                <div key={field} style={{ margin: '1em 1em 1em 0em' }}>
                   <label>{field.toUpperCase()}</label>
                   <input
                     type="text"
@@ -306,13 +447,14 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               ))}
             </div>
 
-              <div style={{ margin: '1em' }} className={ styles.category2 }>
-                <label>Category 2</label>
+              <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
+                <h4 style={{ margin: '0px' }}>Category 2</h4>
                 <div style={{ display: 'grid' }}>
                   {Category2s.map((category, index) => (
                     <button
                       className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
                       key={index}
+                      title={ category }
                       type="button"
                       onClick={() => handleCategory2Click(index)}
                       style={ {...{ }, ...getButtonStyles( Category2s[ index ] ) } }
@@ -323,13 +465,14 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 </div>
               </div>
 
-              <div style={{ margin: '1em' }} className={ styles.category3 }>
-                <label>Category 3</label>
+              <div style={{ marginLeft: '1em' }} className={ styles.category3 }>
+                <h4 style={{ margin: '0px' }}>Category 3</h4>
                 <div style={{ display: 'grid' }}>
                   {Category3s.map((category, index) => (
                     <button
                       className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
                       key={index}
+                      title={ category }
                       type="button"
                       onClick={() => handleCategory3Click(index)}
                       style={ {...{ }, ...getButtonStyles( Category3s[ index ] ) } }
@@ -341,15 +484,27 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               </div>
 
 
+              <div className={ styles.summary }>
+                <div>
+                  <h4 style={{ margin: '0px 0px 5px 0px'}}>Category 2s:</h4>
+                  { formData.category2.map( idx => Category2s[ idx ]).join(' | ') }
+                </div>
+                <div>
+                <h4 style={{ margin: '10px 0px 5px 0px'}}>Category 3s:</h4>
+                  { formData.category3.map( idx => Category3s[ idx ]).join(' | ') }
+                </div>
+              </div>
+
               <div className={ styles.submit } style={{ margin: '1em' }}>
                 <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
-            </div>
-            {imageData && (
+              </div>
+              {imageData && (
                 <div className={ styles.imagePreview }>
                     <h3>Pasted Image Preview:</h3>
                     <img src={imageData} alt="Pasted Image" style={{ maxWidth: '300px' }} />
                 </div>
-            )}
+              )}
+           <div className={ styles.spacer }/>
 
         </form>
     );
