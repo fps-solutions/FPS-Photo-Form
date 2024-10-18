@@ -47,6 +47,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
     const [formData, setFormData] = useState({ category1: 0, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 });
+    const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
     const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
     const [cats2Title, setCats2Title ] = useState<boolean>(false);
 
@@ -181,6 +182,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
         if (imageUrl) {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
+            setWasSubmitted( true );
             alert('Item created and image uploaded successfully!');
         } else {
             alert('Failed to upload the image.');
@@ -225,12 +227,15 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       });
     };
 
+    const { title, x, y, z, category1, category2, category3 } = formData;
+    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && category2.length > 0  && category3.length > 0 ? false : true;
+
     const numberFields = ['x', 'y', 'z'];
 
     return (
-        <form className={ }
+        <form className={ styles.fpsPhotoFormGrid }
           onSubmit={handleSubmit} onPaste={handlePaste as any}>
-            <div style={{ margin: '1em' }}>
+            {/* <div style={{ margin: '1em' }}>
                 <h4>Expecting the following site structure</h4>
                 <ul>
                     <li>List with name: {`'PhotoFormMC'`}</li>
@@ -238,9 +243,15 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                     <li>Text column called {`'ScreenshotUrl'`}</li>
                     <li>SiteAssets library {`Titled as "Site Assets" with the space - should be default`}</li>
                 </ul>
+            </div> */}
+
+            <div className={ styles.title }style={{ margin: '1em' }}>
+                <label>Title</label>
+                <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
             </div>
 
-            <div style={{ margin: '1em', display: 'flex', gap: '1em' }}>
+            <div className={ styles.category1 } style={{ margin: '1em', display: 'flex', gap: '1em' }}>
               <div style={{ margin: '1em' }}>
                 <label>Category 1</label>
                 <div>
@@ -259,80 +270,80 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               </div>
             </div>
 
-            <div style={{ margin: '1em' }}>
-                <label>Title</label>
-                <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div>
-            <div style={{ margin: '1em' }}>
+            <div className={ styles.comments }style={{ margin: '1em' }}>
                 <label>Comments</label>
                 <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
                     style={{ paddingLeft: '.5em', marginLeft: '1em', width: '100%', height: '100px' }} />
             </div>
 
-            {numberFields.map(field => (
-              <div key={field} style={{ margin: '1em' }}>
-                <label>{field.toUpperCase()}</label>
-                <input
-                  type="text"
-                  value={formData[ `${field}` as 'x' ]}
-                  onChange={e => {
-                    const value = e.target.value;
-                    if (value === '' || /^-?\d*\.?\d*$/.test(value)) {
-                      setFormData({ ...formData, [field]: value });
-                    }
-                  }}
-                  onBlur={() => {
-                    setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'x' ]) });
-                  }}
-                  style={{ paddingLeft: '.5em', marginLeft: '1em' }}
-                />
-              </div>
-            ))}
 
-            <div style={{ margin: '1em' }}>
-                <button type="submit">Submit</button>
+
+            <div className={ styles.coordinates }>
+              {numberFields.map(field => (
+                <div key={field} style={{ margin: '1em' }}>
+                  <label>{field.toUpperCase()}</label>
+                  <input
+                    type="text"
+                    value={formData[ `${field}` as 'x' ]}
+                    onChange={e => {
+                      const value = e.target.value;
+                      if (value === '' || /^-?\d*\.?\d*$/.test(value)) {
+                        setFormData({ ...formData, [field]: value });
+                      }
+                    }}
+                    onBlur={() => {
+                      setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'x' ]) });
+                    }}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }}
+                  />
+                </div>
+              ))}
+            </div>
+
+              <div style={{ margin: '1em' }} className={ styles.category2 }>
+                <label>Category 2</label>
+                <div style={{ display: 'grid' }}>
+                  {Category2s.map((category, index) => (
+                    <button
+                      className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
+                      key={index}
+                      type="button"
+                      onClick={() => handleCategory2Click(index)}
+                      style={ {...{ }, ...getButtonStyles( Category2s[ index ] ) } }
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ margin: '1em' }} className={ styles.category3 }>
+                <label>Category 3</label>
+                <div style={{ display: 'grid' }}>
+                  {Category3s.map((category, index) => (
+                    <button
+                      className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
+                      key={index}
+                      type="button"
+                      onClick={() => handleCategory3Click(index)}
+                      style={ {...{ }, ...getButtonStyles( Category3s[ index ] ) } }
+                    >
+                      {category}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+
+              <div className={ styles.submit } style={{ margin: '1em' }}>
+                <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
             </div>
             {imageData && (
-                <div>
+                <div className={ styles.imagePreview }>
                     <h3>Pasted Image Preview:</h3>
                     <img src={imageData} alt="Pasted Image" style={{ maxWidth: '300px' }} />
                 </div>
             )}
-
-              <div style={{ margin: '1em' }} className={ styles.category2Buttons }>
-                <label>Category 2</label>
-                <div>
-                {Category2s.map((category, index) => (
-                  <button
-                    className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
-                    key={index}
-                    type="button"
-                    onClick={() => handleCategory2Click(index)}
-                    style={ {...{ }, ...getButtonStyles( Category2s[ index ] ) } }
-                  >
-                    {category}
-                  </button>
-                ))}
-                </div>
-              </div>
-
-              <div style={{ margin: '1em' }} className={ styles.category3Buttons }>
-                <label>Category 3</label>
-                <div>
-                {Category3s.map((category, index) => (
-                  <button
-                    className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
-                    key={index}
-                    type="button"
-                    onClick={() => handleCategory3Click(index)}
-                    style={ {...{ }, ...getButtonStyles( Category3s[ index ] ) } }
-                  >
-                    {category}
-                  </button>
-                ))}
-                </div>
-              </div>
 
         </form>
     );
