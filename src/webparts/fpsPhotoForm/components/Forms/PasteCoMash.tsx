@@ -43,6 +43,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       setWasSubmitted(false);
     }, [formData]);
 
+    const handleToggleChange = (checked: boolean) => {
+      setAutoClear(checked); // Update the state when toggle changes
+    };
+
     // Handle pasting the image from the clipboard
     const handlePaste = (e: ClipboardEvent) => {
         const clipboardItems = e.clipboardData?.items;
@@ -377,7 +381,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                   label="Reset on Create"
                   onText="Auto"
                   offText="Manual"
-                  onChange={ setAutoClear }
+                  onChange={ handleToggleChange }
                 />
                 <div>Current Toggle State: { autoClear }</div>
 

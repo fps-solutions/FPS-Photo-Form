@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, } from 'react';
+import { useState } from 'react';
 import './Toggle.css';  // Import the CSS file for styling
 
 export interface IFPSToggleProps {
@@ -9,14 +9,17 @@ export interface IFPSToggleProps {
   onChange?: (checked: boolean) => void; // Optional callback when toggle changes
 }
 
-const FPSToggle = ( props: IFPSToggleProps ): JSX.Element => {
-  const { label, onText, onChange, offText } = props;
+const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
+  const { label, onText, offText, onChange } = props;
 
   const [isChecked, setIsChecked] = useState(false);
 
   const handleToggleChange = (): void => {
-    setIsChecked(!isChecked);
-    if (onChange) onChange(!isChecked);
+    setIsChecked((prevState) => {
+      const newChecked = !prevState;
+      if (onChange) onChange(newChecked); // Call onChange with the new state
+      return newChecked;
+    });
   };
 
   return (
@@ -30,10 +33,14 @@ const FPSToggle = ( props: IFPSToggleProps ): JSX.Element => {
           id="toggle"
         />
         <span className="slider"/>
-        <div className="toggle-texts">
-          <span className={`toggle-text ${isChecked ? 'on' : ''}`}>{onText}</span>
-          <span className={`toggle-text ${!isChecked ? 'off' : ''}`}>{offText}</span>
-        </div>
+      </div>
+      <div className="toggle-texts">
+        <span style={{ opacity: isChecked ? 1 : 0, transition: 'opacity 0.4s ease' }}>
+          {onText}
+        </span>
+        <span style={{ opacity: isChecked ? 0 : 1, position: 'absolute', transition: 'opacity 0.4s ease' }}>
+          {offText}
+        </span>
       </div>
     </div>
   );
