@@ -26,10 +26,13 @@ export interface IPhotoFormFormInterface {
   z: number;
 }
 
+const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
 const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
   const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
+  const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
+  const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
@@ -225,6 +228,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       setFormData(prevFormData => {
         const indexInArray = prevFormData.category2.indexOf(index);
         let newCategory2;
+
         if (indexInArray > -1) {
           // Remove the index if it's already in the array
           newCategory2 = prevFormData.category2.filter(i => i !== index);
@@ -232,6 +236,13 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
           // Add the index if it's not in the array
           newCategory2 = [...prevFormData.category2, index];
         }
+
+        // https://github.com/fps-solutions/FPS-Photo-Form/issues/6
+        const clickedActual = PlaceHolderCategories.indexOf( Category2s[index] ) < 0 ? true : false;
+        newCategory2 = newCategory2.filter(function(index) {
+          return clickedActual ? PlaceHolderCategories.indexOf(Category2s[index]) === -1 : PlaceHolderCategories.indexOf(Category2s[index]) > -1;
+        });
+
         return { ...prevFormData, category2: newCategory2 };
       });
     };
@@ -247,6 +258,13 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
           // Add the index if it's not in the array
           newCategory3 = [...prevFormData.category3, index];
         }
+
+        // https://github.com/fps-solutions/FPS-Photo-Form/issues/6
+        const clickedActual = PlaceHolderCategories.indexOf( Category3s[index] ) < 0 ? true : false;
+        newCategory3 = newCategory3.filter(function(index) {
+          return clickedActual ? PlaceHolderCategories.indexOf(Category3s[index]) === -1 : PlaceHolderCategories.indexOf(Category3s[index]) > -1;
+        });
+
         return { ...prevFormData, category3: newCategory3 };
       });
     };

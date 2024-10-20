@@ -1,3 +1,18 @@
+const PlaceholderButtons = [
+  {
+    label: 'Other',
+    styles: { }
+  },
+  {
+    label: 'TBD',
+    styles: { }
+  },
+  {
+    label: 'NA',
+    styles: { }
+  }
+]
+
 export const ButtonStylesMinecraftBiomes = [
   {
     label: 'Desert',
@@ -71,6 +86,7 @@ export const ButtonStylesMinecraftBiomes = [
     label: 'Mangrove',
     styles: { background: '#d4d4aa', color: '#602020' }
   },
+  ...PlaceholderButtons,
 ];
 export const ButtonStylesMinecraftDimensions = [
   {
@@ -143,6 +159,7 @@ export const ButtonStylesMinecraftStructures = [
     label: 'Fortress',
     styles: { background: '#660000', color: '#ffff00' }
   },
+  ...PlaceholderButtons,
 ];
 const ButtonStyles = [
   ...ButtonStylesMinecraftDimensions, ...ButtonStylesMinecraftBiomes, ...ButtonStylesMinecraftStructures
