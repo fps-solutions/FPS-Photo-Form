@@ -33,7 +33,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
-    const [ autoClear, setAutoClear ] = useState<boolean>( true );
+    const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
     const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
     const [cats2Title, setCats2Title ] = useState<boolean>(false);
@@ -206,6 +206,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         if (imageUrl) {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
             setWasSubmitted( true );
+            if ( autoClear === true ) setFormData( EmptyFormData );
             alert('Item created and image uploaded successfully!');
         } else {
             alert('Failed to upload the image.');
@@ -268,12 +269,6 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 </ul>
             </div> */}
 
-            <div className={ styles.title }style={{  }}>
-                <label>Title</label>
-                <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div>
-
             <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
               <div style={{ }}>
               <h4 style={{ margin: '0px' }}>Category 1</h4>
@@ -294,13 +289,11 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               </div>
             </div>
 
-            <div className={ styles.comments }style={{  }}>
-                <label>Comments</label>
-                <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
+            <div className={ styles.title }style={{  }}>
+                <label>Title</label>
+                <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
             </div>
-
-
 
             <div className={ styles.coordinates }>
               {numberFields.map(field => (
@@ -322,6 +315,12 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                   />
                 </div>
               ))}
+            </div>
+
+            <div className={ styles.comments }style={{  }}>
+                <label>Comments</label>
+                <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
             </div>
 
               <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
@@ -360,7 +359,6 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                 </div>
               </div>
 
-
               <div className={ styles.summary }>
                 <div>
                   <h4 style={{ margin: '0px 0px 5px 0px'}}>Category 2s:</h4>
@@ -383,7 +381,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                   offText="Manual"
                   onChange={ handleToggleChange }
                 />
-                <div>Current Toggle State: { autoClear }</div>
+                <div>Current Toggle State: { `${autoClear}` }</div>
 
               </div>
               {imageData && (

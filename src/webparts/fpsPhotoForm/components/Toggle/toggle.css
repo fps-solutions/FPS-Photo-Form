@@ -67,14 +67,37 @@
 }
 
 .toggle-texts {
+  position: relative; /* Used to position both texts relative to this container */
   display: flex;
   align-items: center;
-  margin-left: 0.5em; /* Space between toggle and text */
+  margin-left: 1em; /* Space between toggle and text */
+  width: 3.5em; /* The same width as the toggle switch */
 }
 
 .toggle-text {
+  position: absolute; /* Use absolute positioning to overlay the text */
   font-size: 0.75em;
   color: #555;
   font-weight: bold;
   white-space: nowrap;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+}
+
+.toggle-text.on {
+  left: 100%; /* Position the 'on' text just after the toggle switch */
+  opacity: 0;
+}
+
+.toggle-switch input:checked ~ .toggle-texts .toggle-text.on {
+  opacity: 1; /* On state: 'onText' is fully visible */
+}
+
+.toggle-text.off {
+  left: 100%; /* Position the 'off' text just after the toggle switch */
+  opacity: 1; /* Default: 'offText' is visible */
+}
+
+.toggle-switch input:not(:checked) ~ .toggle-texts .toggle-text.off {
+  opacity: 0; /* Off state: 'offText' fades out */
 }
