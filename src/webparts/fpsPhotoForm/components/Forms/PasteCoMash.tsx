@@ -257,7 +257,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
             <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
               <div style={{ }}>
-                <label>Category 1</label>
+              <h4 style={{ margin: '0px' }}>Category 1</h4>
                 <div>
                   {Category1s.map((category, index) => (
                     <button

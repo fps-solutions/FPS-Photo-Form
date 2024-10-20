@@ -56,8 +56,20 @@ const ButtonStylesMinecraftBiomes = [
     styles: { background: 'darkblue', color: 'yellow' }
   },
   {
-    label: 'Moo Shroom',
-    styles: { background: '#bc8f8f', color: 'darkred' }
+    label: 'Dripstone',
+    styles: { background: '#ffcc99', color: '#cc0000' }
+  },
+  {
+    label: 'Cave',
+    styles: { background: '#A0A0A0', color: 'black' }
+  },
+  {
+    label: 'Swamp',
+    styles: { background: '#d4d4aa', color: '#33331a' }
+  },
+  {
+    label: 'Mangrove',
+    styles: { background: '#d4d4aa', color: '#602020' }
   },
 ];
 const ButtonStylesMinecraftDimensions = [
@@ -122,6 +134,14 @@ const ButtonStylesMinecraftStructures = [
   {
     label: 'End City',
     styles: { background: 'black', color: 'khaki' }
+  },
+  {
+    label: 'Spawner',
+    styles: { background: '#202020', color: '#e60000' }
+  },
+  {
+    label: 'Fortress',
+    styles: { background: '#660000', color: '#ffff00' }
   },
 ];
 const ButtonStyles = [
