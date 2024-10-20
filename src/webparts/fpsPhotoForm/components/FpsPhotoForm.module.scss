@@ -56,11 +56,25 @@
   margin-left: 0px;
   font-weight: 600;
   border: 1px solid transparent;
+  min-width: 200px;
 }
 .submitButton:hover {
   // border-color: yellow; /* Highlight border color */
   // box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); /* Optional: Add a glow effect */
   background: rgb(122, 255, 122);
+  border-color: #373737; /* Darker border color */
+}
+
+.clearButton {
+  @extend .submitButton;
+  padding: .25em 2em;
+}
+
+.clearButton:hover {
+  // border-color: yellow; /* Highlight border color */
+  // box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); /* Optional: Add a glow effect */
+  // background: #ffb3b3;
+  background: yellow;
   border-color: #373737; /* Darker border color */
 }
 

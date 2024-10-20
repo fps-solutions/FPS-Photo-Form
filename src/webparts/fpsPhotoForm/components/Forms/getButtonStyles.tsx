@@ -1,4 +1,4 @@
-const ButtonStylesMinecraftBiomes = [
+export const ButtonStylesMinecraftBiomes = [
   {
     label: 'Desert',
     styles: { background: 'yellow', color: 'black' }
@@ -72,7 +72,7 @@ const ButtonStylesMinecraftBiomes = [
     styles: { background: '#d4d4aa', color: '#602020' }
   },
 ];
-const ButtonStylesMinecraftDimensions = [
+export const ButtonStylesMinecraftDimensions = [
   {
     label: 'Overworld',
     styles: { background: 'green', color: 'white' }
@@ -86,7 +86,7 @@ const ButtonStylesMinecraftDimensions = [
     styles: { background: 'gray', color: 'yellow' }
   },
 ];
-const ButtonStylesMinecraftStructures = [
+export const ButtonStylesMinecraftStructures = [
   {
     label: 'Village',
     styles: { background: '', color: '' }

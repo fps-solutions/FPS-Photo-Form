@@ -4,6 +4,7 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 
 import styles from '../FpsPhotoForm.module.scss';
 import { getButtonStyles } from './getButtonStyles';
+import FPSToggle from '../Toggle/component';
 
 export interface IPhotoFormForm  {
   SiteUrl: string;
@@ -14,11 +15,25 @@ export interface IPhotoFormForm  {
   Category3s: string[];
 }
 
+export interface IPhotoFormFormInterface {
+  category1: number;
+  category2: number[];
+  category3: number[];
+  title: string;
+  comments: string;
+  x: number;
+  y: number;
+  z: number;
+}
+
+const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
+
 const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
   const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
-    const [formData, setFormData] = useState({ category1: 0, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 });
+    const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
+    const [ autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
     const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
     const [cats2Title, setCats2Title ] = useState<boolean>(false);
@@ -50,8 +65,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       const saveItem = {
           Title: title,
           Category1: Category1s[formData.category1],
-          Category2: formData.category2.map(idx => Category2s[idx]),
-          Category3: formData.category3.map(idx => Category3s[idx]),
+          Category2: formData.category2.map((idx: number) => Category2s[idx]),
+          Category3: formData.category3.map((idx: number) => Category3s[idx]),
 
           // NOTE for SE:  You may need this more complex object
           // Category2: {
@@ -201,7 +216,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         };
     }, []);
 
-    const handleCategory2Click = (index: number) => {
+    const handleCategory2Click = (index: number): void => {
       setFormData(prevFormData => {
         const indexInArray = prevFormData.category2.indexOf(index);
         let newCategory2;
@@ -216,7 +231,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       });
     };
 
-    const handleCategory3Click = (index: number) => {
+    const handleCategory3Click = (index: number): void => {
       setFormData(prevFormData => {
         const indexInArray = prevFormData.category3.indexOf(index);
         let newCategory3;
@@ -232,7 +247,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     };
 
     const { title, x, y, z, category1, category2, category3 } = formData;
-    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && category2.length > 0  && category3.length > 0 ? false : true;
+    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && category1 && category2.length > 0  && category3.length > 0 ? false : true;
 
     const numberFields = ['x', 'y', 'z'];
 
@@ -355,6 +370,17 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
               <div className={ styles.submit } style={{ margin: '1em 1em 1em 0em' }}>
                 <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
+                {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
+                <button className={ styles.clearButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button>
+
+                <FPSToggle
+                  label="Reset on Create"
+                  onText="Auto"
+                  offText="Manual"
+                  onChange={ setAutoClear }
+                />
+                <div>Current Toggle State: { autoClear }</div>
+
               </div>
               {imageData && (
                 <div className={ styles.imagePreview }>
