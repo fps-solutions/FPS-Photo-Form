@@ -52,15 +52,15 @@ export const ButtonStylesMinecraftBiomes = [
   },
   {
     label: 'Dark Oak',
-    styles: { background: '#321414', color: 'lightgreen' }
+    styles: { background: '#110A02', color: '#851313' }
   },
   {
     label: 'Tiaga',
-    styles: { background: '#321414', color: 'lightgreen' }
+    styles: { background: '#2D1203', color: '#CEA94F' }
   },
   {
     label: 'Mineshaft',
-    styles: { background: '#F7DC6F', color: '#6e2c00' }
+    styles: { background: '#A3804D', color: '#29292E' }
   },
   {
     label: 'Base',
