@@ -86,6 +86,10 @@ export const ButtonStylesMinecraftBiomes = [
     label: 'Mangrove',
     styles: { background: '#1E220A', color: '#5BD15E' }
   },
+  {
+    label: 'Moo Shroom',
+    styles: { background: '#ffcc99', color: '#cc0000' }
+  },
   ...PlaceholderButtons,
 ];
 export const ButtonStylesMinecraftDimensions = [
