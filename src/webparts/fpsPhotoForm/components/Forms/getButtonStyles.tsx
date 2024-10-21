@@ -32,7 +32,7 @@ export const ButtonStylesMinecraftBiomes = [
   },
   {
     label: 'Island',
-    styles: { background: 'green', color: 'white' }
+    styles: { background: 'green', color: '#FFFE94' }
   },
   {
     label: 'Lush',
@@ -84,7 +84,7 @@ export const ButtonStylesMinecraftBiomes = [
   },
   {
     label: 'Mangrove',
-    styles: { background: '#d4d4aa', color: '#602020' }
+    styles: { background: '#1E220A', color: '#5BD15E' }
   },
   ...PlaceholderButtons,
 ];

@@ -33,6 +33,15 @@
   }
 }
 
+// https://github.com/fps-solutions/FPS-Photo-Form/issues/12
+.categoryButtons {
+  button {
+    font-weight: 600;
+    font-size: larger;
+    padding: .2em 1em;
+  }
+}
+
 .button, .submitButton {
   margin: 0.5em;
   padding: 0.5em 1em;
@@ -49,6 +58,7 @@
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Inset shadow for pressed effect */
   transform: translate(1px, 3px); /* Slightly move the button down */
 }
+
 .submitButton {
   transition: all 0.5s ease;
   font-size: x-large;
@@ -58,6 +68,7 @@
   border: 1px solid transparent;
   min-width: 200px;
 }
+
 .submitButton:hover {
   // border-color: yellow; /* Highlight border color */
   // box-shadow: 0 0 10px rgba(255, 255, 0, 0.5); /* Optional: Add a glow effect */

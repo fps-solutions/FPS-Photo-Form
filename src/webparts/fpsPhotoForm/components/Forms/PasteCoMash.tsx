@@ -202,9 +202,13 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         fileDesc.push( `${formData.title}` );
 
         const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}_${ fileDesc.join('_') }.png`;
-        const shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
+        let shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
+
+        // remove special characters from the filename:  https://github.com/fps-solutions/FPS-Photo-Form/issues/9
+        shortFileName = shortFileName.replace(/[\\/:*?"<>|#&]/g, '' );
         const blob = base64ToBlob(imageData);
-        const imageUrl = await uploadImageToLibrary(blob, shortFileName);
+
+        const imageUrl = await uploadImageToLibrary( blob, shortFileName );
 
         if (imageUrl) {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
@@ -270,27 +274,18 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     };
 
     const { title, x, y, z, category1, category2, category3 } = formData;
-    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && category1 && category2.length > 0  && category3.length > 0 ? false : true;
+    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
 
     const numberFields = ['x', 'y', 'z'];
 
     return (
         <form className={ styles.fpsPhotoFormGrid }
           onSubmit={handleSubmit} onPaste={handlePaste as any}>
-            {/* <div style={{ margin: '1em' }}>
-                <h4>Expecting the following site structure</h4>
-                <ul>
-                    <li>List with name: {`'PhotoFormMC'`}</li>
-                    <li>Title column: {`Comes with default list`}</li>
-                    <li>Text column called {`'ScreenshotUrl'`}</li>
-                    <li>SiteAssets library {`Titled as "Site Assets" with the space - should be default`}</li>
-                </ul>
-            </div> */}
 
             <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
               <div style={{ }}>
               <h4 style={{ margin: '0px' }}>Category 1</h4>
-                <div>
+                <div className={ styles.categoryButtons }>
                   {Category1s.map((category, index) => (
                     <button
                       className={ formData.category1 === index ? [ styles.button, styles.selected ].join(' ') : styles.button }
@@ -343,7 +338,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
               <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
                 <h4 style={{ margin: '0px' }}>Category 2</h4>
-                <div style={{ display: 'grid' }}>
+                <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
                   {Category2s.map((category, index) => (
                     <button
                       className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
@@ -351,7 +346,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory2Click(index)}
-                      style={ {...{ }, ...getButtonStyles( Category2s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category2s[ index ] ) } }
                     >
                       {category}
                     </button>
@@ -361,7 +356,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
               <div style={{ marginLeft: '1em' }} className={ styles.category3 }>
                 <h4 style={{ margin: '0px' }}>Category 3</h4>
-                <div style={{ display: 'grid' }}>
+                <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
                   {Category3s.map((category, index) => (
                     <button
                       className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
@@ -369,7 +364,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory3Click(index)}
-                      style={ {...{ }, ...getButtonStyles( Category3s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category3s[ index ] ) } }
                     >
                       {category}
                     </button>
