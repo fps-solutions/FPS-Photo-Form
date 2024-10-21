@@ -90,6 +90,14 @@ export const ButtonStylesMinecraftBiomes = [
     label: 'Moo Shroom',
     styles: { background: '#ffcc99', color: '#cc0000' }
   },
+  {
+    label: 'Bassalt',
+    styles: { background: 'black', color: 'orange' }
+  },
+  {
+    label: 'Nether Forest',
+    styles: { background: 'teal', color: 'darkred' }
+  },
   ...PlaceholderButtons,
 ];
 export const ButtonStylesMinecraftDimensions = [
@@ -160,6 +168,10 @@ export const ButtonStylesMinecraftStructures = [
     styles: { background: 'khaki', color: 'black' }
   },
   {
+    label: 'Outpost',
+    styles: { background: 'darkbrown', color: 'khaki' }
+  },
+  {
     label: 'End Portal',
     styles: { background: '#004b49', color: 'khaki' }
   },
@@ -178,6 +190,10 @@ export const ButtonStylesMinecraftStructures = [
   {
     label: 'Ruin',
     styles: { background: '#004b49', color: 'khaki' }
+  },
+  {
+    label: 'Bastion',
+    styles: { background: 'black', color: 'orange' }
   },
   ...PlaceholderButtons,
 ];
