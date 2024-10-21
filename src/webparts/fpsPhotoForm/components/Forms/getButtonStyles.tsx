@@ -148,6 +148,10 @@ export const ButtonStylesMinecraftStructures = [
     styles: { background: '#b85233', color: '#33b873' }
   },
   {
+    label: 'Monument',
+    styles: { background: 'lightblue', color: 'darkblue' }
+  },
+  {
     label: 'End Portal',
     styles: { background: '#004b49', color: 'khaki' }
   },
