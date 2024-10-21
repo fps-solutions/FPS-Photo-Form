@@ -35,8 +35,8 @@ export const ButtonStylesMinecraftBiomes = [
     styles: { background: 'green', color: '#FFFE94' }
   },
   {
-    label: 'Lush',
-    styles: { background: 'green', color: 'lightorange' }
+    label: 'Lush Cave',
+    styles: { background: '#447200', color: '#ffd2f' } // #ffa9ea
   },
   {
     label: 'Snow',
@@ -59,23 +59,15 @@ export const ButtonStylesMinecraftBiomes = [
     styles: { background: '#2D1203', color: '#CEA94F' }
   },
   {
-    label: 'Mineshaft',
-    styles: { background: '#A3804D', color: '#29292E' }
-  },
-  {
-    label: 'Base',
-    styles: { background: 'black', color: 'pink' }
-  },
-  {
-    label: 'Wreck',
-    styles: { background: 'darkblue', color: 'yellow' }
-  },
-  {
     label: 'Dripstone',
     styles: { background: '#ffcc99', color: '#cc0000' }
   },
   {
     label: 'Cave',
+    styles: { background: '#A0A0A0', color: 'black' }
+  },
+  {
+    label: 'Cavern', // Essentially a massive cave
     styles: { background: '#A0A0A0', color: 'black' }
   },
   {
@@ -109,7 +101,7 @@ export const ButtonStylesMinecraftStructures = [
   },
   {
     label: 'Mineshaft',
-    styles: { background: 'darkgray', color: 'lightbrown' }
+    styles: { background: '#A3804D', color: '#29292E' }
   },
   {
     label: 'Wreck',
@@ -158,6 +150,14 @@ export const ButtonStylesMinecraftStructures = [
   {
     label: 'Fortress',
     styles: { background: '#660000', color: '#ffff00' }
+  },
+  {
+    label: 'Witch',
+    styles: { background: '#1E220A', color: 'khaki' }
+  },
+  {
+    label: 'Ruin',
+    styles: { background: '#004b49', color: 'khaki' }
   },
   ...PlaceholderButtons,
 ];
