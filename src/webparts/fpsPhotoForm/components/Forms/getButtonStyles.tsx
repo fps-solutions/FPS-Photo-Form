@@ -152,6 +152,14 @@ export const ButtonStylesMinecraftStructures = [
     styles: { background: 'lightblue', color: 'darkblue' }
   },
   {
+    label: 'Site Seeing',
+    styles: { background: 'yellow', color: 'black' }
+  },
+  {
+    label: 'Historical',
+    styles: { background: 'khaki', color: 'black' }
+  },
+  {
     label: 'End Portal',
     styles: { background: '#004b49', color: 'khaki' }
   },
