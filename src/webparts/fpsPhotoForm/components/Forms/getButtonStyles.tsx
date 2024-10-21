@@ -40,7 +40,7 @@ export const ButtonStylesMinecraftBiomes = [
   },
   {
     label: 'Snow',
-    styles: { background: 'white', color: 'black', fontSize: 'larger', fontWeight: 700, height: '33px', paddingTop: '2px' }
+    styles: { background: 'white', color: 'black',  } // fontSize: 'larger', fontWeight: 700, height: '33px', paddingTop: '2px'
   },
   {
     label: 'Ocean',

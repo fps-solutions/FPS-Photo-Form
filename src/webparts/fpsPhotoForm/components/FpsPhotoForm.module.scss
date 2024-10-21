@@ -33,14 +33,6 @@
   }
 }
 
-// https://github.com/fps-solutions/FPS-Photo-Form/issues/12
-.categoryButtons {
-  button {
-    font-weight: 600;
-    font-size: larger;
-    padding: .2em 1em;
-  }
-}
 
 .button, .submitButton {
   margin: 0.5em;
@@ -48,6 +40,16 @@
   border: 2px solid transparent;
   transition: all 0.2s ease;
   cursor: pointer;
+}
+
+// https://github.com/fps-solutions/FPS-Photo-Form/issues/12
+.categoryButtons {
+  button {
+    font-weight: 500;
+    font-size: default;
+    padding: .2em 1em;
+    margin: .5em;
+  }
 }
 
 .button.selected {
@@ -111,6 +113,9 @@
     "imagePreview"
     "spacer";
   gap: 1em;
+  label {
+    font-weight: 600;
+  }
 }
 
 .fpsPhotoFormGrid > * {
