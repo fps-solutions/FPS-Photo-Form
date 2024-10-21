@@ -31,12 +31,20 @@ export const ButtonStylesMinecraftBiomes = [
     styles: { background: 'gray', color: 'white' }
   },
   {
+    label: 'Cherry',
+    styles: { background: '#33202B', color: '#DDBFB5' }
+  },
+  {
     label: 'Island',
     styles: { background: 'green', color: '#FFFE94' }
   },
   {
+    label: 'Extreme Towers',
+    styles: { background: '#d9d8d8', color: 'rgb(1 61 5)' }
+  },
+  {
     label: 'Lush Cave',
-    styles: { background: '#447200', color: '#ffd2f' } // #ffa9ea
+    styles: { background: '#447200', color: '#E8BDFF' } // #ffa9ea
   },
   {
     label: 'Snow',
@@ -105,31 +113,23 @@ export const ButtonStylesMinecraftStructures = [
   },
   {
     label: 'Wreck',
-    styles: { background: '', color: '' }
+    styles: { background: 'darkblue', color: 'yellow' }
+  },
+  {
+    label: 'Spawner',
+    styles: { background: '#202020', color: '#e60000' }
   },
   {
     label: 'Nether Portal',
     styles: { background: 'black', color: 'mediumpurple' }
   },
   {
-    label: 'Trials',
-    styles: { background: '#b85233', color: '#33b873' }
-  },
-  {
-    label: 'End Portal',
-    styles: { background: '#004b49', color: 'khaki' }
-  },
-  {
     label: 'Buzz Base',
-    styles: { background: '', color: '' }
+    styles: { background: 'green', color: 'yellow' }
   },
   {
     label: 'Cat Base',
     styles: { background: 'black', color: 'pink' }
-  },
-  {
-    label: 'Wreck',
-    styles: { background: 'darkblue', color: 'yellow' }
   },
   {
     label: 'Geode',
@@ -140,12 +140,16 @@ export const ButtonStylesMinecraftStructures = [
     styles: { background: 'black', color: 'khaki' }
   },
   {
-    label: 'End City',
-    styles: { background: 'black', color: 'khaki' }
+    label: 'Trials',
+    styles: { background: '#b85233', color: '#33b873' }
   },
   {
-    label: 'Spawner',
-    styles: { background: '#202020', color: '#e60000' }
+    label: 'End Portal',
+    styles: { background: '#004b49', color: 'khaki' }
+  },
+  {
+    label: 'End City',
+    styles: { background: 'black', color: 'khaki' }
   },
   {
     label: 'Fortress',
