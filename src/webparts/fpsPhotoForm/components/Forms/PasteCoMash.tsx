@@ -7,9 +7,14 @@ import { getButtonStyles } from './getButtonStyles';
 import FPSToggle from '../Toggle/component';
 
 export interface IPhotoFormForm  {
-  SiteUrl: string;
+  ListSiteUrl: string;
   ListTitle: string;
+  LibrarySiteUrl: string;
   LibraryName: string;
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+  imageSubfolder2: string;
+
   Category1s: string[];
   Category2s: string[];
   Category3s: string[];
@@ -30,7 +35,7 @@ const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
 const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
-  const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
+  const { ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName, Category1s, Category2s, Category3s } = props;
   const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
   const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
@@ -67,7 +72,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
     // Create list item in SharePoint
     const createListItem = async (title: string): Promise<any> => {
-      const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+      const requestDigest = await getThisFPSDigestValueFromUrl(ListSiteUrl);
 
       const saveItem = {
           Title: title,
@@ -94,7 +99,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       console.log('Save Item:', saveItem);
 
       try {
-          const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items`, {
+          const response = await fetch(`${ListSiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items`, {
               method: 'POST',
               headers: {
                   'Accept': 'application/json',
@@ -131,13 +136,13 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
     // Upload image to SiteAssets library
     const uploadImageToLibrary = async (blob: Blob, fileName: string): Promise<string | null> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+        const requestDigest = await getThisFPSDigestValueFromUrl(LibrarySiteUrl);
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.onloadend = async () => {
                 const buffer = fileReader.result as ArrayBuffer;
                 try {
-                    const response = await fetch(`${SiteUrl}/_api/web/GetFolderByServerRelativeUrl('${LibraryName}')/Files/add(url='${fileName}', overwrite=true)`, {
+                    const response = await fetch(`${LibrarySiteUrl}/_api/web/GetFolderByServerRelativeUrl('${LibraryName}')/Files/add(url='${fileName}', overwrite=true)`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json; odata=verbose',
@@ -164,10 +169,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
     // Update list item with image URL
     const updateListItemWithImage = async (itemId: number, imageUrl: string):Promise<void> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+        const requestDigest = await getThisFPSDigestValueFromUrl(ListSiteUrl);
         const body = { ScreenshotUrl: imageUrl }; // Assuming ScreenshotUrl is the name of your image column
         try {
-            const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items(${itemId})`, {
+            const response = await fetch(`${ListSiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items(${itemId})`, {
                 method: 'PATCH',
                 headers: {
                     'Accept': 'application/json',

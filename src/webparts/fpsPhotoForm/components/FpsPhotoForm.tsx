@@ -277,12 +277,14 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
               /> */}
 
               <ScreenshotFormMash
-                SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
-                ListTitle={ 'WorldCoords888' }
-                LibraryName={ 'MapImages/888Mashup' }
-                Category1s={ ButtonStylesMinecraftDimensions.map( x => x.label) }
-                Category2s={ButtonStylesMinecraftBiomes.map( x => x.label) }
-                Category3s={ ButtonStylesMinecraftStructures.map( x => x.label) }
+                ListSiteUrl={ this.props.ListSiteUrl }
+                ListTitle={ this.props.ListTitle }
+                LibrarySiteUrl={ this.props.LibrarySiteUrl }
+                LibraryName={ this.props.LibraryName }
+                Category1s={ this.props.Category1s }
+                Category2s={ this.props.Category2s }
+                Category3s={ this.props.Category3s }
+                imageSubfolder2={ this.props.imageSubfolder2 }
                 // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
                 // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
                 // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }

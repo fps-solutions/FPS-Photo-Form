@@ -4,10 +4,11 @@ import { IFPSCoreReactComponentProps } from '@mikezimm/fps-core-v7/lib/banner/ma
 import { IFPSCorePinMeReactComponentState } from '@mikezimm/fps-core-v7/lib/banner/mainReact/ReactComponentState';
 
 import { ILoadPerformance } from '../fpsReferences';
+import { IPhotoFormForm } from './Forms/PasteCoMash';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
-export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps {
+export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhotoFormForm {
   description: string;
   isDarkTheme: boolean;
   environmentMessage: string;

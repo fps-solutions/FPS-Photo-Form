@@ -19,6 +19,7 @@ import { Environment, Version } from '@microsoft/sp-core-library';
 import {
   IPropertyPaneConfiguration,
   IPropertyPaneGroup,
+  PropertyPaneTextField,
 } from '@microsoft/sp-property-pane';
 import { IReadonlyTheme,  ThemeProvider, ThemeChangedEventArgs } from '@microsoft/sp-component-base';
 
@@ -73,6 +74,9 @@ import { analyticsList, AnalyticsOptions } from './CoreFPS/Analytics';
 *
 *    USED IN PRESETTING PROPS
 */
+import { IFPSListItemPropPaneDropDownOption } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPropPaneDropDownOption';
+import { IPropertyPaneDropdownOption } from '@mikezimm/fps-core-v7/lib/types/@msft/1.15.2/sp-property-pane';
+
 
 import { PreConfiguredProps,  } from './CoreFPS/PreConfiguredSettings';
 
@@ -103,6 +107,8 @@ import { panelVersionNumber } from './HelpPanel/About';
 import { FPSCert } from './CoreFPS/fpsCert';
 import { IFPSCert } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IFPSCert';
 import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
+import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './components/Forms/getButtonStyles';
+import { Label } from 'office-ui-fabric-react';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -115,12 +121,36 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
   private _themeProvider: ThemeProvider;
   private _themeVariant: IReadonlyTheme | undefined;  // 2023-01-22:  Just copied from Drilldown
 
+
+  private _listPickerValue2 = '';
+  private _webUrlPickerValue2 = '';
+  private _webUrlPickerValueApproved2:  boolean = false;
+  private _listItemPickerValue2 = '';
+
+  // Dropdown gets disabled while retrieving items asynchronously
+  //Created in SecureScript7
+  private _listsDropdownDisabled2: boolean = true;
+  // Copied from CherryPickedCE
+  private _itemsDropdownDisabled2: boolean = true;
+
+  // Files in the selected library
+  private _listItemsPickerList2: IPropertyPaneDropdownOption[] = [];
+
+  //Added in Secure Script 7
+  private _listPickerList2: IFPSListItemPropPaneDropDownOption[] = [];
+
+  private _approvedLists2 : IFPSListItemPropPaneDropDownOption[]= [];
+
+  // File types you want available in the picker.  Use * for all extensions
+  private _approvedFilePickerTypes2 = [ '*' ];
+
   protected async onInit(): Promise<void> {
     // return this._getEnvironmentMessage().then(message => {
     //   this._environmentMessage = message;
     // });
 
     this._approvedFilePickerTypes = [ '*' ];
+    this._approvedLists2 = [ ];
 
     this._environmentMessage = await this._getEnvironmentMessage();
 
@@ -200,6 +230,16 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         errMessage: '',
         bannerProps: bannerProps,
 
+        ListSiteUrl: this.properties.webUrlPickerValue,
+        ListTitle: this.properties.listPickerValue,
+        LibrarySiteUrl: this.properties.webUrlPickerValue2,
+        LibraryName: this.properties.listPickerValue2,
+        Category1s:  ButtonStylesMinecraftDimensions.map( x => x.label),
+        Category2s: ButtonStylesMinecraftBiomes.map( x => x.label),
+        Category3s:  ButtonStylesMinecraftStructures.map( x => x.label),
+
+        imageSubfolder2: this.properties.imageSubfolder2,
+
       }
     );
 
@@ -261,7 +301,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
   protected async onPropertyPaneConfigurationStart(): Promise<void> {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await onListItemPropPaneStart( this as any, [], '100', false );
+    await onListItemPropPaneStart( this as any, [], '100', false, '' );
+    await onListItemPropPaneStart( this as any, [], '101', false, '2' );
   }
   /***
  *    d8888b. d8888b.  .d88b.  d8888b.      d8888b.  .d8b.  d8b   db d88888b       .o88b. db   db  .d8b.  d8b   db  d888b  d88888b
@@ -286,9 +327,14 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // If required add approvedSites into approvedSites[] or set to just [] to allow any site
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await onwebUrlPickerValueChanged( this as any, propertyPath, oldValue, newValue, [], '100' );
+    await onwebUrlPickerValueChanged( this as any, propertyPath, oldValue, newValue, [], '100', '' );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await onListPickerChanged( this as any, false, propertyPath, oldValue, newValue, );
+    await onListPickerChanged( this as any, false, propertyPath, oldValue, newValue, '' );
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await onwebUrlPickerValueChanged( this as any, propertyPath, oldValue, newValue, [], '101', '2' );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await onListPickerChanged( this as any, false, propertyPath, oldValue, newValue, '2' );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // await onListItemPickerChanged( this as any, propertyPath, oldValue, newValue, );
 
@@ -319,7 +365,16 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
       const FPSGroups: IPropertyPaneGroup[] = getAllDefaultFPSFeatureGroups ( thisAsAny );
 
-      groups.push( FPSListItemPickerGroup( 'List Picker', false, thisAsAny ) );
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+      const LibraryGroup = FPSListItemPickerGroup( 'Image Library Picker', false, thisAsAny, '2' );
+      LibraryGroup.groupFields.push(
+        PropertyPaneTextField('imageSubfolder2', {
+          label: 'Image Library Folder',
+        })
+      );
+      groups.push( FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' ) );
+
+      groups.push( LibraryGroup );
 
       // LOOCKPROOPS REFACTOR:  ADD THIS Loop for all other groups
       if ( propsEasyMode !== true ) {

@@ -12,6 +12,7 @@
  *
  */
 import { IMinWPBannerProps } from '@mikezimm/fps-core-v7/lib/banner/interfaces/MinWP/IMinWPBannerProps';
+import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 
 export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomProps' , ];
@@ -23,6 +24,7 @@ export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomPro
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const WebPartAnalyticsChanges : any = {
   listPicker: changeListItemPickers,
+  libraryPicker:  [ ...changeListItemPickers2, 'imageSubfolder2' ],
   groupX: changePropertyGroupX,
 }
 
@@ -52,8 +54,11 @@ export const importBlockPropsWP : string[] = [ 'showSomeProps' ];
    * Extend with portions of FPS Props that are needed
    *
    */
-export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps {
+export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListItemPickerWPProps2 {
 
   description: string;
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+  imageSubfolder2: string;
 
 }
