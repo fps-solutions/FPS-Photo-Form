@@ -24,6 +24,7 @@ import { WebPartContext } from '@microsoft/sp-webpart-base';
 import FileUpload from './Forms/Paste2';
 import FileUpload3 from './Forms/Paste3';
 import ScreenshotFormMash from './Forms/PasteCoMash';
+import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './Forms/getButtonStyles';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -279,9 +280,12 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
                 ListTitle={ 'WorldCoords888' }
                 LibraryName={ 'MapImages/888Mashup' }
-                Category1s={ [ 'Overworld', 'Nether', 'End' ] }
-                Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
-                Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
+                Category1s={ ButtonStylesMinecraftDimensions.map( x => x.label) }
+                Category2s={ButtonStylesMinecraftBiomes.map( x => x.label) }
+                Category3s={ ButtonStylesMinecraftStructures.map( x => x.label) }
+                // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
+                // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
+                // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
               />
 
               {/* <div className={styles.welcome}>

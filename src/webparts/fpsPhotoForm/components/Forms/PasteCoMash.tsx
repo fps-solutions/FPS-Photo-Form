@@ -4,6 +4,7 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 
 import styles from '../FpsPhotoForm.module.scss';
 import { getButtonStyles } from './getButtonStyles';
+import FPSToggle from '../Toggle/component';
 
 export interface IPhotoFormForm  {
   SiteUrl: string;
@@ -14,11 +15,28 @@ export interface IPhotoFormForm  {
   Category3s: string[];
 }
 
+export interface IPhotoFormFormInterface {
+  category1: number;
+  category2: number[];
+  category3: number[];
+  title: string;
+  comments: string;
+  x: number;
+  y: number;
+  z: number;
+}
+
+const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
+const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
+
 const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
   const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
+  const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
+  const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
-    const [formData, setFormData] = useState({ category1: 0, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 });
+    const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
+    const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
     const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
     const [cats2Title, setCats2Title ] = useState<boolean>(false);
@@ -27,6 +45,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     useEffect(() => {
       setWasSubmitted(false);
     }, [formData]);
+
+    const handleToggleChange = (checked: boolean) => {
+      setAutoClear(checked); // Update the state when toggle changes
+    };
 
     // Handle pasting the image from the clipboard
     const handlePaste = (e: ClipboardEvent) => {
@@ -50,8 +72,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       const saveItem = {
           Title: title,
           Category1: Category1s[formData.category1],
-          Category2: formData.category2.map(idx => Category2s[idx]),
-          Category3: formData.category3.map(idx => Category3s[idx]),
+          Category2: formData.category2.map((idx: number) => Category2s[idx]),
+          Category3: formData.category3.map((idx: number) => Category3s[idx]),
 
           // NOTE for SE:  You may need this more complex object
           // Category2: {
@@ -180,13 +202,18 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         fileDesc.push( `${formData.title}` );
 
         const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}_${ fileDesc.join('_') }.png`;
-        const shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
+        let shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
+
+        // remove special characters from the filename:  https://github.com/fps-solutions/FPS-Photo-Form/issues/9
+        shortFileName = shortFileName.replace(/[\\/:*?"<>|#&]/g, '' );
         const blob = base64ToBlob(imageData);
-        const imageUrl = await uploadImageToLibrary(blob, shortFileName);
+
+        const imageUrl = await uploadImageToLibrary( blob, shortFileName );
 
         if (imageUrl) {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
             setWasSubmitted( true );
+            if ( autoClear === true ) setFormData( EmptyFormData );
             alert('Item created and image uploaded successfully!');
         } else {
             alert('Failed to upload the image.');
@@ -201,10 +228,11 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         };
     }, []);
 
-    const handleCategory2Click = (index: number) => {
+    const handleCategory2Click = (index: number): void => {
       setFormData(prevFormData => {
         const indexInArray = prevFormData.category2.indexOf(index);
         let newCategory2;
+
         if (indexInArray > -1) {
           // Remove the index if it's already in the array
           newCategory2 = prevFormData.category2.filter(i => i !== index);
@@ -212,11 +240,18 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
           // Add the index if it's not in the array
           newCategory2 = [...prevFormData.category2, index];
         }
+
+        // https://github.com/fps-solutions/FPS-Photo-Form/issues/6
+        const clickedActual = PlaceHolderCategories.indexOf( Category2s[index] ) < 0 ? true : false;
+        newCategory2 = newCategory2.filter(function(index) {
+          return clickedActual ? PlaceHolderCategories.indexOf(Category2s[index]) === -1 : PlaceHolderCategories.indexOf(Category2s[index]) > -1;
+        });
+
         return { ...prevFormData, category2: newCategory2 };
       });
     };
 
-    const handleCategory3Click = (index: number) => {
+    const handleCategory3Click = (index: number): void => {
       setFormData(prevFormData => {
         const indexInArray = prevFormData.category3.indexOf(index);
         let newCategory3;
@@ -227,38 +262,30 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
           // Add the index if it's not in the array
           newCategory3 = [...prevFormData.category3, index];
         }
+
+        // https://github.com/fps-solutions/FPS-Photo-Form/issues/6
+        const clickedActual = PlaceHolderCategories.indexOf( Category3s[index] ) < 0 ? true : false;
+        newCategory3 = newCategory3.filter(function(index) {
+          return clickedActual ? PlaceHolderCategories.indexOf(Category3s[index]) === -1 : PlaceHolderCategories.indexOf(Category3s[index]) > -1;
+        });
+
         return { ...prevFormData, category3: newCategory3 };
       });
     };
 
     const { title, x, y, z, category1, category2, category3 } = formData;
-    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && category2.length > 0  && category3.length > 0 ? false : true;
+    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
 
     const numberFields = ['x', 'y', 'z'];
 
     return (
         <form className={ styles.fpsPhotoFormGrid }
           onSubmit={handleSubmit} onPaste={handlePaste as any}>
-            {/* <div style={{ margin: '1em' }}>
-                <h4>Expecting the following site structure</h4>
-                <ul>
-                    <li>List with name: {`'PhotoFormMC'`}</li>
-                    <li>Title column: {`Comes with default list`}</li>
-                    <li>Text column called {`'ScreenshotUrl'`}</li>
-                    <li>SiteAssets library {`Titled as "Site Assets" with the space - should be default`}</li>
-                </ul>
-            </div> */}
-
-            <div className={ styles.title }style={{  }}>
-                <label>Title</label>
-                <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
-            </div>
 
             <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
               <div style={{ }}>
-                <label>Category 1</label>
-                <div>
+              <h4 style={{ margin: '0px' }}>Category 1</h4>
+                <div className={ styles.categoryButtons }>
                   {Category1s.map((category, index) => (
                     <button
                       className={ formData.category1 === index ? [ styles.button, styles.selected ].join(' ') : styles.button }
@@ -275,13 +302,11 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               </div>
             </div>
 
-            <div className={ styles.comments }style={{  }}>
-                <label>Comments</label>
-                <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
+            <div className={ styles.title }style={{  }}>
+                <label>Title</label>
+                <input type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em' }} />
             </div>
-
-
 
             <div className={ styles.coordinates }>
               {numberFields.map(field => (
@@ -305,9 +330,15 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
               ))}
             </div>
 
+            <div className={ styles.comments }style={{  }}>
+                <label>Comments</label>
+                <textarea value={formData.comments} onChange={e => setFormData({ ...formData, comments: e.target.value })}
+                    style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
+            </div>
+
               <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
                 <h4 style={{ margin: '0px' }}>Category 2</h4>
-                <div style={{ display: 'grid' }}>
+                <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
                   {Category2s.map((category, index) => (
                     <button
                       className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
@@ -315,7 +346,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory2Click(index)}
-                      style={ {...{ }, ...getButtonStyles( Category2s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category2s[ index ] ) } }
                     >
                       {category}
                     </button>
@@ -325,7 +356,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
               <div style={{ marginLeft: '1em' }} className={ styles.category3 }>
                 <h4 style={{ margin: '0px' }}>Category 3</h4>
-                <div style={{ display: 'grid' }}>
+                <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
                   {Category3s.map((category, index) => (
                     <button
                       className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
@@ -333,14 +364,13 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory3Click(index)}
-                      style={ {...{ }, ...getButtonStyles( Category3s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category3s[ index ] ) } }
                     >
                       {category}
                     </button>
                   ))}
                 </div>
               </div>
-
 
               <div className={ styles.summary }>
                 <div>
@@ -355,6 +385,17 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
               <div className={ styles.submit } style={{ margin: '1em 1em 1em 0em' }}>
                 <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
+                {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
+                <button className={ styles.clearButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button>
+
+                <FPSToggle
+                  label="Reset on Create"
+                  onText="Auto"
+                  offText="Manual"
+                  onChange={ handleToggleChange }
+                />
+                <div>Current Toggle State: { `${autoClear}` }</div>
+
               </div>
               {imageData && (
                 <div className={ styles.imagePreview }>
