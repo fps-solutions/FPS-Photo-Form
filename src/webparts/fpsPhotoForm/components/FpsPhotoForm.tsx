@@ -8,7 +8,7 @@ import { escape } from '@microsoft/sp-lodash-subset';
 
 import { saveViewAnalytics } from '../CoreFPS/Analytics';
 
-import FetchBannerX from '@mikezimm/fps-library-v2/lib/banner/bannerX/FetchBannerX';
+import FetchBannerY from '@mikezimm/fps-library-v2/lib/banner/bannerX/FetchBannerY';
 import { checkCert, } from '@mikezimm/fps-core-v7/lib/banner/bannerX/checkCert';
 // import { createSpecialElement } from '@mikezimm/fps-library-v2/lib/banner/components/SpecialBanner/component';
 // import { ISpecialMessage, } from '@mikezimm/fps-library-v2/lib/banner/components/SpecialBanner/interface';
@@ -242,7 +242,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     if ( check4Gulp() === true )  console.log('React Render - this._performance:', JSON.parse(JSON.stringify(this._performance)) );
 
-    const Banner = <FetchBannerX
+    const Banner = <FetchBannerY
 
       // bonusHTML1={ 'BonusHTML1 Text' }
       panelPerformance={ this._performance }
