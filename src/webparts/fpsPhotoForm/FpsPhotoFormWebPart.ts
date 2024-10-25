@@ -240,7 +240,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         errMessage: '',
         bannerProps: bannerProps,
 
-        tab: 'Input',
+        tab: 'Map',
         ListSource: ListSource,
         ImagesSource: ImagesSource,
 

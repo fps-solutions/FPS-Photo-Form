@@ -77,7 +77,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       refreshId: makeid(5),
       debugMode: false,
       showSpinner: false,
-      tab: this.props.tab ? this.props.tab : 'Map',
+      tab: this.props.tab ? this.props.tab : 'Input',
       };
   }
 
@@ -313,6 +313,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                       { x: 30, y: 1, z: -30, Category: 'G', Title: 'TopRight' },
                     ],
                   }}
+                reverseVerticalAxis={ true }
 
               />
 

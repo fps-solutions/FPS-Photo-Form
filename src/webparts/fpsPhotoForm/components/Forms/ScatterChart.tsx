@@ -20,6 +20,7 @@ interface ScatterChartProps {
   diameter: number; // Total height of the chart
   stateSource: IStateSource;
   gridStep: number; // Step for grid lines
+  reverseVerticalAxis?: boolean; // Flag to reverse the vertical axis
 }
 
 const calculatePercentageInRange = (
@@ -32,7 +33,6 @@ const calculatePercentageInRange = (
   const range = max - min;
 
   if (returnValid === 'OnlyBetweenMinMax') {
-    // Check if x is within the range
     if (x < min || x > max) {
       throw new Error(`Value ${x} is out of the range [${min}, ${max}]`);
     }
@@ -66,26 +66,15 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   diameter,
   stateSource,
   gridStep,
+  reverseVerticalAxis = false,
 }) => {
+  const xMin = xCenter - (diameter / 2);
+  const xMax = xCenter + (diameter / 2);
+  const zMin = yCenter - (diameter / 2);
+  const zMax = yCenter + (diameter / 2);
 
+  const displaySize = diameter / 75; // Default display size for circles
 
-  // Calculate min and max for x and z
-  // const xValues = stateSource.items.map(item => item.x);
-  // const zValues = stateSource.items.map(item => item.z);
-
-  // const xMin = Math.min(...xValues);
-  // const xMax = Math.max(...xValues);
-  // const zMin = Math.min(...zValues);
-  // const zMax = Math.max(...zValues);
-
-  const xMin = xCenter-(diameter/2);
-  const xMax =  xCenter+(diameter/2);
-  const zMin =  yCenter-(diameter/2);
-  const zMax = yCenter+(diameter/2);
-
-  const displaySize = diameter / 75; // Default displaySize for circles
-
-  // Log min and max values for scaling
   console.log(`X Range: ${xMin} to ${xMax}`);
   console.log(`Z Range: ${zMin} to ${zMax}`);
 
@@ -96,11 +85,13 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           const xPercent = calculatePercentageInRange(item.x, xMin, xMax);
           const yPercent = calculatePercentageInRange(item.z, zMin, zMax);
 
-          // Calculate circle position
           const cx = xCenter + (xPercent / 100) * (diameter);
-          const cy = diameter - (yPercent / 100) * (diameter); // Inverted Y position
 
-          // Log coordinates for debugging
+          // Adjust cy based on reverseVerticalAxis
+          const cy = reverseVerticalAxis
+            ? (yPercent / 100) * diameter // Lower z values higher on the Y-axis
+            : diameter - (yPercent / 100) * diameter; // Standard positioning
+
           console.log(`coords: ${index}:`, cx, cy, item);
 
           return (
@@ -125,8 +116,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
           return (
             <g key={i}>
-              <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={ displaySize/5 } />
-              <text x={xLinePosition} y={15} fontSize={ displaySize * 2 } fill="black">{`${i * gridStep + xMin}`}</text>
+              <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={displaySize / 5} />
+              <text x={xLinePosition} y={15} fontSize={displaySize * 2} fill="black">{`${i * gridStep + xMin}`}</text>
             </g>
           );
         })}
@@ -136,8 +127,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
           return (
             <g key={i}>
-              <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={ displaySize/5 } />
-              <text x={displaySize} y={yLinePosition + displaySize} fontSize={ displaySize * 2 } fill="black">{`${i * gridStep + zMin}`}</text>
+              <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={displaySize / 5} />
+              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{`${i * gridStep + zMin}`}</text>
             </g>
           );
         })}
