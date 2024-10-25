@@ -1,10 +1,12 @@
 import * as React from 'react';
 import styles from './FpsPhotoForm.module.scss';
 
-import { IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
+import { IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
 
 import { IDefSourceType,  } from './IFpsPhotoFormProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+
+import { Icon } from '@fluentui/react/lib/Icon';
 
 import { saveViewAnalytics } from '../CoreFPS/Analytics';
 
@@ -19,12 +21,8 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
-import ScreenshotForm from './Forms/Paste';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
-import FileUpload from './Forms/Paste2';
-import FileUpload3 from './Forms/Paste3';
 import ScreenshotFormMash from './Forms/PasteCoMash';
-import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './Forms/getButtonStyles';
+import ScatterChart from './Forms/ScatterChart';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -79,7 +77,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       refreshId: makeid(5),
       debugMode: false,
       showSpinner: false,
-
+      tab: this.props.tab ? this.props.tab : 'Input',
       };
   }
 
@@ -201,11 +199,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
   public render(): React.ReactElement<IFpsPhotoFormProps> {
     const {
-      description,
-      isDarkTheme,
-      environmentMessage,
       hasTeamsContext,
-      userDisplayName,
       bannerProps
     } = this.props;
 
@@ -230,9 +224,18 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     //Setting showTricks to false here ( skipping this line does not have any impact on bug #90 )
     if ( this.props.bannerProps.beAUser === false ) {
-      farBannerElementsArray.push(
-        // <div title={'Show Debug Info'}><Icon iconName='TestAutoSolid' onClick={ this.toggleDebugMode.bind(this) } style={ this.debugCmdStyles }></Icon></div>
-      );
+      farBannerElementsArray.push( ...[
+
+        <div key='Gap' style={{ cursor: 'default', marginRight: '.5em' }}>Tabs:</div>,
+        <Icon key='Input' iconName='Questionnaire' title='Form Input View' onClick={ ( event ) => this.handleStateClick( 'Input' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='List' iconName='BulletedList' title='List View' onClick={ ( event ) => this.handleStateClick( 'List' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='Map' iconName='Globe2' title='Coordinates View' onClick={ ( event ) => this.handleStateClick( 'Map' ) } style={ { ...this.props.bannerProps.bannerCmdReactCSS, ...{ marginRight: '2em' } } }/>,
+
+        <div key='Links' style={{ marginLeft: '3em', cursor: 'default', marginRight: '.5em' }}>Links:</div>,
+        <Icon key='Questionnaire' iconName='BulletedListText' title='Open List' onClick={ ( ) => window.open( `${this.props.ListSource.webUrl}${this.props.ListSource.webRelativeLink}`, '_blank' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='Photo2' iconName='Photo2' title='Open Images Folder' onClick={ ( ) => window.open( `${this.props.ImagesSource.webUrl}${this.props.ImagesSource.webRelativeLink}/${this.props.ImagesSource.subFolder}`, '_blank' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+
+      ]);
     }
 
     // const FPSUser : IFPSUser = this.props.bannerProps.FPSUser;
@@ -277,6 +280,9 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
               /> */}
 
               <ScreenshotFormMash
+                display={ this.state.tab === 'Input' ? 'block' : 'none' }
+                ListSource = { this.props.ListSource }
+                ImagesSource = { this.props.ImagesSource }
                 ListSiteUrl={ this.props.ListSiteUrl }
                 ListTitle={ this.props.ListTitle }
                 LibrarySiteUrl={ this.props.LibrarySiteUrl }
@@ -288,6 +294,25 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
                 // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
                 // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
+              />
+
+              <ScatterChart
+                Category1={ 'Overworld' }
+                xCenter={0}   // Example center x coordinate
+                yCenter={0}   // Example center y coordinate
+                diameter={60}  // Example total height of the chart
+                stateSource={{
+                    items: [
+                      { x: -30, y: 20, z: 30, Category: 'A', Title: 'BottomLeft' },
+                      { x: 0, y: 20, z: 0, Category: 'B', Title: 'Center' },
+                      // { x: 10, y: 20, z: 5, Category: 'C', Title: 'Point 1' },
+                      // { x: 15, y: 25, z: 10, Category: 'D', Title: 'Point 2' },
+                      // { x: 20, y: 15, z: 7, Category: 'E', Title: 'Point 3' },
+                      // { x: 25, y: 30, z: 3, Category: 'F', Title: 'Point 4' },
+                      { x: 30, y: 1, z: -30, Category: 'G', Title: 'TopRight' },
+                    ],
+                  }}
+
               />
 
               {/* <div className={styles.welcome}>
@@ -310,6 +335,10 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     );
   }
+
+  handleStateClick = (icon: IDefaultFormTab): void => {
+    this.setState({ tab: icon }); // Update with your desired state
+  };
 
   private _doSomething( cmd: string, cmd2: string ): void {
     console.log( '_doSomething and props', cmd, cmd2 );

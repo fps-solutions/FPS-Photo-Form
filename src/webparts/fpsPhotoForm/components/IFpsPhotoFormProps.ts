@@ -8,6 +8,8 @@ import { IPhotoFormForm } from './Forms/PasteCoMash';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
+export type IDefaultFormTab = 'Input' | 'List' | 'Map';
+
 export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhotoFormForm {
   description: string;
   isDarkTheme: boolean;
@@ -16,13 +18,12 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   userDisplayName: string;
 
   performance: ILoadPerformance;
-
+  tab: IDefaultFormTab;
 }
 
 /**
  * Extends IFPSCorePinMeReactComponentState with all basics required for FPS Banner
  */
  export interface IFpsPhotoFormState extends IFPSCorePinMeReactComponentState {
-
-
+  tab: IDefaultFormTab;
 }

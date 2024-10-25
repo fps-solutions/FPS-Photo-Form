@@ -108,7 +108,10 @@ import { FPSCert } from './CoreFPS/fpsCert';
 import { IFPSCert } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IFPSCert';
 import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
 import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './components/Forms/getButtonStyles';
-import { Label } from 'office-ui-fabric-react';
+import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
+import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
+import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/createListSource';
+
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -216,6 +219,13 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, );
 
+    // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
+    const ListSource: ISourceProps = createListSource( this.properties.webUrlPickerValue, this.properties.listPickerValue.replace(/List([^L]*)$/, ''), this.properties.listItemPickerValue  );
+    ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
+    // NO NEED to replace 'List' because Libraries do not add that.
+    const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
+    ImagesSource.subFolder = this.properties.imageSubfolder2;
+
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
       FpsPhotoForm,
       {
@@ -229,6 +239,10 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
         errMessage: '',
         bannerProps: bannerProps,
+
+        tab: 'Input',
+        ListSource: ListSource,
+        ImagesSource: ImagesSource,
 
         ListSiteUrl: this.properties.webUrlPickerValue,
         ListTitle: this.properties.listPickerValue,

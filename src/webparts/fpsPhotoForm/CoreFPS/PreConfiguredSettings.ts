@@ -43,9 +43,16 @@ export const WPPresetEverywhere : IPreConfigSettings = {
     source: 'WPPresetEverywhere',
     location: '*',
     props: {
-        bannerTitle: "FPS Photo Form",
+        bannerTitle: 'FPS Photo Form',
         defPinState: 'disabled',
-        webUrlPickerValue: "CurrentSite",
+        webUrlPickerValue: 'CurrentSite',
+        webUrlPickerValue2: 'CurrentSite',
+        listPickerValue: '',
+        listItemPickerValue: '',
+        listPickerValue2: '',
+        listItemPickerValue2: '',
+        imageSubfolder2: '',
+
     }
 };
 
