@@ -77,7 +77,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       refreshId: makeid(5),
       debugMode: false,
       showSpinner: false,
-      tab: this.props.tab ? this.props.tab : 'Input',
+      tab: this.props.tab ? this.props.tab : 'Map',
       };
   }
 
@@ -300,7 +300,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 Category1={ 'Overworld' }
                 xCenter={0}   // Example center x coordinate
                 yCenter={0}   // Example center y coordinate
-                diameter={60}  // Example total height of the chart
+                diameter={80}  // Example total height of the chart
+                gridStep={ 10 }
                 stateSource={{
                     items: [
                       { x: -30, y: 20, z: 30, Category: 'A', Title: 'BottomLeft' },

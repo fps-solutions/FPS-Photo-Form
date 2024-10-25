@@ -67,16 +67,23 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   stateSource,
   gridStep,
 }) => {
-  const radius = 5; // Default radius for circles
+
 
   // Calculate min and max for x and z
-  const xValues = stateSource.items.map(item => item.x);
-  const zValues = stateSource.items.map(item => item.z);
+  // const xValues = stateSource.items.map(item => item.x);
+  // const zValues = stateSource.items.map(item => item.z);
 
-  const xMin = Math.min(...xValues);
-  const xMax = Math.max(...xValues);
-  const zMin = Math.min(...zValues);
-  const zMax = Math.max(...zValues);
+  // const xMin = Math.min(...xValues);
+  // const xMax = Math.max(...xValues);
+  // const zMin = Math.min(...zValues);
+  // const zMax = Math.max(...zValues);
+
+  const xMin = xCenter-(diameter/2);
+  const xMax =  xCenter+(diameter/2);
+  const zMin =  yCenter-(diameter/2);
+  const zMax = yCenter+(diameter/2);
+
+  const displaySize = diameter / 75; // Default displaySize for circles
 
   // Log min and max values for scaling
   console.log(`X Range: ${xMin} to ${xMax}`);
@@ -101,7 +108,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
               key={index}
               cx={cx}
               cy={cy}
-              r={radius}
+              r={displaySize}
               fill="blue"
               onClick={() => alert(item.Title)}
             >
@@ -118,8 +125,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
           return (
             <g key={i}>
-              <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth=".25" />
-              <text x={xLinePosition} y={15} fontSize="8" fill="black">{`${i * gridStep + xMin}`}</text>
+              <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={ displaySize/5 } />
+              <text x={xLinePosition} y={15} fontSize={ displaySize * 2 } fill="black">{`${i * gridStep + xMin}`}</text>
             </g>
           );
         })}
@@ -129,8 +136,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
           return (
             <g key={i}>
-              <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth=".25" />
-              <text x={5} y={yLinePosition + 5} fontSize="8" fill="black">{`${i * gridStep + zMin}`}</text>
+              <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={ displaySize/5 } />
+              <text x={displaySize} y={yLinePosition + displaySize} fontSize={ displaySize * 2 } fill="black">{`${i * gridStep + zMin}`}</text>
             </g>
           );
         })}
