@@ -306,10 +306,10 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                     items: [
                       { x: -30, y: 20, z: 30, Category: 'A', Title: 'BottomLeft' },
                       { x: 0, y: 20, z: 0, Category: 'B', Title: 'Center' },
-                      // { x: 10, y: 20, z: 5, Category: 'C', Title: 'Point 1' },
-                      // { x: 15, y: 25, z: 10, Category: 'D', Title: 'Point 2' },
-                      // { x: 20, y: 15, z: 7, Category: 'E', Title: 'Point 3' },
-                      // { x: 25, y: 30, z: 3, Category: 'F', Title: 'Point 4' },
+                      { x: 10, y: 20, z: 5, Category: 'C', Title: 'Point 1' },
+                      { x: 15, y: 25, z: 10, Category: 'D', Title: 'Point 2' },
+                      { x: 20, y: 15, z: 7, Category: 'E', Title: 'Point 3' },
+                      { x: 25, y: 30, z: 3, Category: 'F', Title: 'Point 4' },
                       { x: 30, y: 1, z: -30, Category: 'G', Title: 'TopRight' },
                     ],
                   }}

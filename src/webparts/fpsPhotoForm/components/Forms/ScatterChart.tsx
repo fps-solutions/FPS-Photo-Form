@@ -6,11 +6,19 @@ interface IStateSource {
 }
 
 interface IAnySourceItem {
+  FPSItem: {
+    Scatter: IScatterPlotItem,
+   }
+}
+
+interface IScatterPlotItem {
   x: number;
   y: number;
   z: number;
   Category: string;
   Title: string;
+  Shape: 'circle' | 'triangle' | 'Square' | 'X' | '-' | 'image';
+  Color: string;
 }
 
 interface ScatterChartProps {
@@ -21,6 +29,11 @@ interface ScatterChartProps {
   stateSource: IStateSource;
   gridStep: number; // Step for grid lines
   reverseVerticalAxis?: boolean; // Flag to reverse the vertical axis
+  axisMap: { // for labeling
+    x: 'x', // raw item property key representing Horizontal Axis -
+    y: 'z', // raw item property key representing Vertical Chart Axis
+    z: 'y', // raw item property key representing Depth Axis
+  },
 }
 
 const calculatePercentageInRange = (
