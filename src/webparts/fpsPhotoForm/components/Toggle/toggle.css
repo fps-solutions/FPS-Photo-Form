@@ -1,103 +1,43 @@
-/* Toggle.css */
-
-.toggle-container {
+.fps-slider-container {
   display: flex;
-  align-items: center;
-  margin: 20px 0;
-  font-family: 'Arial', sans-serif;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px 0;
 }
 
-.toggle-label {
-  margin-right: 10px;
-  font-size: 14px;
-  color: #333;
-}
-
-.toggle-switch {
-  position: relative;
-  width: 4em;  /* 4em = roughly 64px depending on the font-size */
-  height: 2em; /* 2em = roughly 32px depending on the font-size */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.toggle-switch input[type="checkbox"] {
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 2;
-  cursor: pointer;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #ccc;
-  border-radius: 50px;
-  transition: 0.4s;
-  z-index: 1;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 1.6em;  /* Adjusted to 1.6em so it fits within the toggle size */
-  width: 1.6em;
-  border-radius: 50%;
-  left: 0.2em;
-  bottom: 0.2em;
-  background-color: white;
-  transition: 0.4s;
-}
-
-.toggle-switch input:checked + .slider {
-  background-color: #4CAF50;
-}
-
-.toggle-switch input:checked + .slider:before {
-  transform: translateX(2em);  /* Moves the slider knob 2em to the right */
-}
-
-.toggle-texts {
-  position: relative; /* Used to position both texts relative to this container */
-  display: flex;
-  align-items: center;
-  margin-left: 1em; /* Space between toggle and text */
-  width: 3.5em; /* The same width as the toggle switch */
-}
-
-.toggle-text {
-  position: absolute; /* Use absolute positioning to overlay the text */
-  font-size: 0.75em;
-  color: #555;
+.fps-slider-label {
+  margin-bottom: 5px;
   font-weight: bold;
-  white-space: nowrap;
-  transition: opacity 0.4s ease;
-  z-index: 2;
 }
 
-.toggle-text.on {
-  left: 100%; /* Position the 'on' text just after the toggle switch */
-  opacity: 0;
+.fps-slider {
+  width: 100%; /* Full width for the slider */
+  cursor: pointer; /* Change cursor on hover */
 }
 
-.toggle-switch input:checked ~ .toggle-texts .toggle-text.on {
-  opacity: 1; /* On state: 'onText' is fully visible */
+.fps-slider input[type="range"] {
+  -webkit-appearance: none; /* Remove default styling in WebKit browsers */
+  appearance: none;
+  background: #ddd; /* Track color */
+  border-radius: 5px;
+  height: 8px;
+  outline: none; /* Remove outline on focus */
 }
 
-.toggle-text.off {
-  left: 100%; /* Position the 'off' text just after the toggle switch */
-  opacity: 1; /* Default: 'offText' is visible */
+.fps-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Custom thumb for WebKit */
+  appearance: none;
+  width: 20px; /* Thumb width */
+  height: 20px; /* Thumb height */
+  background: #4caf50; /* Thumb color */
+  border-radius: 50%; /* Rounded thumb */
+  cursor: pointer; /* Change cursor on hover */
 }
 
-.toggle-switch input:not(:checked) ~ .toggle-texts .toggle-text.off {
-  opacity: 0; /* Off state: 'offText' fades out */
+.fps-slider input[type="range"]::-moz-range-thumb {
+  width: 20px; /* Thumb width */
+  height: 20px; /* Thumb height */
+  background: #4caf50; /* Thumb color */
+  border-radius: 50%; /* Rounded thumb */
+  cursor: pointer; /* Change cursor on hover */
 }

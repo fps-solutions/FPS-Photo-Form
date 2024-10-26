@@ -4,7 +4,9 @@ import './ScatterChart.css';
 import { useState } from 'react';
 import { ScatterChartProps } from './ScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
+import FPSSlider from '../Slider/component';
 
+const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
 
 const ScatterChart: React.FC<ScatterChartProps> = ({
   Category1,
@@ -14,17 +16,19 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   stateSource,
   gridStep,
   reverseVerticalAxis = false,
+  axisMap,
 }) => {
 
   const [minX, setMinX] = useState( hCenter - (diameter / 2) ); // Initial minX
   const [minY, setMinY] = useState( vCenter - (diameter / 2) );  // Initial minY
+  const [step, setStep] = useState( roundToNearest( diameter / 10 ) );  // Initial minY
 
-  const handleHScroll = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setMinX(parseInt(event.target.value));
+  const handleHScroll = (value: number): void => {
+    setMinX( value - (diameter / 2) );
   };
 
-  const handleVScroll = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setMinY(parseInt(event.target.value));
+  const handleVScroll = (value: number): void => {
+    setMinY( value - (diameter / 2) );
   };
 
   const horizontalMin = minX;
@@ -50,13 +54,19 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   console.log(`H Grid Lines: ${horzGridLines}`);
   console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
 
+  const sliderStyle: React.CSSProperties = { minWidth: '300px' };
   const viewBox: string = `${0} ${0} ${diameter} ${diameter}`;
 
   return (
     <div style={{ width: '100%', height: '700px' }}>
-
-      <input type="range" min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } onChange={handleHScroll} />
-      <input type="range" min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } onChange={handleVScroll} />
+      <div style={ { display: 'flex', gap: '2em' } }>
+        {/* <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } step={ step } onChange={ handleVScroll } style={ sliderStyle } /> */}
+        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ step } onChange={ handleVScroll } style={ sliderStyle } />
+      </div>
+      {/* <input type="range" step={ step } min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } onChange={handleHScroll} />
+      <input type="range" step={ step } min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } onChange={handleVScroll} /> */}
 
       <svg viewBox={ viewBox } style={{ width: '100%', height: '100%' }}>
         {stateSource.items.map((item, index) => {

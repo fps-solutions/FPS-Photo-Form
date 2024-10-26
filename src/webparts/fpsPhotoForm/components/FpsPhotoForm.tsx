@@ -319,7 +319,6 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 //     { FPSItem: { Scatter : { horz: -1000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
                 //     // { FPSItem: { Scatter : { horz: 9000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
                 //   ],
-
                 // }}
                 // reverseVerticalAxis={ true }
 
@@ -338,9 +337,9 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                 // vCenter={0}   // Example center y coordinate
                 // diameter={80}  // Example total height of the chart
 
-                hCenter={-22}   // Example center x coordinate
-                vCenter={15}   // Example center y coordinate
-                diameter={109}  // Example total height of the chart
+                hCenter={0}   // Example center x coordinate
+                vCenter={0}   // Example center y coordinate
+                diameter={100}  // Example total height of the chart
 
                 gridStep={ 10 }
                 stateSource={{
@@ -354,7 +353,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
                     { FPSItem: { Scatter : { horz: 30, vert: -30, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
                   ],
                 }}
-              reverseVerticalAxis={ false }
+              reverseVerticalAxis={ true }
               axisMap={{
                 horz: 'X',
                 vert: 'Z',
