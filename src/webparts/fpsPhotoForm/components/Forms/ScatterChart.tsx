@@ -1,6 +1,7 @@
 import * as React from 'react';
 import './ScatterChart.css';
 
+import { useState } from 'react';
 import { ScatterChartProps } from './ScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
 
@@ -14,6 +15,18 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   gridStep,
   reverseVerticalAxis = false,
 }) => {
+
+  const [minX, setMinX] = useState( hCenter - (diameter / 2) ); // Initial minX
+  const [minY, setMinY] = useState( vCenter - (diameter / 2) );  // Initial minY
+
+  const handleHScroll = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setMinX(parseInt(event.target.value));
+  };
+
+  const handleVScroll = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setMinY(parseInt(event.target.value));
+  };
+
   const horizontalMin = hCenter - (diameter / 2);
   const horizontalMax = hCenter + (diameter / 2);
   const verticalMin = vCenter - (diameter / 2);
@@ -37,14 +50,15 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   console.log(`H Grid Lines: ${horzGridLines}`);
   console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
 
+  const viewBox: string = `${minX} ${minY} ${diameter} ${diameter}`;
+
   return (
     <div style={{ width: '100%', height: '700px' }}>
 
-      <input type="range" min="-5000" max="5000" onChange={handleHScroll} />
-      <input type="range" min="-5000" max="5000" onChange={handleVScroll} />
+      <input type="range" min={ -diameter/4 } max={ diameter/4 } onChange={handleHScroll} />
+      <input type="range" min={ -diameter/4 } max={ diameter/4 } onChange={handleVScroll} />
 
-
-      <svg viewBox={`0 0 ${diameter} ${diameter}`} style={{ width: '100%', height: '100%' }}>
+      <svg viewBox={ viewBox } style={{ width: '100%', height: '100%' }}>
         {stateSource.items.map((item, index) => {
 
           const { Scatter } = item.FPSItem;
