@@ -3,15 +3,16 @@ export function calculatePercentageInRange(
   x: number,
   min: number,
   max: number,
-  returnValid: 'AnyNumber' | 'OnlyBetweenMinMax' = 'OnlyBetweenMinMax',
-  clamp: 'LimitToBoundary' | 'ActualPercent' = 'LimitToBoundary'
+  returnValid: 'AnyNumber' | 'OnlyBetweenMinMax' = 'AnyNumber',
+  clamp: 'LimitToBoundary' | 'ActualPercent' = 'ActualPercent'
 ): number {
   const range = max - min;
 
   if (returnValid === 'OnlyBetweenMinMax') {
       // Check if x is within the range
       if (x < min || x > max) {
-          throw new Error(`Value ${x} is out of the range [${min}, ${max}]`);
+          // throw new Error(`Value ${x} is out of the range [${min}, ${max}]`);
+          console.log(`Value ${x} is out of the range [${min}, ${max}]`);
       }
   }
 
@@ -35,9 +36,10 @@ export function calculatePercentageInRange(
 
   // Handle clamping based on the clamp parameter
   if (clamp === 'LimitToBoundary') {
-      return Math.max(0, Math.min(percentage, 100));
+    percentage = Math.max(0, Math.min(percentage, 100));
   }
 
+  console.log( `calculatePercentageInRange: %, x, min, max, clamp, returnValid`, percentage,x, min, max, clamp, returnValid );
   // If clamp is 'ActualPercent', return the actual percentage
   return percentage;
 }

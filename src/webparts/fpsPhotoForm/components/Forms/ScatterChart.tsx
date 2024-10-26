@@ -33,6 +33,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
   console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
   console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
+  console.log(`H Grid Lines: ${horzGridLines}`);
   console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
 
   return (
@@ -43,8 +44,12 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           const { Scatter } = item.FPSItem;
           const horzPercent = calculatePercentageInRange(Scatter.horz, horizontalMin, horizontalMax);
           const vertPercent = calculatePercentageInRange(Scatter.vert, verticalMin, verticalMax);
+          console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
 
-          const cHorizontal = hCenter + (horzPercent / 100) * (diameter);
+          // const cHorizontal = hCenter + (horzPercent / 100) * (diameter);
+          const cHorizontal = (horzPercent / 100) * diameter + hCenter; // Ensure hCenter is added
+          console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
+
 
           // Adjust cy based on reverseVerticalAxis
           const cVertical = reverseVerticalAxis
@@ -71,30 +76,30 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
         {/* Draw grid lines */}
         {horzGridLines.map((value, i) => {
-          const xLinePosition = (i * gridStep) / (horizontalMax - horizontalMin) * diameter;
-          console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
+          // const xLinePosition = (i * gridStep) / (horizontalMax - horizontalMin) * diameter;
+          const xLinePosition = (value - horizontalMin) / (horizontalMax - horizontalMin) * diameter + hCenter;
 
+          console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
+          const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
           return (
             <g key={i}>
               <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={displaySize / 5} />
-              <text x={xLinePosition} y={ displaySize } fontSize={displaySize * 2} fill="black">{value}</text>
+              <text x={xLinePosition} y={ displaySize } fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
             </g>
           );
         })}
 
         {vertGridLines.map((value, i) => {
           const yLinePosition = reverseVerticalAxis
-            // / ? (verticalMax - value) / (verticalMax - verticalMin) * diameter // Higher values at the bottom, lower values at the top
-            // : (value - verticalMin) / (verticalMax - verticalMin) * diameter; // Normal positioning
             ? (value - verticalMin) / (verticalMax - verticalMin) * diameter // Normal positioning
             : (verticalMax - value) / (verticalMax - verticalMin) * diameter; // Higher values at the bottom, lower values at the top
 
           console.log(`vertGridLines: ${value} is at ${yLinePosition}`);
-
+          const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
           return (
             <g key={i}>
               <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={displaySize / 5} />
-              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{value}</text>
+              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
             </g>
           );
         })}
