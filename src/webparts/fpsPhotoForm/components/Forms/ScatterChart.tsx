@@ -21,8 +21,9 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   const displaySize = diameter / 75; // Default display size for circles
 
   // Create grid line values
-  const horzGridLines: number[] = Array.from({ length: Math.ceil((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
-    return horizontalMin + i * gridStep; // Populate with actual horizontal values
+  const horzGridLines: number[] = Array.from({ length: Math.floor((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
+    return horizontalMin + i * gridStep; // THIS works for a sample where diamter is 80 and center is 0
+    // return horizontalMin + i * gridStep - gridStep; // Populate with actual horizontal values - WORKS WITH WIDE Scale values
     // return horizontalMin + (i * gridStep) - (gridStep / 2); // Shift left by half a grid step
   });
 
