@@ -27,8 +27,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
     setMinY(parseInt(event.target.value));
   };
 
-  const horizontalMin = hCenter - (diameter / 2);
-  const horizontalMax = hCenter + (diameter / 2);
+  const horizontalMin = minX;
+  const horizontalMax = minY;
   const verticalMin = vCenter - (diameter / 2);
   const verticalMax = vCenter + (diameter / 2);
 
