@@ -1,76 +1,8 @@
 import * as React from 'react';
 import './ScatterChart.css';
+import { ScatterChartProps } from './ScatterChartProps';
+import { calculatePercentageInRange } from './ScaleCalculations';
 
-interface IStateSource {
-  items: IAnySourceItem[];
-}
-
-interface IAnySourceItem {
-  FPSItem: {
-    Scatter: IScatterPlotItem,
-   }
-}
-
-interface IScatterPlotItem {
-  x: number;
-  y: number;
-  z: number;
-  Category: string;
-  Title: string;
-  Shape: 'circle' | 'triangle' | 'Square' | 'X' | '-' | 'image';
-  Color: string;
-}
-
-interface ScatterChartProps {
-  Category1: string;
-  xCenter: number; // Center x coordinate
-  yCenter: number; // Center y coordinate
-  diameter: number; // Total height of the chart
-  stateSource: IStateSource;
-  gridStep: number; // Step for grid lines
-  reverseVerticalAxis?: boolean; // Flag to reverse the vertical axis
-  axisMap: { // for labeling
-    x: 'x', // raw item property key representing Horizontal Axis -
-    y: 'z', // raw item property key representing Vertical Chart Axis
-    z: 'y', // raw item property key representing Depth Axis
-  },
-}
-
-const calculatePercentageInRange = (
-  x: number,
-  min: number,
-  max: number,
-  returnValid: 'AnyNumber' | 'OnlyBetweenMinMax' = 'OnlyBetweenMinMax',
-  clamp: 'LimitToBoundary' | 'ActualPercent' = 'LimitToBoundary'
-): number => {
-  const range = max - min;
-
-  if (returnValid === 'OnlyBetweenMinMax') {
-    if (x < min || x > max) {
-      throw new Error(`Value ${x} is out of the range [${min}, ${max}]`);
-    }
-  }
-
-  let percentage: number;
-
-  if (x < min) {
-    const distance = min - x;
-    percentage = -((distance / range) * 100);
-  } else {
-    const distance = x - min;
-    percentage = (distance / range) * 100;
-
-    if (x > max) {
-      percentage = 100 + ((x - max) / range) * 100;
-    }
-  }
-
-  if (clamp === 'LimitToBoundary') {
-    return Math.max(0, Math.min(percentage, 100));
-  }
-
-  return percentage;
-};
 
 const ScatterChart: React.FC<ScatterChartProps> = ({
   Category1,
@@ -83,20 +15,22 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 }) => {
   const xMin = xCenter - (diameter / 2);
   const xMax = xCenter + (diameter / 2);
-  const zMin = yCenter - (diameter / 2);
-  const zMax = yCenter + (diameter / 2);
+  const yMin = yCenter - (diameter / 2);
+  const yMax = yCenter + (diameter / 2);
 
   const displaySize = diameter / 75; // Default display size for circles
 
   console.log(`X Range: ${xMin} to ${xMax}`);
-  console.log(`Z Range: ${zMin} to ${zMax}`);
+  console.log(`Z Range: ${yMin} to ${yMax}`);
 
   return (
     <div style={{ width: '100%', height: '700px' }}>
       <svg viewBox={`0 0 ${diameter} ${diameter}`} style={{ width: '100%', height: '100%' }}>
         {stateSource.items.map((item, index) => {
-          const xPercent = calculatePercentageInRange(item.x, xMin, xMax);
-          const yPercent = calculatePercentageInRange(item.z, zMin, zMax);
+
+          const { Scatter } = item.FPSItem;
+          const xPercent = calculatePercentageInRange(Scatter.x, xMin, xMax);
+          const yPercent = calculatePercentageInRange(Scatter.y, yMin, yMax);
 
           const cx = xCenter + (xPercent / 100) * (diameter);
 
@@ -113,11 +47,11 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
               cx={cx}
               cy={cy}
               r={displaySize}
-              fill="blue"
-              onClick={() => alert(item.Title)}
+              fill={ Scatter.Color ? Scatter.Color : 'blue'}
+              onClick={() => alert(Scatter.Title)}
             >
               <title>
-                {`Title: ${item.Title}, Category: ${item.Category}, X: ${item.x}, Y: ${item.z}`}
+                {`Title: ${Scatter.Title}, Category: ${Scatter.Category}, X: ${Scatter.x}, Y: ${Scatter.y}`}
               </title>
             </circle>
           );
@@ -135,13 +69,13 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           );
         })}
 
-        {Array.from({ length: Math.ceil((zMax - zMin) / gridStep) + 1 }).map((_, i) => {
-          const yLinePosition = diameter - (i * gridStep) / (zMax - zMin) * diameter;
+        {Array.from({ length: Math.ceil((yMax - yMin) / gridStep) + 1 }).map((_, i) => {
+          const yLinePosition = diameter - (i * gridStep) / (yMax - yMin) * diameter;
 
           return (
             <g key={i}>
               <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={displaySize / 5} />
-              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{`${i * gridStep + zMin}`}</text>
+              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{`${i * gridStep + yMin}`}</text>
             </g>
           );
         })}
