@@ -28,9 +28,9 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   };
 
   const horizontalMin = minX;
-  const horizontalMax = minY;
-  const verticalMin = vCenter - (diameter / 2);
-  const verticalMax = vCenter + (diameter / 2);
+  const horizontalMax = minX + diameter;
+  const verticalMin = minY;
+  const verticalMax = minY + diameter;
 
   const displaySize = diameter / 75; // Default display size for circles
 
@@ -50,13 +50,13 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   console.log(`H Grid Lines: ${horzGridLines}`);
   console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
 
-  const viewBox: string = `${minX} ${minY} ${diameter} ${diameter}`;
+  const viewBox: string = `${0} ${0} ${diameter} ${diameter}`;
 
   return (
     <div style={{ width: '100%', height: '700px' }}>
 
-      <input type="range" min={ -diameter/4 } max={ diameter/4 } onChange={handleHScroll} />
-      <input type="range" min={ -diameter/4 } max={ diameter/4 } onChange={handleVScroll} />
+      <input type="range" min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } onChange={handleHScroll} />
+      <input type="range" min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } onChange={handleVScroll} />
 
       <svg viewBox={ viewBox } style={{ width: '100%', height: '100%' }}>
         {stateSource.items.map((item, index) => {
@@ -102,7 +102,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           return (
             <g key={i}>
               <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={displaySize / 5} />
-              <text x={xLinePosition} y={ displaySize } fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
+              <text x={xLinePosition} y={ displaySize * 3 } fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
               <title>{`H Value: ${value}`}</title> {/* Add title for hover effect */}
             </g>
           );
