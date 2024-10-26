@@ -305,19 +305,19 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
               <ScatterChart
                 Category1={ 'Overworld' }
-                xCenter={0}   // Example center x coordinate
-                yCenter={0}   // Example center y coordinate
+                hCenter={0}   // Example center x coordinate
+                vCenter={0}   // Example center y coordinate
                 diameter={80}  // Example total height of the chart
                 gridStep={ 10 }
                 // stateSource={{
                 //     items: [
-                //       { x: -30, y: 20, z: 30, Category: 'A', Title: 'BottomLeft' },
-                //       { x: 0, y: 20, z: 0, Category: 'B', Title: 'Center' },
-                //       { x: 10, y: 20, z: 5, Category: 'C', Title: 'Point 1' },
-                //       { x: 15, y: 25, z: 10, Category: 'D', Title: 'Point 2' },
-                //       { x: 20, y: 15, z: 7, Category: 'E', Title: 'Point 3' },
-                //       { x: 25, y: 30, z: 3, Category: 'F', Title: 'Point 4' },
-                //       { x: 30, y: 1, z: -30, Category: 'G', Title: 'TopRight' },
+                //       { horz: -30, vert: 20, depth: 30, Category: 'A', Title: 'BottomLeft' },
+                //       { horz: 0, vert: 20, depth: 0, Category: 'B', Title: 'Center' },
+                //       { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1' },
+                //       { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2' },
+                //       { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3' },
+                //       { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4' },
+                //       { horz: 30, vert: 1, depth: -30, Category: 'G', Title: 'TopRight' },
                 //     ],
                 //   }}
                 // reverseVerticalAxis={ true }
@@ -325,20 +325,20 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
                 stateSource={{
                   items: [
-                    { FPSItem: { Scatter : { x: -30, y: 30, z: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', 'Color': 'blue' } }},
-                    { FPSItem: { Scatter : { x: 0, y: 0, z: 33, Category: 'B', Title: 'Center', Shape: 'circle', 'Color': 'blue' } }},
-                    // { FPSItem: { Scatter : { x: 10, y: 20, z: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', 'Color': 'blue' } }},
-                    // { FPSItem: { Scatter : { x: 15, y: 25, z: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', 'Color': 'blue' } }},
-                    // { FPSItem: { Scatter : { x: 20, y: 15, z: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', 'Color': 'blue' } }},
-                    // { FPSItem: { Scatter : { x: 25, y: 30, z: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', 'Color': 'blue' } }},
-                    { FPSItem: { Scatter : { x: 30, y: -30, z: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', 'Color': 'blue' } }},
+                    { FPSItem: { Scatter : { horz: -30, vert: 30, depth: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', Color: 'red' } }},
+                    { FPSItem: { Scatter : { horz: 0, vert: 0, depth: 33, Category: 'B', Title: 'Center', Shape: 'circle', Color: 'black' } }},
+                    { FPSItem: { Scatter : { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', Color: 'blue' } }},
+                    { FPSItem: { Scatter : { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', Color: 'yellow' } }},
+                    { FPSItem: { Scatter : { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', Color: 'orange' } }},
+                    { FPSItem: { Scatter : { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', Color: 'teal' } }},
+                    { FPSItem: { Scatter : { horz: 30, vert: -30, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
                   ],
                 }}
               reverseVerticalAxis={ true }
               axisMap={{
-                x: 'X',
-                y: 'Z',
-                z: 'Y',
+                horz: 'X',
+                vert: 'Z',
+                depth: 'Y',
               }}
 
               />
