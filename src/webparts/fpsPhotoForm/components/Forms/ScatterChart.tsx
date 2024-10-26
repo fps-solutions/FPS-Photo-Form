@@ -20,8 +20,20 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
   const displaySize = diameter / 75; // Default display size for circles
 
-  console.log(`X Range: ${horizontalMin} to ${horizontalMax}`);
-  console.log(`Z Range: ${verticalMin} to ${verticalMax}`);
+  // Create grid line values
+  const horzGridLines: number[] = Array.from({ length: Math.ceil((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
+    return horizontalMin + i * gridStep; // Populate with actual horizontal values
+  });
+
+  const vertGridLines: number[] = Array.from({ length: Math.ceil((verticalMax - verticalMin) / gridStep) + 1 }).map((_, i) => {
+    return reverseVerticalAxis
+    ? verticalMin + i * gridStep // Normal order
+    : verticalMax - i * gridStep; // Reverse the order of vertical labels
+  });
+
+  console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
+  console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
+  console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
 
   return (
     <div style={{ width: '100%', height: '700px' }}>
@@ -58,27 +70,35 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
         })}
 
         {/* Draw grid lines */}
-        {Array.from({ length: Math.ceil((horizontalMax - horizontalMin) / gridStep) + 1 }).map((_, i) => {
+        {horzGridLines.map((value, i) => {
           const xLinePosition = (i * gridStep) / (horizontalMax - horizontalMin) * diameter;
+          console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
 
           return (
             <g key={i}>
               <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={displaySize / 5} />
-              <text x={xLinePosition} y={ displaySize } fontSize={displaySize * 2} fill="black">{`${i * gridStep + horizontalMin}`}</text>
+              <text x={xLinePosition} y={ displaySize } fontSize={displaySize * 2} fill="black">{value}</text>
             </g>
           );
         })}
 
-        {Array.from({ length: Math.ceil((verticalMax - verticalMin) / gridStep) + 1 }).map((_, i) => {
-          const yLinePosition = diameter - (i * gridStep) / (verticalMax - verticalMin) * diameter;
+        {vertGridLines.map((value, i) => {
+          const yLinePosition = reverseVerticalAxis
+            // / ? (verticalMax - value) / (verticalMax - verticalMin) * diameter // Higher values at the bottom, lower values at the top
+            // : (value - verticalMin) / (verticalMax - verticalMin) * diameter; // Normal positioning
+            ? (value - verticalMin) / (verticalMax - verticalMin) * diameter // Normal positioning
+            : (verticalMax - value) / (verticalMax - verticalMin) * diameter; // Higher values at the bottom, lower values at the top
+
+          console.log(`vertGridLines: ${value} is at ${yLinePosition}`);
 
           return (
             <g key={i}>
               <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={displaySize / 5} />
-              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{`${i * gridStep + verticalMin}`}</text>
+              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{value}</text>
             </g>
           );
         })}
+
       </svg>
     </div>
   );
