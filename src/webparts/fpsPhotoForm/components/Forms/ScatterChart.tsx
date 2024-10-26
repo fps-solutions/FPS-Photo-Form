@@ -9,6 +9,7 @@ import FPSSlider from '../Slider/component';
 const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
 
 const ScatterChart: React.FC<ScatterChartProps> = ({
+  show,
   Category1,
   hCenter,
   vCenter,
@@ -31,6 +32,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
     setMinY( value - (diameter / 2) );
   };
 
+  if ( show === false ) return null;
   const horizontalMin = minX;
   const horizontalMax = minX + diameter;
   const verticalMin = minY;
@@ -58,7 +60,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   const viewBox: string = `${0} ${0} ${diameter} ${diameter}`;
 
   return (
-    <div style={{ width: '100%', height: '700px' }}>
+    <div style={{ width: '100%', height: '70vh' }}>
       <div style={ { display: 'flex', gap: '2em' } }>
         {/* <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
         <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } step={ step } onChange={ handleVScroll } style={ sliderStyle } /> */}

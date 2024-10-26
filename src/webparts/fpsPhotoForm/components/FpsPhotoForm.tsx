@@ -304,6 +304,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
               />
 
               <ScatterChart
+                show={ this.state.tab === 'Map' ? true : false }
                 Category1={ 'Overworld' }
 
 

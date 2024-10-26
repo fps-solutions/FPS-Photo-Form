@@ -1,4 +1,5 @@
 export interface ScatterChartProps {
+  show?: boolean;
   Category1: string;
   hCenter: number; // Center x coordinate
   vCenter: number; // Center y coordinate
