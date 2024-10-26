@@ -22,8 +22,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
 
   // Create grid line values
   const horzGridLines: number[] = Array.from({ length: Math.ceil((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
-    // return horizontalMin + i * gridStep; // Populate with actual horizontal values
-    return horizontalMin + (i * gridStep) - (gridStep / 2); // Shift left by half a grid step
+    return horizontalMin + i * gridStep; // Populate with actual horizontal values
+    // return horizontalMin + (i * gridStep) - (gridStep / 2); // Shift left by half a grid step
   });
 
   const vertGridLines: number[] = Array.from({ length: Math.ceil((verticalMax - verticalMin) / gridStep) + 1 }).map((_, i) => {
@@ -48,8 +48,8 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
 
           // const cHorizontal = hCenter + (horzPercent / 100) * (diameter);
-          // const cHorizontal = (horzPercent / 100) * diameter + hCenter; // Ensure hCenter is added
-          const cHorizontal = hCenter + (horzPercent / 100) * diameter - (gridStep / 2);
+          const cHorizontal = (horzPercent / 100) * diameter + hCenter; // Ensure hCenter is added
+          // const cHorizontal = hCenter + (horzPercent / 100) * diameter - (gridStep / 2);
           console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
 
 
@@ -82,12 +82,13 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           const xLinePosition = (value - horizontalMin) / (horizontalMax - horizontalMin) * diameter + hCenter;
 
           console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
-          // const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
-          const formatNumberLabel = Math.abs(value - (gridStep / 2)) >= 1000 ? `${((value - (gridStep / 2)) / 1000).toFixed(0)}k` : (value - (gridStep / 2)).toString();
+          const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
+          // const formatNumberLabel = Math.abs(value - (gridStep / 2)) >= 1000 ? `${((value - (gridStep / 2)) / 1000).toFixed(0)}k` : (value - (gridStep / 2)).toString();
           return (
             <g key={i}>
               <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke="lightgray" strokeWidth={displaySize / 5} />
               <text x={xLinePosition} y={ displaySize } fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
+              <title>{`H Value: ${value}`}</title> {/* Add title for hover effect */}
             </g>
           );
         })}
@@ -103,6 +104,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
             <g key={i}>
               <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke="lightgray" strokeWidth={displaySize / 5} />
               <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
+              <title>{`V Value: ${value}`}</title> {/* Add title for hover effect */}
             </g>
           );
         })}
