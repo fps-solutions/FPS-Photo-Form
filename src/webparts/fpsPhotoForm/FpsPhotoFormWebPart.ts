@@ -110,10 +110,9 @@ import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
 import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './components/Forms/getButtonStyles';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
-import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/createListSource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
-import { IAxisMap, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
-import { createAxisMap, createPhotoListSourceProps } from './CoreFPS/createPhotoFormListSource';
+import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
+import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
 
 
 
@@ -233,6 +232,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     }
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
+    const ChartDisplay: IChartDisplayProps = createChartDisplay( this.properties )
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
@@ -273,6 +273,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         photoButtonStyles: this._photoButtonStyles,
 
         axisMap: AxisMap,
+        chartDisplay: ChartDisplay,
         // axisMap: {
         //   type: 'MC',
         //   Title: 'Title',

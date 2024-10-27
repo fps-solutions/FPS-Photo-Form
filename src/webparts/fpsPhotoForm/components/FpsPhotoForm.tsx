@@ -299,6 +299,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             tab={ this.state.tab  }
             ListSource={ this.props.ListSource  }
             axisMap={ this.props.axisMap  }
+            chartDisplay={ this.props.chartDisplay  }
             bannerProps={ bannerProps  }
             performance={ this._performance  }
             photoButtonStyles={ this.props.photoButtonStyles }

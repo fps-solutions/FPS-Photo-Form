@@ -14,7 +14,7 @@
 import { IMinWPBannerProps } from '@mikezimm/fps-core-v7/lib/banner/interfaces/MinWP/IMinWPBannerProps';
 import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
-import { changesAxis, IAxisMapWPProps } from './components/Forms/IScatterChartProps';
+import { changesAxis, changesChart, IAxisMapWPProps, IChartDisplayWPProps } from './components/Forms/IScatterChartProps';
 
 export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomProps' , ];
 
@@ -28,6 +28,7 @@ export const WebPartAnalyticsChanges : any = {
   listPicker: changeListItemPickers,
   libraryPicker:  [ ...changeListItemPickers2, 'imageSubfolder2' ],
   axisMap: changesAxis,
+  chartDisplay: changesChart,
   groupX: changePropertyGroupX,
 }
 
@@ -57,7 +58,7 @@ export const importBlockPropsWP : string[] = [ 'showSomeProps' ];
    * Extend with portions of FPS Props that are needed
    *
    */
-export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListItemPickerWPProps2, IAxisMapWPProps {
+export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListItemPickerWPProps2, IAxisMapWPProps, IChartDisplayWPProps {
 
   description: string;
 

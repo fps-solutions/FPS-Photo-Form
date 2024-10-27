@@ -1,12 +1,13 @@
 import { ILoadPerformance, IWebpartBannerProps } from "../../fpsReferences";
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { IDefaultFormTab } from "../IFpsPhotoFormProps";
-import { IAxisMap, IPhotoButtonStyle, IStateSourceScatter } from "../Forms/IScatterChartProps";
+import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle, IStateSourceScatter } from "../Forms/IScatterChartProps";
 
 export interface IViewTabsProps {
   ListSource: ISourceProps;
   tab: IDefaultFormTab;
   axisMap: IAxisMap;
+  chartDisplay: IChartDisplayProps;
   bannerProps: IWebpartBannerProps;
   performance: ILoadPerformance;
 

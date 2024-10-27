@@ -1,0 +1,27 @@
+/* ScatterChart.module.css */
+.svg-scatter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* or specific pixel values */
+  height: 400px; /* or percentage for responsiveness */
+  position: relative;
+  border: 1px solid #ccc; /* Optional: border for visibility */
+}
+
+.svg-scatter-container svg {
+  width: 100%; /* Allow it to fill the container */
+  height: 100%; /* Allow it to fill the container */
+  border: 1px solid #ccc; /* Optional: for visibility */
+}
+
+/* Original circle styles */
+.svg-scatter-container .scatter-point {
+  transition: all 0.2s ease; /* Smooth transition */
+  transition: transform 0.2s ease; /* Smooth transition */
+  transform-origin: center; /* Scale from the center */
+}
+
+.svg-scatter-container .scatter-point:hover {
+  transform: scale(1.4); /* Scale the circle */
+}
