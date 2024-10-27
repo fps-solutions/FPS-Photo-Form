@@ -60,26 +60,22 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
   const viewBox: string = `${0} ${0} ${diameter} ${diameter}`;
 
   return (
-    <div style={{ width: '100%', height: '70vh' }}>
+    <div style={{ width: '100%', height: '90vh' }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        {/* <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } step={ step } onChange={ handleVScroll } style={ sliderStyle } /> */}
-        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
+         <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
         <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ step } onChange={ handleVScroll } style={ sliderStyle } />
       </div>
-      {/* <input type="range" step={ step } min={ hCenter - (diameter / 2) } max={ hCenter + (diameter / 2) } onChange={handleHScroll} />
-      <input type="range" step={ step } min={ vCenter - (diameter / 2) } max={ vCenter + (diameter / 2) } onChange={handleVScroll} /> */}
 
-      <svg viewBox={ viewBox } style={{ width: '100%', height: '100%' }}>
+      {/* Reduced height to accomodate the slider heights */}
+      <svg viewBox={ viewBox } style={{ width: '100%', height: '90%' }}>
         {stateSource.items.map((item, index) => {
 
           const { Scatter } = item.FPSItem;
           const horzPercent = calculatePercentageInRange(Scatter.horz, horizontalMin, horizontalMax);
           const vertPercent = calculatePercentageInRange(Scatter.vert, verticalMin, verticalMax);
-          console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
-
           const cHorizontal = (Scatter.horz - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
 
+          console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
           console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
 
           // Adjust cy based on reverseVerticalAxis
@@ -90,18 +86,21 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
 
           return (
-            <circle
-              key={index}
-              cx={cHorizontal}
-              cy={cVertical}
-              r={displaySize}
-              fill={ Scatter.Color ? Scatter.Color : 'blue'}
-              onClick={() => alert(Scatter.Title)}
-            >
-              <title>
-                {`Title: ${Scatter.Title}, Category: ${Scatter.Category}, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
-              </title>
-            </circle>
+            <g key={index}>
+              <circle
+                key={index}
+                cx={cHorizontal}
+                cy={cVertical}
+                r={displaySize}
+                fill={ Scatter.Color ? Scatter.Color : 'blue'}
+                onClick={() => alert(Scatter.Title)}
+              >
+                <title>
+                  {`Title: ${Scatter.Title}, Category: ${Scatter.Category}, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
+                </title>
+              </circle>
+              <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize } fontSize={displaySize * 2} fill="black">{Scatter.Title}</text>
+            </g>
           );
         })}
 
