@@ -23,6 +23,7 @@ import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsRe
 
 import ScreenshotFormMash from './Forms/PasteCoMash';
 import ScatterChart from './Forms/ScatterChart';
+import { IAnySourceItem } from './Forms/ScatterChartProps';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -271,8 +272,24 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
   // Usage
   // const transformedItems = transformCoordinates(stateSource.items, axisMap);
+    const originalArray : IAnySourceItem[]= [
+      { FPSItem: { Scatter : { horz: -30, vert: 30, depth: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', Color: 'red' } }},
+      { FPSItem: { Scatter : { horz: 0, vert: 0, depth: 33, Category: 'B', Title: 'Center', Shape: 'circle', Color: 'black' } }},
+      { FPSItem: { Scatter : { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', Color: 'blue' } }},
+      { FPSItem: { Scatter : { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', Color: 'yellow' } }},
+      { FPSItem: { Scatter : { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', Color: 'orange' } }},
+      { FPSItem: { Scatter : { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', Color: 'teal' } }},
+      { FPSItem: { Scatter : { horz: 30, vert: -30, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
+    ];
 
+    const times = 100;
+    const replicatedArray = [];
 
+    for (let i = 0; i < originalArray.length; i++) {
+      for (let j = 0; j < times; j++) {
+        replicatedArray.push({ ...originalArray[i] }); // Create a shallow copy
+      }
+    }
 
     return (
       <section className={`${styles.fpsPhotoForm} ${hasTeamsContext ? styles.teams : ''}`}>
@@ -344,15 +361,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
                 gridStep={ 10 }
                 stateSource={{
-                  items: [
-                    { FPSItem: { Scatter : { horz: -30, vert: 30, depth: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', Color: 'red' } }},
-                    { FPSItem: { Scatter : { horz: 0, vert: 0, depth: 33, Category: 'B', Title: 'Center', Shape: 'circle', Color: 'black' } }},
-                    { FPSItem: { Scatter : { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', Color: 'blue' } }},
-                    { FPSItem: { Scatter : { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', Color: 'yellow' } }},
-                    { FPSItem: { Scatter : { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', Color: 'orange' } }},
-                    { FPSItem: { Scatter : { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', Color: 'teal' } }},
-                    { FPSItem: { Scatter : { horz: 30, vert: -30, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
-                  ],
+                  items: replicatedArray,
                 }}
               reverseVerticalAxis={ true }
               axisMap={{

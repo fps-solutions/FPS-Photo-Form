@@ -1,3 +1,4 @@
+import { check4This } from "../../fpsReferences";
 
 export function calculatePercentageInRange(
   x: number,
@@ -39,7 +40,7 @@ export function calculatePercentageInRange(
     percentage = Math.max(0, Math.min(percentage, 100));
   }
 
-  console.log( `calculatePercentageInRange: %, x, min, max, clamp, returnValid`, percentage,x, min, max, clamp, returnValid );
+  if ( check4This( 'tracePerformance=true' ) === true ) console.log( `calculatePercentageInRange: %, x, min, max, clamp, returnValid`, percentage,x, min, max, clamp, returnValid );
   // If clamp is 'ActualPercent', return the actual percentage
   return percentage;
 }

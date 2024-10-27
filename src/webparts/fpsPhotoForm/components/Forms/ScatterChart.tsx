@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ScatterChartProps } from './ScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
 import FPSSlider from '../Slider/component';
+import { check4This } from '../../fpsReferences';
 
 const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
 
@@ -51,10 +52,13 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
     : verticalMax - i * gridStep; // Reverse the order of vertical labels
   });
 
-  console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
-  console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
-  console.log(`H Grid Lines: ${horzGridLines}`);
-  console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
+  if ( check4This( 'tracePerformance=true' ) === true ) {
+    console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
+    console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
+    console.log(`H Grid Lines: ${horzGridLines}`);
+    console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
+  }
+
 
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
   const viewBox: string = `${0} ${0} ${diameter} ${diameter}`;
@@ -75,15 +79,17 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
           const vertPercent = calculatePercentageInRange(Scatter.vert, verticalMin, verticalMax);
           const cHorizontal = (Scatter.horz - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
 
-          console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
-          console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
 
           // Adjust cy based on reverseVerticalAxis
           const cVertical = reverseVerticalAxis
             ? (vertPercent / 100) * diameter // Lower z values higher on the Y-axis
             : diameter - (vertPercent / 100) * diameter; // Standard positioning
 
-          console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
+            if ( check4This( 'tracePerformance=true' ) === true ) {
+              console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
+              console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
+              console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
+            }
 
           return (
             <g key={index}>
@@ -107,7 +113,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
         {/* Draw grid lines */}
         {horzGridLines.map((value, i) => {
           const xLinePosition = (value - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
-          console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
+          if ( check4This( 'tracePerformance=true' ) === true ) console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
           const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
 
           return (
@@ -124,7 +130,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
             ? (value - verticalMin) / (verticalMax - verticalMin) * diameter // Normal positioning
             : (verticalMax - value) / (verticalMax - verticalMin) * diameter; // Higher values at the bottom, lower values at the top
 
-          console.log(`vertGridLines: ${value} is at ${yLinePosition}`);
+            if ( check4This( 'tracePerformance=true' ) === true ) console.log(`vertGridLines: ${value} is at ${yLinePosition}`);
           const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
           return (
             <g key={i}>
