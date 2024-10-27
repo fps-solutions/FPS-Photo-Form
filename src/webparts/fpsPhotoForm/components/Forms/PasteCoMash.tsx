@@ -7,6 +7,7 @@ import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/sou
 import styles from '../FpsPhotoForm.module.scss';
 import { getButtonStyles } from './getButtonStyles';
 import FPSToggle from '../Toggle/component';
+import { IPhotoButtonStyle } from './IScatterChartProps';
 
 export interface IPhotoFormForm  {
 
@@ -24,6 +25,8 @@ export interface IPhotoFormForm  {
 
   ListSource: ISourceProps;
   ImagesSource: ISourceProps;
+  photoButtonStyles: IPhotoButtonStyle[];
+
 }
 
 export interface IPhotoFormInput extends IPhotoFormForm {
@@ -45,7 +48,7 @@ const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
 const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
-  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, imageSubfolder2 } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
+  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, imageSubfolder2, photoButtonStyles } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
   const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
   const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
@@ -317,7 +320,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => setFormData({ ...formData, category1: index })}
-                      style={ {...{ }, ...getButtonStyles( Category1s[ index ] ) } }
+                      style={ {...{ }, ...getButtonStyles( Category1s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>
@@ -370,7 +373,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory2Click(index)}
-                      style={ {...{  }, ...getButtonStyles( Category2s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category2s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>
@@ -388,7 +391,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory3Click(index)}
-                      style={ {...{  }, ...getButtonStyles( Category3s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category3s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>

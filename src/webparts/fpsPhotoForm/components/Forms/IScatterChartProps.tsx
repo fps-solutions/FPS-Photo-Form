@@ -20,6 +20,10 @@ export interface IAxisMapWPProps {
   axisdepth: string; // raw item property key representing Depth Axis
 }
 
+export interface IPhotoButtonStyle {
+  label: string;
+  styles: React.CSSProperties;
+}
 
 export interface IAxisMap {
   type: ICustomScatterType;

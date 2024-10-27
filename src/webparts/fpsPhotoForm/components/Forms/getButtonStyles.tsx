@@ -1,4 +1,7 @@
-const PlaceholderButtons = [
+import { IPhotoButtonStyle } from "./IScatterChartProps";
+
+
+const PlaceholderButtons: IPhotoButtonStyle[] = [
   {
     label: 'Other',
     styles: { }
@@ -13,7 +16,7 @@ const PlaceholderButtons = [
   }
 ]
 
-export const ButtonStylesMinecraftBiomes = [
+export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
   {
     label: 'Desert',
     styles: { background: 'yellow', color: 'black' }
@@ -100,7 +103,7 @@ export const ButtonStylesMinecraftBiomes = [
   },
   ...PlaceholderButtons,
 ];
-export const ButtonStylesMinecraftDimensions = [
+export const ButtonStylesMinecraftDimensions: IPhotoButtonStyle[] = [
   {
     label: 'Overworld',
     styles: { background: 'green', color: 'white' }
@@ -114,7 +117,7 @@ export const ButtonStylesMinecraftDimensions = [
     styles: { background: 'gray', color: 'yellow' }
   },
 ];
-export const ButtonStylesMinecraftStructures = [
+export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
   {
     label: 'Village',
     styles: { background: '', color: '' }
@@ -197,13 +200,15 @@ export const ButtonStylesMinecraftStructures = [
   },
   ...PlaceholderButtons,
 ];
-const ButtonStyles = [
+
+
+export const ButtonStylesMC: IPhotoButtonStyle[] = [
   ...ButtonStylesMinecraftDimensions, ...ButtonStylesMinecraftBiomes, ...ButtonStylesMinecraftStructures
 ];
 
-export function getButtonStyles(label: string): any {
+export function getButtonStyles(label: string, buttonStyles: IPhotoButtonStyle[] ): React.CSSProperties {
   let results = {};
-  ButtonStyles.map(but => {
+  buttonStyles.map(but => {
     if (but.label === label) results = but.styles;
   });
   return results;

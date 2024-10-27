@@ -5,7 +5,7 @@ import { IFPSCorePinMeReactComponentState } from '@mikezimm/fps-core-v7/lib/bann
 
 import { ILoadPerformance } from '../fpsReferences';
 import { IPhotoFormForm } from './Forms/PasteCoMash';
-import { IAxisMap } from './Forms/IScatterChartProps';
+import { IAxisMap, IPhotoButtonStyle } from './Forms/IScatterChartProps';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
@@ -21,6 +21,8 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   performance: ILoadPerformance;
   tab: IDefaultFormTab;
   axisMap: IAxisMap;
+
+  photoButtonStyles: IPhotoButtonStyle[];
 }
 
 /**

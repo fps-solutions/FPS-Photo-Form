@@ -18,6 +18,7 @@ import { changesAxis, IAxisMapWPProps } from './components/Forms/IScatterChartPr
 
 export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomProps' , ];
 
+export const changePhoto: string[] = [ 'photoButtonStyles' ];
 
  /**
   For props to export to panel but NOT save in analytics
@@ -62,5 +63,6 @@ export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListIt
 
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
   imageSubfolder2: string;
+  photoButtonStyles: string;
 
 }

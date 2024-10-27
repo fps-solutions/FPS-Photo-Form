@@ -112,7 +112,7 @@ import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/sou
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
 import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/createListSource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
-import { IAxisMap } from './components/Forms/IScatterChartProps';
+import { IAxisMap, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
 import { createAxisMap, createPhotoListSourceProps } from './CoreFPS/createPhotoFormListSource';
 
 
@@ -149,6 +149,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
   // File types you want available in the picker.  Use * for all extensions
   private _approvedFilePickerTypes2 = [ '*' ];
+
+  private _photoButtonStyles: IPhotoButtonStyle[] = [];
 
   protected async onInit(): Promise<void> {
     // return this._getEnvironmentMessage().then(message => {
@@ -222,6 +224,13 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, );
 
+    try {
+      this._photoButtonStyles = JSON.parse( this.properties.photoButtonStyles );
+
+    } catch(e) {
+      console.log( `Unable to parse buttonStyles `);
+
+    }
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
@@ -230,6 +239,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // NO NEED to replace 'List' because Libraries do not add that.
     const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
     ImagesSource.subFolder = this.properties.imageSubfolder2;
+
+
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
       FpsPhotoForm,
@@ -258,6 +269,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         Category3s:  ButtonStylesMinecraftStructures.map( x => x.label),
 
         imageSubfolder2: this.properties.imageSubfolder2,
+
+        photoButtonStyles: this._photoButtonStyles,
 
         axisMap: AxisMap,
         // axisMap: {

@@ -11,6 +11,7 @@
 
 // import { encrptMeOriginalTest } from '../fpsReferences';
 
+import { ButtonStylesMC } from '../components/Forms/getButtonStyles';
 import { PresetFPSBanner, } from '../fpsReferences';
 import { IPreConfigSettings, IAllPreConfigSettings,  } from '../fpsReferences';
 
@@ -52,6 +53,8 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         listPickerValue2: '',
         listItemPickerValue2: '',
         imageSubfolder2: '',
+
+        photoButtonStyles: JSON.stringify( ButtonStylesMC ),
 
         axistype: 'MC',
         axisTitle: 'Title',

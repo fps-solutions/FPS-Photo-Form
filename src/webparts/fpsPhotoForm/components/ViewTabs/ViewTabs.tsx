@@ -112,7 +112,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
   private async fetchItems(): Promise<void> {
 
-    return;
+    // return;
     const FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, true ) as IStateSourceScatter;
 
     FetchedSource.items = transformCoordinates( FetchedSource.items, this.props.axisMap );

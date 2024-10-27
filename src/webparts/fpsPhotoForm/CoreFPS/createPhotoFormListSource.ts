@@ -23,10 +23,12 @@ export function createPhotoListSourceProps( wpProps: IFpsPhotoFormWebPartProps, 
 
   const ListSource: ISourceProps = createListSource( wpProps.webUrlPickerValue, wpProps.listPickerValue.replace(/List([^L]*)$/, ''), wpProps.listItemPickerValue  );
 
-  const allColumns = Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { return axisMap[ col ] } );
+  const allColumns: string[] = [];
+  Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { if ( col !== 'type' )  allColumns.push( axisMap[ col ] ) } );
 
   ListSource.selectThese = getSelectColumns(allColumns).map( col => { return col.replace('.Url', '' )});
   ListSource.expandThese = getExpandColumns(allColumns).map( col => { return col.replace('.Url', '' )});
+  ListSource.searchProps = ListSource.selectThese;
   ListSource.orderBy = createSeriesSort( 'Id', false );
   ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
 

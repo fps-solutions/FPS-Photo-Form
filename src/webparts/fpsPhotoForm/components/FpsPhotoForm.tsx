@@ -277,92 +277,90 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
         { checkCert( bannerProps ) === true ? <div>
 
-              {/* <ScreenshotForm
-                SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
-              /> */}
+          <ScreenshotFormMash
+            display={ this.state.tab === 'Input' ? 'block' : 'none' }
+            ListSource = { this.props.ListSource }
+            ImagesSource = { this.props.ImagesSource }
+            ListSiteUrl={ this.props.ListSiteUrl }
+            ListTitle={ this.props.ListTitle }
+            LibrarySiteUrl={ this.props.LibrarySiteUrl }
+            LibraryName={ this.props.LibraryName }
+            Category1s={ this.props.Category1s }
+            Category2s={ this.props.Category2s }
+            Category3s={ this.props.Category3s }
+            imageSubfolder2={ this.props.imageSubfolder2 }
+            photoButtonStyles={ this.props.photoButtonStyles }
+            // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
+            // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
+            // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
+          />
 
-              <ScreenshotFormMash
-                display={ this.state.tab === 'Input' ? 'block' : 'none' }
-                ListSource = { this.props.ListSource }
-                ImagesSource = { this.props.ImagesSource }
-                ListSiteUrl={ this.props.ListSiteUrl }
-                ListTitle={ this.props.ListTitle }
-                LibrarySiteUrl={ this.props.LibrarySiteUrl }
-                LibraryName={ this.props.LibraryName }
-                Category1s={ this.props.Category1s }
-                Category2s={ this.props.Category2s }
-                Category3s={ this.props.Category3s }
-                imageSubfolder2={ this.props.imageSubfolder2 }
-                // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
-                // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
-                // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
-              />
+          <ViewTabs
+            tab={ this.state.tab  }
+            ListSource={ this.props.ListSource  }
+            axisMap={ this.props.axisMap  }
+            bannerProps={ bannerProps  }
+            performance={ this._performance  }
+            photoButtonStyles={ this.props.photoButtonStyles }
 
-              <ViewTabs
-                tab={ this.state.tab  }
-                ListSource={ this.props.ListSource  }
-                axisMap={ this.props.axisMap  }
-                bannerProps={ bannerProps  }
-                performance={ this._performance  }
-
-                // WORKS!
-                // diameter={ 12000 }  // Example total height of the chart
-                // hCenter={7000}   // Example center x coordinate
-                // vCenter={-4000}   // Example center y coordinate
-                // gridStep={ 1000 }
-                // stateSource={{
-                //   items: [
-                //     { FPSItem: { Scatter : { horz: -6000, vert: 2000, depth: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', Color: 'red' } }},
-                //     { FPSItem: { Scatter : { horz: -2000, vert: 0, depth: 33, Category: 'B', Title: 'Center', Shape: 'circle', Color: 'black' } }},
-                //     { FPSItem: { Scatter : { horz: -1000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
-                //     // { FPSItem: { Scatter : { horz: 9000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
-                //   ],
-                // }}
-                // reverseVerticalAxis={ true }
+            // WORKS!
+            // diameter={ 12000 }  // Example total height of the chart
+            // hCenter={7000}   // Example center x coordinate
+            // vCenter={-4000}   // Example center y coordinate
+            // gridStep={ 1000 }
+            // stateSource={{
+            //   items: [
+            //     { FPSItem: { Scatter : { horz: -6000, vert: 2000, depth: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', Color: 'red' } }},
+            //     { FPSItem: { Scatter : { horz: -2000, vert: 0, depth: 33, Category: 'B', Title: 'Center', Shape: 'circle', Color: 'black' } }},
+            //     { FPSItem: { Scatter : { horz: -1000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
+            //     // { FPSItem: { Scatter : { horz: 9000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
+            //   ],
+            // }}
+            // reverseVerticalAxis={ true }
 
 
 
 
-                    // { FPSItem: { Scatter : { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', Color: 'blue' } }},
-                    // { FPSItem: { Scatter : { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', Color: 'yellow' } }},
-                    // { FPSItem: { Scatter : { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', Color: 'orange' } }},
-                    // { FPSItem: { Scatter : { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', Color: 'teal' } }},
+                // { FPSItem: { Scatter : { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', Color: 'blue' } }},
+                // { FPSItem: { Scatter : { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', Color: 'yellow' } }},
+                // { FPSItem: { Scatter : { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', Color: 'orange' } }},
+                // { FPSItem: { Scatter : { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', Color: 'teal' } }},
 
 
 
 
-                // hCenter={0}   // Example center x coordinate
-                // vCenter={0}   // Example center y coordinate
-                // diameter={80}  // Example total height of the chart
+            // hCenter={0}   // Example center x coordinate
+            // vCenter={0}   // Example center y coordinate
+            // diameter={80}  // Example total height of the chart
 
-                // hCenter={0}   // Example center x coordinate
-                // vCenter={0}   // Example center y coordinate
-                // diameter={100}  // Example total height of the chart
+            // hCenter={0}   // Example center x coordinate
+            // vCenter={0}   // Example center y coordinate
+            // diameter={100}  // Example total height of the chart
 
-                // gridStep={ 10 }
+            // gridStep={ 10 }
 
-                // reverseVerticalAxis={ true }
-                // axisMap={this.props.axisMap}
+            // reverseVerticalAxis={ true }
+            // axisMap={this.props.axisMap}
 
-              />
+          />
 
-              {/* <div className={styles.welcome}>
-                <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
-                  src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-                <h2>Well done, {escape(userDisplayName)}!</h2>
-                <div>{environmentMessage}</div>
-                <div>Web part property value: <strong>{escape(description)}</strong></div>
-              </div>
-              <div>
-                <h3>Welcome to SharePoint Framework!</h3>
-                <p>
-                  The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-                </p>
+          {/* <div className={styles.welcome}>
+            <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
+              src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
+            <h2>Well done, {escape(userDisplayName)}!</h2>
+            <div>{environmentMessage}</div>
+            <div>Web part property value: <strong>{escape(description)}</strong></div>
+          </div>
+          <div>
+            <h3>Welcome to SharePoint Framework!</h3>
+            <p>
+              The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
+            </p>
 
-              </div> */}
+          </div> */}
 
-            </div> : undefined }
-          </section>
+        </div> : undefined }
+      </section>
 
     );
   }
