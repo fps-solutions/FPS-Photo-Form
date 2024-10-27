@@ -126,7 +126,6 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
   }
 
-
   public render(): React.ReactElement<IViewTabsProps> {
     const {
 
