@@ -2,14 +2,14 @@ import * as React from 'react';
 import './ScatterChart.css';
 
 import { useState } from 'react';
-import { ScatterChartProps } from './ScatterChartProps';
+import { IScatterChartProps } from './IScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
 import FPSSlider from '../Slider/component';
 import { check4This } from '../../fpsReferences';
 
 const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
 
-const ScatterChart: React.FC<ScatterChartProps> = ({
+const ScatterChart: React.FC<IScatterChartProps> = ({
   show,
   Category1,
   hCenter,
@@ -102,7 +102,7 @@ const ScatterChart: React.FC<ScatterChartProps> = ({
                 onClick={() => alert(Scatter.Title)}
               >
                 <title>
-                  {`Title: ${Scatter.Title}, Category: ${Scatter.Category}, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
+                  {`Title: ${Scatter.Title}, Category: ${JSON.stringify( Scatter.Category2 ) }, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
                 </title>
               </circle>
               <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize } fontSize={displaySize * 2} fill="black">{Scatter.Title}</text>

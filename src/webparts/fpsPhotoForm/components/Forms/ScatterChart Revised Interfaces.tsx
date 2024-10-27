@@ -1,6 +1,6 @@
 // import * as React from 'react';
 // import './ScatterChart.css';
-// import { ScatterChartProps } from './ScatterChartProps';
+// import { ScatterChartProps } from './IScatterChartProps';
 
 // const calculatePercentageInRange = (
 //   x: number,
@@ -38,7 +38,7 @@
 //   return percentage;
 // };
 
-// const ScatterChart: React.FC<ScatterChartProps> = ({
+// const ScatterChart: React.FC<IScatterChartProps> = ({
 //   Category1,
 //   xCenter,
 //   yCenter,

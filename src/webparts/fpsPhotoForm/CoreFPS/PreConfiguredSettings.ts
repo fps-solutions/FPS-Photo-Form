@@ -53,6 +53,19 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         listItemPickerValue2: '',
         imageSubfolder2: '',
 
+        axistype: 'MC',
+        axisTitle: 'Title',
+        axisComments: 'Notes',
+        axisCategory1: 'Category1',
+        axisCategory2: 'Category2',
+        axisCategory3: 'Category3',
+        axisColor: '',
+        axisShape: '',
+        axishorz: 'CoordX', // raw item property key representing Horizontal Axis
+        axisvert: 'CoordZ', // raw item property key representing Vertical Chart Axis
+        axisdepth: 'CoordY', // raw item property key representing Depth Axis
+
+
     }
 };
 

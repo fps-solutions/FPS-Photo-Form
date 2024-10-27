@@ -111,6 +111,9 @@ import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonSty
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
 import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/createListSource';
+import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
+import { IAxisMap } from './components/Forms/IScatterChartProps';
+import { createAxisMap, createPhotoListSourceProps } from './CoreFPS/createPhotoFormListSource';
 
 
 
@@ -220,7 +223,9 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, );
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
-    const ListSource: ISourceProps = createListSource( this.properties.webUrlPickerValue, this.properties.listPickerValue.replace(/List([^L]*)$/, ''), this.properties.listItemPickerValue  );
+    const AxisMap: IAxisMap = createAxisMap( this.properties );
+    const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
+    ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
     // NO NEED to replace 'List' because Libraries do not add that.
     const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
@@ -253,6 +258,21 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         Category3s:  ButtonStylesMinecraftStructures.map( x => x.label),
 
         imageSubfolder2: this.properties.imageSubfolder2,
+
+        axisMap: AxisMap,
+        // axisMap: {
+        //   type: 'MC',
+        //   Title: 'Title',
+        //   Comments: 'Notes',
+        //   Category1: 'Category1',
+        //   Category2: 'Category2',
+        //   Category3: 'Category3',
+        //   Color: 'Color',
+        //   Shape: 'Shape',
+        //   horz: 'CoordX', // raw item property key representing Horizontal Axis
+        //   vert: 'CoordZ', // raw item property key representing Vertical Chart Axis
+        //   depth: 'CoordY', // raw item property key representing Depth Axis
+        // }
 
       }
     );
