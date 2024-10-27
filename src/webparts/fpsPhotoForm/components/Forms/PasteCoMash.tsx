@@ -348,7 +348,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                     onBlur={() => {
                       setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'x' ]) });
                     }}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }}
+                    style={{ width: '80%', paddingLeft: '.5em', marginLeft: '1em' }}
                   />
                 </div>
               ))}
