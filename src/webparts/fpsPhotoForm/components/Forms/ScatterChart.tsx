@@ -26,10 +26,10 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const useDiameter: number = gridGaps[ gridScale ] * 10;
 
-  const [minX, setMinX] = useState( hCenter - (diameter / 2) ); // Initial minX
-  const [minY, setMinY] = useState( vCenter - (diameter / 2) );  // Initial minY
+  const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
+  const [centerY, setCenterY] = useState( vCenter - (diameter / 2) );  // Initial centerY
 
-  // const [step, setStep] = useState( roundToNearest( diameter / 10 ) );  // Initial minY
+  // const [step, setStep] = useState( roundToNearest( diameter / 10 ) );  // Initial centerY
 
   const useDisplaySize = displaySize ? displaySize : diameter / 75; // Default display size for circles
 
@@ -38,21 +38,21 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   };
 
   const handleHScroll = (value: number): void => {
-    setMinX( value - (diameter / 2) );
+    setCenterX( value - (diameter / 2) );
   };
 
   const handleVScroll = (value: number): void => {
-    setMinY( value - (diameter / 2) );
+    setCenterY( value - (diameter / 2) );
   };
 
   if ( show === false ) return null;
 
   const minXSVG = hCenter - (gridGaps[gridScale] / 2);
   const minYSVG = hCenter - (gridGaps[gridScale] / 2);
-  const horizontalMin = minX;
-  const horizontalMax = minX + useDiameter;
-  const verticalMin = minY;
-  const verticalMax = minY + useDiameter;
+  const horizontalMin = centerX - useDiameter/2;
+  const horizontalMax = centerX + useDiameter/2;
+  const verticalMin = centerY - useDiameter/2;
+  const verticalMax = centerY + useDiameter/2;
 
   // Create grid line values
   const horzGridLines: number[] = Array.from({ length: Math.floor((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
