@@ -139,8 +139,8 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           Category1={ 'Overworld' }
           chartDisplay={ { ...this.props.chartDisplay, ...{ gridStep: 1000, diameter: 6000 } } }
 
-          hCenter={-5000 }   // Example center x coordinate
-          vCenter={ 1000 }   // Example center y coordinate
+          hCenter={ 0 }   // Example center x coordinate
+          vCenter={ 0 }   // Example center y coordinate
 
 
           // chartDisplay={ { ...this.props.chartDisplay, ...{  } } }

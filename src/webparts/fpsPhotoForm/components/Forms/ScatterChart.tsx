@@ -61,11 +61,14 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const verticalMin = centerY - maxRange/2;
   const verticalMax = centerY + maxRange/2;
 
+  console.log(`Scatter Range H Grid:  C ${centerX} min ${horizontalMin} to ${horizontalMax}`);
+  console.log(`Scatter Range V Grid:  C ${centerY} min ${verticalMin} to ${verticalMax}`);
+
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
   return (
-    // <div style={{ width: '100%', height: '90vh' }}>
-    <div style={{ width: '100%', }}>
+    // Not sure why but have to make this a little smaller here ;(
+    <div style={{ width: '97%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
         <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
         <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />

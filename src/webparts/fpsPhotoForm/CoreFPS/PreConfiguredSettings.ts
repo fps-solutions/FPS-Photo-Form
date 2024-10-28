@@ -68,8 +68,8 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         axis_vert: 'CoordZ', // raw item property key representing Vertical Chart Axis
         axis_depth: 'CoordY', // raw item property key representing Depth Axis
 
-        chart_diameter: 100, // Total height of the chart
-        chart_gridStep: 10, // Step for grid lines
+        chart_diameter: 6000, // Total height of the chart
+        chart_gridStep: 1000, // Step for grid lines
         chart_reverseVerticalAxis: true, // Flag to reverse the vertical axis  = false
 
         chart_gridlineColor: 'lightgray', // = 'lightgray'
