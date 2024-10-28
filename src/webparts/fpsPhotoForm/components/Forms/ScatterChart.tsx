@@ -61,24 +61,6 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const verticalMin = centerY - maxRange/2;
   const verticalMax = centerY + maxRange/2;
 
-  // Create grid line values
-  const horzGridLines: number[] = Array.from({ length: Math.floor((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
-    return horizontalMin + i * gridStep; // THIS works for a sample where diamter is 80 and center is 0
-  });
-
-  const vertGridLines: number[] = Array.from({ length: Math.ceil((verticalMax - verticalMin) / gridStep) + 1 }).map((_, i) => {
-    return reverseVerticalAxis
-    ? verticalMin + i * gridStep // Normal order
-    : verticalMax - i * gridStep; // Reverse the order of vertical labels
-  });
-
-  if ( check4This( 'tracePerformance=true' ) === true ) {
-    console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
-    console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
-    console.log(`H Grid Lines: ${horzGridLines}`);
-    console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
-  }
-
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
   return (
@@ -96,7 +78,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         axisMap={ axisMap }
 
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
-        chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, } }}
+        chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
         stateSource={ stateSource }
 
         onDotClick={ null }

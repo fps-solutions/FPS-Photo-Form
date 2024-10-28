@@ -31,8 +31,6 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   let strokeDashArray: string = ``;
 
   if ( gridlineType !== 'Solid' ) {
-    // const dashLine = gridStep * ( gridlineType === 'Dashed' ? 10 : 2 )/( displaySize * 4 );
-    // const dashGap = gridStep * ( gridlineType === 'Dashed' ? 5 : 5 )/( displaySize * 4 );
     const dashLine = gridlineType === 'Dashed' ? diameter * 1.5 / 100 : diameter * .5 / 100;
     const dashGap = gridlineType === 'Dashed' ? diameter * 1.5 / 100 : diameter * .75 / 100;
     strokeDashArray = `${dashLine},${dashGap}`;
