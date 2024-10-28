@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import './ScatterChart.css';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IScatterChartProps } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
 import { check4This } from '../../fpsReferences';
@@ -24,10 +24,19 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const [gridScale, setGridScale] = useState( gridGaps.length -1 );  // Initial minY
 
-  const useDiameter: number = gridGaps[ gridScale ] * 10;
+  const maxRange: number = gridGaps[ gridScale ] * 10;
 
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
   const [centerY, setCenterY] = useState( vCenter - (diameter / 2) );  // Initial centerY
+
+  // Effect to update Y when Z changes
+  useEffect(() => {
+    // Update Y based on the new value of Z
+    const roundTo: number = gridGaps[ gridScale ];
+    setCenterX( Math.round(centerX / roundTo) * roundTo ); // Example: set Y to double the value of Z
+    setCenterY( Math.round(centerY / roundTo) * roundTo ); // Example: set Y to double the value of Z
+
+  }, [gridScale]); // Dependency array, effect runs when Z changes
 
   // const [step, setStep] = useState( roundToNearest( diameter / 10 ) );  // Initial centerY
 
@@ -47,12 +56,10 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   if ( show === false ) return null;
 
-  const minXSVG = hCenter - (gridGaps[gridScale] / 2);
-  const minYSVG = hCenter - (gridGaps[gridScale] / 2);
-  const horizontalMin = centerX - useDiameter/2;
-  const horizontalMax = centerX + useDiameter/2;
-  const verticalMin = centerY - useDiameter/2;
-  const verticalMax = centerY + useDiameter/2;
+  const horizontalMin = centerX - maxRange/2;
+  const horizontalMax = centerX + maxRange/2;
+  const verticalMin = centerY - maxRange/2;
+  const verticalMax = centerY + maxRange/2;
 
   // Create grid line values
   const horzGridLines: number[] = Array.from({ length: Math.floor((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
@@ -78,8 +85,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     // <div style={{ width: '100%', height: '90vh' }}>
     <div style={{ width: '100%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ 1 ] } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ 1 ] } onChange={ handleVScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
         <FPSSlider label={ 'Scale' } initial={ gridGaps.length -1 } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
       </div>
 

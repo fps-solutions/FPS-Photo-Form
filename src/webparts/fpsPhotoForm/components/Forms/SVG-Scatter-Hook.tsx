@@ -19,8 +19,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
     onDotClick, onLineClick,
 
-    svgHeight = '90%',
-    divHeight = '90vh',
+    svgHeight = '70vh',
+    divHeight = '70vh',
     ratio = 1,
   } = props
 
