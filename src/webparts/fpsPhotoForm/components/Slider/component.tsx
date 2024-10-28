@@ -1,5 +1,5 @@
 import * as React from 'react';
-import './FPSSlider.css'; // Import your CSS file
+import './fps-Slider.css'; // Import your CSS file
 
 interface FPSSliderValueProps {
   min: number;

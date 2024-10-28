@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import './Toggle.css';  // Import the CSS file for styling
+import './fps-Toggle.css';  // Import the CSS file for styling
 
 export interface IFPSToggleProps {
   label: string;
@@ -23,7 +23,7 @@ const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
   };
 
   return (
-    <div className="toggle-container">
+    <div className="fps-toggle-container">
       <label className="toggle-label">{label}</label>
       <div className="toggle-switch">
         <input

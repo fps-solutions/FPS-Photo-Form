@@ -6,17 +6,17 @@
   margin: 10px 0;
 }
 
-.fps-slider-label {
+.fps-slider-container .fps-slider-label {
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.fps-slider {
+.fps-slider-container .fps-slider {
   width: 100%; /* Full width for the slider */
   cursor: pointer; /* Change cursor on hover */
 }
 
-.fps-slider input[type="range"] {
+.fps-slider-container .fps-slider input[type="range"] {
   -webkit-appearance: none; /* Remove default styling in WebKit browsers */
   appearance: none;
   background: #ddd; /* Track color */
@@ -25,7 +25,7 @@
   outline: none; /* Remove outline on focus */
 }
 
-.fps-slider input[type="range"]::-webkit-slider-thumb {
+.fps-slider-container .fps-slider input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none; /* Custom thumb for WebKit */
   appearance: none;
   width: 20px; /* Thumb width */
@@ -35,7 +35,7 @@
   cursor: pointer; /* Change cursor on hover */
 }
 
-.fps-slider input[type="range"]::-moz-range-thumb {
+.fps-slider-container .fps-slider input[type="range"]::-moz-range-thumb {
   width: 20px; /* Thumb width */
   height: 20px; /* Thumb height */
   background: #4caf50; /* Thumb color */
