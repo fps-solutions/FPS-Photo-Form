@@ -47,12 +47,12 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   if ( show === false ) return null;
 
-  const minXSVG = 100;
-  const minYSVG = 100;
+  const minXSVG = hCenter - (gridGaps[gridScale] / 2);
+  const minYSVG = hCenter - (gridGaps[gridScale] / 2);
   const horizontalMin = minX;
-  const horizontalMax = minX + diameter;
+  const horizontalMax = minX + useDiameter;
   const verticalMin = minY;
-  const verticalMax = minY + diameter;
+  const verticalMax = minY + useDiameter;
 
   // Create grid line values
   const horzGridLines: number[] = Array.from({ length: Math.floor((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
@@ -89,7 +89,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         axisMap={ axisMap }
 
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
-        chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridStep ] } }}
+        chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, } }}
         stateSource={ stateSource }
 
         onDotClick={ null }
