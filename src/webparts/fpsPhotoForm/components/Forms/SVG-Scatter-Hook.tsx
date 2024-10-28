@@ -24,6 +24,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     ratio = 1,
   } = props
 
+
+
   const { diameter, gridStep, displaySize, gridlineColor = 'lightgray', gridlineType = 'Solid', reverseVerticalAxis = false, divStyle = {} } = chartDisplay;
 
   if ( show === false ) return null;
@@ -35,6 +37,13 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     const dashGap = gridlineType === 'Dashed' ? diameter * 1.5 / 100 : diameter * .75 / 100;
     strokeDashArray = `${dashLine},${dashGap}`;
   }
+
+  const getLabel = (value: number): string => {
+
+    const label: string = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed( gridStep >= 1000 ? 0 : gridStep >= 100 ? 1 : 2 )}k` : value.toString();
+
+    return label;
+};
 
   /**
    * Was trying to add an animation to increase dot size here but was not able to get it to work
@@ -55,11 +64,12 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     : verticalMax - i * gridStep; // Reverse the order of vertical labels
   });
 
+  console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
+  console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
+
   if ( check4This( 'tracePerformance=true' ) === true ) {
     console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
-    console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
     console.log(`H Grid Lines: ${horzGridLines}`);
-    console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
   }
 
   const viewBox: string = `${0} ${0} ${diameter} ${diameter * ratio}`;
@@ -109,13 +119,12 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
         {horzGridLines.map((value, i) => {
           const xLinePosition = (value - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
           if ( check4This( 'tracePerformance=true' ) === true ) console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
-          const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
 
           return (
             <g key={i}>
               <line x1={xLinePosition} y1={0} x2={xLinePosition} y2={diameter} stroke={ gridlineColor } strokeWidth={displaySize / 5}
                   onClick={(event) => onLineClick( 'Horizontal', value , event )} strokeDasharray={ strokeDashArray }/>
-              <text x={xLinePosition} y={ displaySize * 3 } fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
+              <text x={xLinePosition} y={ displaySize * 3 } fontSize={displaySize * 2} fill="black">{getLabel(value)}</text>
               <title>{`H Value: ${value}`}</title> {/* Add title for hover effect */}
             </g>
           );
@@ -127,12 +136,12 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
             : (verticalMax - value) / (verticalMax - verticalMin) * diameter; // Higher values at the bottom, lower values at the top
 
             if ( check4This( 'tracePerformance=true' ) === true ) console.log(`vertGridLines: ${value} is at ${yLinePosition}`);
-          const formatNumberLabel = Math.abs(value) >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
+
           return (
             <g key={i}>
               <line x1={0} y1={yLinePosition} x2={diameter} y2={yLinePosition} stroke={ gridlineColor } strokeWidth={displaySize / 5}
                   onClick={(event) => onLineClick( 'Vertical', value , event )} strokeDasharray={ strokeDashArray } />
-              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{formatNumberLabel}</text>
+              <text x={displaySize} y={yLinePosition + displaySize} fontSize={displaySize * 2} fill="black">{getLabel(value)}</text>
               <title>{`V Value: ${value}`}</title> {/* Add title for hover effect */}
             </g>
           );
