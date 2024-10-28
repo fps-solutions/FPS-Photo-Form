@@ -6,6 +6,7 @@ interface FPSSliderValueProps {
   max: number;
   step: number;
   initial: number;
+  values?: string[] | number[];
 }
 
 interface FPSSliderBaseProps {
@@ -20,7 +21,7 @@ interface FPSSliderProps extends FPSSliderValueProps, FPSSliderBaseProps {
 }
 
 const FPSSlider: React.FC<FPSSliderProps> = (props) => {
-  const { min, max, step, initial, onChange, label, style, className, htmlFor } = props;
+  const { min, max, step, initial, onChange, label, style, className, htmlFor, values } = props;
   const [value, setValue] = React.useState<number>(initial);
   const useHtmlFor = htmlFor ? htmlFor : 'fpsSlider';
 
@@ -30,17 +31,16 @@ const FPSSlider: React.FC<FPSSliderProps> = (props) => {
     onChange(newValue);
   };
 
-
   return (
     <div className={`fps-slider-container ${className}`} style={style}>
-      {label && <label className="fps-slider-label" htmlFor={ useHtmlFor }>{label}: {value}</label>}
+      {label && <label className="fps-slider-label" htmlFor={ useHtmlFor }>{label}: { values ? values[value] : value }</label>}
       <input
         type="range"
         id={ useHtmlFor }
-        min={min}
-        max={max}
-        step={step}
-        value={value}
+        min={ values ? 0 : min}
+        max={ values ? values.length -1 : max}
+        step={ values ? 1 : step}
+        value={ value }
         className="fps-slider"
         onChange={handleChange as React.ChangeEventHandler<HTMLInputElement>}
       />

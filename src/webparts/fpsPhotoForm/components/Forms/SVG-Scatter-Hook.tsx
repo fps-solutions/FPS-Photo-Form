@@ -31,10 +31,20 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   let strokeDashArray: string = ``;
 
   if ( gridlineType !== 'Solid' ) {
-    const dashLine = ( gridlineType === 'Dashed' ? 10 : 2 )/( displaySize * 4 );
-    const dashGap =( gridlineType === 'Dashed' ? 5 : 5 )/( displaySize * 4 );
+    // const dashLine = gridStep * ( gridlineType === 'Dashed' ? 10 : 2 )/( displaySize * 4 );
+    // const dashGap = gridStep * ( gridlineType === 'Dashed' ? 5 : 5 )/( displaySize * 4 );
+    const dashLine = gridlineType === 'Dashed' ? diameter * 1.5 / 100 : diameter * .5 / 100;
+    const dashGap = gridlineType === 'Dashed' ? diameter * 1.5 / 100 : diameter * .75 / 100;
     strokeDashArray = `${dashLine},${dashGap}`;
   }
+
+  /**
+   * Was trying to add an animation to increase dot size here but was not able to get it to work
+   *
+   *    const scatterHoverScale = diameter <= 50 ? '' : diameter > 50 && diameter < 300 ? 'diameter100' : diameter >= 300 && diameter < 3000 ? 'diameter3000' : 'diameter6000';
+   */
+
+  const scatterHoverScale = ''
 
   // Create grid line values
   const horzGridLines: number[] = Array.from({ length: Math.floor((horizontalMax - horizontalMin) / gridStep) + 1 }, (_, i) => {
@@ -80,7 +90,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
           return (
             <g key={index}>
-              <circle className='scatter-point'
+              <circle className={ `scatter-point ${scatterHoverScale}` }
                 key={index}
                 cx={cHorizontal}
                 cy={cVertical}

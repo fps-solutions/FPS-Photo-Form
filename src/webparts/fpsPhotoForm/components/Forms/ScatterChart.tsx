@@ -7,6 +7,8 @@ import FPSSlider from '../Slider/component';
 import { check4This } from '../../fpsReferences';
 import SVGScatterHook from './SVG-Scatter-Hook';
 
+const gridGaps: number[] = [ 10, 50, 100, 500, 1000, 2000, 5000, 10000 ];
+
 const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
 
 const ScatterChart: React.FC<IScatterChartProps> = ({
@@ -18,13 +20,18 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   stateSource,
 }) => {
 
-  const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
+  const { diameter, gridStep, reverseVerticalAxis = false, displaySize, } = chartDisplay;
 
   const [minX, setMinX] = useState( hCenter - (diameter / 2) ); // Initial minX
   const [minY, setMinY] = useState( vCenter - (diameter / 2) );  // Initial minY
+  const [gridScale, setGridScale] = useState( gridGaps.length -1 );  // Initial minY
   const [step, setStep] = useState( roundToNearest( diameter / 10 ) );  // Initial minY
 
   const useDisplaySize = displaySize ? displaySize : diameter / 75; // Default display size for circles
+
+  const handleScaleScroll = (value: number): void => {
+    setGridScale( value );
+  };
 
   const handleHScroll = (value: number): void => {
     setMinX( value - (diameter / 2) );
@@ -64,8 +71,9 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     // <div style={{ width: '100%', height: '90vh' }}>
     <div style={{ width: '100%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ step } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ step } onChange={ handleVScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale] } onChange={ handleVScroll } style={ sliderStyle } />
+        <FPSSlider label={ 'Scale' } initial={ gridGaps.length -1 } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
       </div>
 
       <SVGScatterHook

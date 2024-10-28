@@ -137,10 +137,22 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
         <ScatterChart
           show={ this.props.tab === 'Map' ? true : false }
           Category1={ 'Overworld' }
-          chartDisplay={ this.props.chartDisplay }
+          chartDisplay={ { ...this.props.chartDisplay, ...{ gridStep: 1000, diameter: 6000 } } }
 
-          hCenter={0}   // Example center x coordinate
-          vCenter={0}   // Example center y coordinate
+          hCenter={-5000 }   // Example center x coordinate
+          vCenter={ 1000 }   // Example center y coordinate
+
+
+          // chartDisplay={ { ...this.props.chartDisplay, ...{  } } }
+
+          // hCenter={ 0 }   // Example center x coordinate
+          // vCenter={ 0 }   // Example center y coordinate
+
+
+          // chartDisplay={ { ...this.props.chartDisplay, ...{ gridStep: 1000, diameter: 6000 } } }
+
+          // hCenter={-5000 }   // Example center x coordinate
+          // vCenter={ 1000 }   // Example center y coordinate
 
           stateSource={ this.state.stateSource as IStateSourceScatter }
 
