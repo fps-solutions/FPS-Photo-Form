@@ -1,11 +1,11 @@
 
-import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
+import { ISourceProps, StandardMetaViewProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/createListSource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
 import { createStyleFromString } from '@mikezimm/fps-library-v2/lib/logic/Strings/reactCSS';
 import { getExpandColumns, getSelectColumns, } from '../fpsReferences';
 import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
-import { changesAxis, changesChart, IAxisMap, IAxisMapWPProps, IChartDisplayProps, IChartFavorites, IFPSGridLineType, } from '../components/Forms/IScatterChartProps';
+import { changesAxis, IAxisMap, IAxisMapWPProps, IChartDisplayProps, IChartFavorites, IFPSGridLineType, } from '../components/Forms/IScatterChartProps';
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 
 export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {
@@ -61,6 +61,7 @@ export function createPhotoListSourceProps( wpProps: IFpsPhotoFormWebPartProps, 
 
   const allColumns: string[] = [];
   Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { if ( col !== 'type' )  allColumns.push( axisMap[ col ] ) } );
+  allColumns.push( ...StandardMetaViewProps )
 
   ListSource.selectThese = getSelectColumns(allColumns).map( col => { return col.replace('.Url', '' )});
   ListSource.expandThese = getExpandColumns(allColumns).map( col => { return col.replace('.Url', '' )});

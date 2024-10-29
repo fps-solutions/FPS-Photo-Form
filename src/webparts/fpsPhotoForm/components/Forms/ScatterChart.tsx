@@ -35,6 +35,11 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const maxRange: number = gridGaps[ gridScale ] * 10;
 
+  const { tileHighlightColor } = eleExtras;
+
+  const [highlightCSS, setHighlightCSS] = useState( tileHighlightColor ? { paddingLeft: '0.5em', color: tileHighlightColor, opacity: tileHighlightColor === 'yellow' ? .8 : 1 } : { paddingLeft: '0.5em', } ); // Initial centerX
+
+
   const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
   const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
@@ -100,8 +105,6 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     }
   };
 
-
-
   const handleScaleScroll = (value: number): void => {
     setGridScale( value );
   };
@@ -126,23 +129,34 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
+  const brightSpan = ( str: string ): JSX.Element => {
+    return  <span className='fade-bright' style={highlightCSS}>{ str }</span>
+  };
+
+
   const clickedItem: IScatterSourceItem = clickedIdx < 0 ? undefined : stateSource.items[ clickedIdx ];
   const scatterItem = clickedIdx < 0 ? undefined : clickedItem.FPSItem.Scatter;
   const PanelContent: JSX.Element = clickedIdx < 0 ? undefined : <div className={ 'scatter-fade-panel' }>
-    <div className='scatter-fade-panel-title'>{ clickedItem.FPSItem.Scatter.Title }</div>
+    <div className='scatter-fade-panel-title'>{  brightSpan( clickedItem.FPSItem.Scatter.Title ) }</div>
     <div className='scatter-fade-details'>
       <div className='scatter-fade-panel-coords'>
-        <div>{ axisMap.horz }: { scatterItem.horz }</div>
-        <div>{ axisMap.vert }: { scatterItem.vert }</div>
-        <div>{ axisMap.depth }: { scatterItem.depth }</div>
+        <div>Created: {  brightSpan(clickedItem.FPSItem.Stamp.createdNote) }</div>
+        <div>Days ago: {  brightSpan( clickedItem.FPSItem.Stamp.created.age.toFixed(1) ) }</div>
       </div>
       <div className='scatter-fade-panel-coords'>
-        <div>{ axisMap.Category1 }: { scatterItem.Category1 }</div>
-        <div>{ axisMap.Category2 }: {  scatterItem.Category2 ? scatterItem.Category2.join(' | ') : 'none' }</div>
-        <div>{ axisMap.Category3 }: {  scatterItem.Category3 ? scatterItem.Category3 .join(' | ') : 'none' }</div>
+        <div>{ axisMap.horz }: { brightSpan(  `${scatterItem.horz}` ) }</div>
+        <div>{ axisMap.vert }: { brightSpan(  `${scatterItem.vert}` ) }</div>
+        <div>{ axisMap.depth }: { brightSpan(  `${scatterItem.depth}` ) }</div>
       </div>
-      <div style={{ fontSize: 'xx-large'}}>{ axisMap.Comments }:</div>
-      <div style={{ fontSize: 'x-large'}}>{ scatterItem.Comments }</div>
+      <div className='scatter-fade-panel-coords'>
+        { scatterItem.Category1 ? <div>{ axisMap.Category1 }: { brightSpan(  scatterItem.Category1 ) }</div> : undefined }
+        { scatterItem.Category2 && scatterItem.Category2.length > 0 ?  <div>{ axisMap.Category2 }: { brightSpan(   scatterItem.Category2 ? scatterItem.Category2.join(' | ') : 'none' ) }</div> : undefined }
+        { scatterItem.Category2 && scatterItem.Category2.length > 0 ?  <div>{ axisMap.Category3 }: { brightSpan(   scatterItem.Category3 ? scatterItem.Category3 .join(' | ') : 'none' ) }</div> : undefined }
+      </div>
+      { scatterItem.Category2 && scatterItem.Category2.length > 0 ?  <div>
+        <div style={{ fontSize: 'xx-large'}}>{ axisMap.Comments }:</div>
+        <div style={{ fontSize: 'x-large'}}>{ brightSpan(  scatterItem.Comments ) }</div>
+      </div> : undefined }
     </div>
     <img className='main-Image' src={ clickedItem.FPSItem.Image.src } style={{  }} />
   </div>;

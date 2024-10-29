@@ -6,6 +6,10 @@
   align-items: center;
 }
 
+.scatter-fade-panel .fade-bright {
+  color: #d9d53d;
+}
+
 .scatter-fade-panel .main-Image {
   margin-top: 1.5em;
   width: 60%;
@@ -18,9 +22,9 @@
 }
 
 .scatter-fade-panel-title {
-  font-size: xx-large;
+  font-size: xxx-large;
   text-align: center;
-  margin-bottom: 1em;
+  margin-bottom: .5em;
 }
 
 .scatter-fade-details {
