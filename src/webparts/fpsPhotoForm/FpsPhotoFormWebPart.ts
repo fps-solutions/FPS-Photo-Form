@@ -363,6 +363,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await onListItemPropPaneStart( this as any, [], '100', false, '' );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await onListItemPropPaneStart( this as any, [], '101', false, '2' );
   }
   /***

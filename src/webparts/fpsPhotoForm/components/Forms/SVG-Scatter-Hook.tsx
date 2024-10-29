@@ -10,10 +10,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
   const { show, stateSource,
     chartDisplay,
-    horizontalMin,
-    horizontalMax,
-    verticalMin,
-    verticalMax,
+    scatterSize,
 
     highlightIds,
 
@@ -21,12 +18,11 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
     svgHeight = '70vh',
     divHeight = '70vh',
-    ratio = 1,
+
   } = props
 
-
-
   const { diameter, gridStep, displaySize, autoFadeDots, autoFadeText, gridlineColor = 'lightgray', gridlineType = 'Solid', reverseVerticalAxis = false, divStyle = {} } = chartDisplay;
+  const { horizontalMin, horizontalMax, verticalMin, verticalMax, ratio = 1, } = scatterSize;
 
   if ( show === false ) return null;
 

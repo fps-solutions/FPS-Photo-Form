@@ -24,7 +24,7 @@ interface FPSSliderProps extends FPSSliderValueProps, FPSSliderBaseProps {
 
 const FPSSlider: React.FC<FPSSliderProps> = (props) => {
   const { min, max, step, initial, onChange, label, style, className, htmlFor, values } = props;
-  const [value, setValue] = React.useState<number>(initial);
+  const [value, setValue] = useState<number>(initial);
   const useHtmlFor = htmlFor ? htmlFor : 'fpsSlider';
 
   useEffect(() => {

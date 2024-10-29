@@ -3,9 +3,6 @@ import styles from './FpsPhotoForm.module.scss';
 
 import { IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
 
-import { IDefSourceType,  } from './IFpsPhotoFormProps';
-import { escape } from '@microsoft/sp-lodash-subset';
-
 import { Icon } from '@fluentui/react/lib/Icon';
 
 import { saveViewAnalytics } from '../CoreFPS/Analytics';
@@ -22,8 +19,6 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
 import ScreenshotFormMash from './Forms/PasteCoMash';
-import ScatterChart from './Forms/ScatterChart';
-import { IScatterSourceItem } from './Forms/IScatterChartProps';
 import ViewTabs from './ViewTabs/ViewTabs';
 
 //Use this to add more console.logs for this component

@@ -13,7 +13,6 @@ import {
 
 // import * as strings from 'PivotTiles20WebPartStrings';
 
-import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
 import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IThisFPSWebPartClass1152';
 
 export function buildEasyModeGroup( thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {

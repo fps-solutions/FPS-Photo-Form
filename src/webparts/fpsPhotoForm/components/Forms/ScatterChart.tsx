@@ -6,7 +6,7 @@ import { doesObjectExistInArray } from '@mikezimm/fps-core-v7/lib/logic/Arrays/s
 import FpsTileComponent from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FpsTileComponent';
 
 import { useState, useEffect } from 'react';
-import { IScatterChartProps, IScatterSourceItem } from './IScatterChartProps';
+import { IScatterChartProps, IScatterChartSize, IScatterSourceItem } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
@@ -31,7 +31,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   eleExtras
 }) => {
 
-  const { diameter, gridStep, reverseVerticalAxis = false, displaySize, } = chartDisplay;
+  const { diameter, displaySize, } = chartDisplay;
 
   const [gridScale, setGridScale] = useState( gridGaps.length -1 );  // Initial minY
 
@@ -39,6 +39,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const { tileHighlightColor } = eleExtras;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [highlightCSS, setHighlightCSS] = useState( tileHighlightColor ? { paddingLeft: '0.5em', color: tileHighlightColor, opacity: tileHighlightColor === 'yellow' ? .8 : 1 } : { paddingLeft: '0.5em', } ); // Initial centerX
 
 
@@ -69,7 +70,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   };
 
   const historyClick = (event: IMinReactMouseEvent, item: IScatterSourceItem): void => {
-    const idx: any = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
+    const idx: boolean | string = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
     setClickedIdx( idx === false ? -1 : parseInt( idx ) );
   }
 
@@ -121,13 +122,19 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   if ( show === false ) return null;
 
-  const horizontalMin = centerX - maxRange/2;
-  const horizontalMax = centerX + maxRange/2;
-  const verticalMin = centerY - maxRange/2;
-  const verticalMax = centerY + maxRange/2;
+  const ScatterSize: IScatterChartSize = {
+      horizontalMin: roundToNearestMultiple( centerX - maxRange/2, gridGaps[ gridScale ] ),
+      horizontalMax: roundToNearestMultiple( centerX + maxRange/2, gridGaps[ gridScale ] ),
+      verticalMin: roundToNearestMultiple( centerY - maxRange/2, gridGaps[ gridScale ] ),
+      verticalMax: roundToNearestMultiple( centerY + maxRange/2, gridGaps[ gridScale ] ),
+  }
+  // const horizontalMin = centerX - maxRange/2;
+  // const horizontalMax = centerX + maxRange/2;
+  // const verticalMin = centerY - maxRange/2;
+  // const verticalMax = centerY + maxRange/2;
 
-  console.log(`Scatter Range H Grid:  C ${centerX} min ${horizontalMin} to ${horizontalMax}`);
-  console.log(`Scatter Range V Grid:  C ${centerY} min ${verticalMin} to ${verticalMax}`);
+  console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
+  console.log(`Scatter Range V Grid:  C ${centerY} min ${ScatterSize.verticalMin} to ${ScatterSize.verticalMax}`);
 
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
@@ -167,8 +174,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     // Not sure why but have to make this a little smaller here ;(
     <div style={{ width: '97%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ centerX } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ centerY } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
         <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
       </div>
 
@@ -187,10 +194,11 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         onDotClick={ onDotClick }
         onLineClick={ null }
 
-        horizontalMin={ horizontalMin }
-        horizontalMax={ horizontalMax }
-        verticalMin={ verticalMin }
-        verticalMax={ verticalMax }
+        scatterSize={ScatterSize}
+        // horizontalMin={ horizontalMin }
+        // horizontalMax={ horizontalMax }
+        // verticalMin={ verticalMin }
+        // verticalMax={ verticalMax }
 
       />
       <FpsTileComponent
