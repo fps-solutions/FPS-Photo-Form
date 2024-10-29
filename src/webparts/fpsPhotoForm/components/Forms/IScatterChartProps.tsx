@@ -43,7 +43,7 @@ export interface IAxisMap {
 
 export type IFPSGridLineType = 'Solid' | 'Dashed' | 'Dotted';
 
-export const changesChart: string[] = [ 'diameter', 'favorites', 'gridStep', 'reverseVerticalAxis', 'gridlineColor', 'gridlineType', 'displaySize', 'divStyle', ].map( (str => `chart_${str}`));
+export const changesChart: string[] = [ 'diameter', 'favorites', 'gridStep', 'reverseVerticalAxis', 'gridlineColor', 'gridlineType', 'displaySize', 'divStyle', 'autoFadeDots', 'autoFadeText' ].map( (str => `chart_${str}`));
 
 export interface IChartDisplayWPProps {
   chart_diameter: number; // Total height of the chart
@@ -56,6 +56,8 @@ export interface IChartDisplayWPProps {
 
   chart_displaySize: number; // Default display size for circles
   chart_divStyle: string; // {}
+  chart_autoFadeDots: boolean; // AutoFade children by default
+  chart_autoFadeText: boolean; // AutoFade children by default
 }
 
 export interface IChartFavorites {
@@ -76,6 +78,9 @@ export interface IChartDisplayProps {
 
   displaySize?: number; // Default display size for circles
   divStyle?: React.CSSProperties; // {}
+
+  autoFadeDots: boolean;
+  autoFadeText: boolean;
 }
 
 
@@ -90,6 +95,7 @@ export interface IScatterChartProps extends IScatterChartSettings {
   hCenter: number; // Center x coordinate
   vCenter: number; // Center y coordinate
   stateSource: IStateSourceScatter;
+  filteredIds: number[];
   onDotClick?: ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ) => void;
   onLineClick?: ( line: 'Horizontal' | 'Vertical', value: number, event: React.MouseEvent<SVGLineElement, MouseEvent> ) => void;
 }
@@ -112,7 +118,7 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   svgHeight?: string; // '90%'
   divHeight?: string; // '90vh'
 
-  titleIds?: number[]; // Pass in array of Ids to show Titles for.  If empty, shows for all.
+  highlightIds: number[]; // Pass in array of Ids to show highlight - either skip fading, or somehow highlight.
 
 }
 

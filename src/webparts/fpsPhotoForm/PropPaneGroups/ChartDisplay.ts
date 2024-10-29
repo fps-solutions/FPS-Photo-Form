@@ -39,6 +39,7 @@ export function buildChartDisplayGroup( thisWPClass: IThisFPSWebPartClass ): IPr
         onText: 'Up is Negative -',
         offText: 'Up is Positive +',
       }),
+
       PropertyPaneTextField('chart_gridlineColor', {
         label: 'Gridline Color (name or code)',
         description: '',
@@ -54,6 +55,17 @@ export function buildChartDisplayGroup( thisWPClass: IThisFPSWebPartClass ): IPr
       PropertyPaneTextField('chart_divStyle', {
         label: 'Chart css - React.CSSProperties',
         description: `{ background: 'limegreen', padding: '3em' }`,
+      }),
+
+      PropertyPaneToggle('chart_autoFadeDots', {
+        label: 'Auto-Fade Dots',
+        onText: 'On',
+        offText: 'Off',
+      }),
+      PropertyPaneToggle('chart_autoFadeText', {
+        label: 'Auto-Fade Text',
+        onText: 'On',
+        offText: 'Off',
       }),
 
     ]

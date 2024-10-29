@@ -53,7 +53,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
       stateSource: EmptyStateSource as unknown as IStateSourceScatter,
       filteredSource: EmptyStateSource as unknown as IStateSourceScatter,
-
+      filteredIds: [],
       showSpinner: false,
       analyticsWasExecuted: false,
     };
@@ -155,6 +155,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           // vCenter={ 1000 }   // Example center y coordinate
 
           stateSource={ this.state.stateSource as IStateSourceScatter }
+          filteredIds={ this.state.filteredIds  }
 
           axisMap={ this.props.axisMap }
 

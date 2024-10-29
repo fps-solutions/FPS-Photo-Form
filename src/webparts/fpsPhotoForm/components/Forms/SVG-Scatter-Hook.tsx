@@ -17,6 +17,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     verticalMin,
     verticalMax,
 
+    highlightIds,
+
     onDotClick, onLineClick,
 
     svgHeight = '70vh',
@@ -26,7 +28,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
 
 
-  const { diameter, gridStep, displaySize, gridlineColor = 'lightgray', gridlineType = 'Solid', reverseVerticalAxis = false, divStyle = {} } = chartDisplay;
+  const { diameter, gridStep, displaySize, autoFadeDots, autoFadeText, gridlineColor = 'lightgray', gridlineType = 'Solid', reverseVerticalAxis = false, divStyle = {} } = chartDisplay;
 
   if ( show === false ) return null;
 
@@ -75,47 +77,11 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   const viewBox: string = `${0} ${0} ${diameter} ${diameter * ratio}`;
 
   return (
-    <div className={ `svg-scatter-container`} style={{ ...{ width: '100%', height: divHeight  }, ...{ divStyle } } }>
+    <div className={ `svg-scatter-container ${ autoFadeDots === true ? 'faded-dots' : '' }`} style={{ ...{ width: '100%', height: divHeight  }, ...{ divStyle } } }>
       {/* Reduced height to accomodate the slider heights */}
       <svg viewBox={ viewBox } style={{ width: '100%', height: svgHeight }}>
-        {stateSource.items.map((item, index) => {
 
-          const { Scatter } = item.FPSItem;
-          const horzPercent = calculatePercentageInRange(Scatter.horz, horizontalMin, horizontalMax);
-          const vertPercent = calculatePercentageInRange(Scatter.vert, verticalMin, verticalMax);
-          const cHorizontal = (Scatter.horz - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
-
-          // Adjust cy based on reverseVerticalAxis
-          const cVertical = reverseVerticalAxis
-            ? (vertPercent / 100) * diameter // Lower z values higher on the Y-axis
-            : diameter - (vertPercent / 100) * diameter; // Standard positioning
-
-            if ( check4This( 'tracePerformance=true' ) === true ) {
-              console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
-              console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
-              console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
-            }
-
-          return (
-            <g key={index}>
-              <circle className={ `scatter-point ${scatterHoverScale}` }
-                key={index}
-                cx={cHorizontal}
-                cy={cVertical}
-                r={displaySize}
-                fill={ Scatter.Color ? Scatter.Color : 'blue'}
-                onClick={(event) => onDotClick( item.Id, 'DotClick', item, event )}
-              >
-                <title>
-                  {`Title: ${Scatter.Title}, Category: ${JSON.stringify( Scatter.Category2 ) }, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
-                </title>
-              </circle>
-              <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize } fontSize={displaySize * 2} fill="black">{Scatter.Title}</text>
-            </g>
-          );
-        })}
-
-        {/* Draw grid lines */}
+        {/* Draw horizontal grid lines */}
         {horzGridLines.map((value, i) => {
           const xLinePosition = (value - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
           if ( check4This( 'tracePerformance=true' ) === true ) console.log( `horzGridLines: ${value} is at ${xLinePosition}`);
@@ -130,6 +96,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
           );
         })}
 
+        {/* Draw vertical grid lines */}
         {vertGridLines.map((value, i) => {
           const yLinePosition = reverseVerticalAxis
             ? (value - verticalMin) / (verticalMax - verticalMin) * diameter // Normal positioning
@@ -147,6 +114,45 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
           );
         })}
 
+        {/* Draw circles from items */}
+        {/* CIRCLES ARE LAST - because that way they are on top of the other elements */}
+        {stateSource.items.map((item, index) => {
+
+        const { Scatter } = item.FPSItem;
+        const horzPercent = calculatePercentageInRange(Scatter.horz, horizontalMin, horizontalMax);
+        const vertPercent = calculatePercentageInRange(Scatter.vert, verticalMin, verticalMax);
+        const cHorizontal = (Scatter.horz - horizontalMin) / (horizontalMax - horizontalMin) * diameter;
+
+        // Adjust cy based on reverseVerticalAxis
+        const cVertical = reverseVerticalAxis
+          ? (vertPercent / 100) * diameter // Lower z values higher on the Y-axis
+          : diameter - (vertPercent / 100) * diameter; // Standard positioning
+
+          if ( check4This( 'tracePerformance=true' ) === true ) {
+            console.log(`Scatter.horz: ${Scatter.horz}, horizontalMin: ${horizontalMin}, horizontalMax: ${horizontalMax}, horzPercent: ${horzPercent}`);
+            console.log(`Calculated cHorizontal for ${Scatter.horz}: ${cHorizontal}`);
+            console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
+          }
+
+        return (
+          <g className={ highlightIds.indexOf( item.Id ) > -1 ? 'no-fade' : '' } key={index}>
+            <circle className={ `scatter-point ${scatterHoverScale}` }
+              key={index}
+              cx={cHorizontal}
+              cy={cVertical}
+              r={displaySize}
+              fill={ Scatter.Color ? Scatter.Color : 'blue'}
+              onClick={(event) => onDotClick( item.Id, 'DotClick', item, event )}
+            >
+              <title>
+                {`Title: ${Scatter.Title}, Category: ${JSON.stringify( Scatter.Category2 ) }, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
+              </title>
+            </circle>
+            <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize }
+              fontSize={displaySize * 2} fill="black" className={ autoFadeText === true ? 'faded-text' : '' }>{Scatter.Title}</text>
+          </g>
+        );
+        })}
       </svg>
     </div>
   );

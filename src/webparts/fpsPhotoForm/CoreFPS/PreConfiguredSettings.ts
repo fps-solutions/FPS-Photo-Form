@@ -79,6 +79,8 @@ export const WPPresetEverywhere : IPreConfigSettings = {
 
         chart_displaySize: null, // Default display size for circles
         chart_divStyle: '', // {}
+        chart_autoFadeDots: false,
+        chart_autoFadeText: true,
 
     }
 };

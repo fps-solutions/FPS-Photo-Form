@@ -28,6 +28,7 @@ export interface IViewTabsState {
 
   stateSource: IStateSourceScatter;
   filteredSource: IStateSourceScatter;
+  filteredIds: number[];
 
   showSpinner: boolean;
   analyticsWasExecuted: boolean;

@@ -29,6 +29,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const maxRange: number = gridGaps[ gridScale ] * 10;
 
   const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
+  const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
+  const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
   const [centerY, setCenterY] = useState( vCenter - (diameter / 2) );  // Initial centerY
@@ -53,12 +55,26 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const onDotClick = ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ): void =>  {
     const newCenterX: number = item.FPSItem.Scatter.horz;
     const newCenterY: number = item.FPSItem.Scatter.vert;
+    const currentIds: number[] = JSON.parse(JSON.stringify( highlightIds ));
     // setGridScale(3);
-    if ( event.ctrlKey === true ) {
+    if ( event.altKey === true && currentIds.indexOf( Id ) > -1 ) {
+      // Remove selected item from highlights
+      setHighlightIds( currentIds.filter( num => num !== Id ) );
+
+    } else if ( event.altKey === true ) {
+      // Add item to highlights
+      setHighlightIds( [ ...highlightIds, Id ] );
+
+    } else if ( event.ctrlKey === true ) {
+      setHighlightIds( [ Id ] );
+      setIdHistory( [ Id, ...idHistory ] );
       setCenterX(newCenterX);
       setCenterY(newCenterY);
+
     } else {
       const idx: any = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
+      setHighlightIds( [ Id ] );
+      setIdHistory( [ Id, ...idHistory ] );
       setClickedIdx( idx === false ? -1 : parseInt( idx ) );
     }
 
@@ -111,6 +127,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
         chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
         stateSource={ stateSource }
+        highlightIds={ highlightIds }
 
         onDotClick={ onDotClick }
         onLineClick={ null }

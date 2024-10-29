@@ -23,7 +23,7 @@ export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {
 
 export function createChartDisplay( wpProps: IFpsPhotoFormWebPartProps ): IChartDisplayProps {
 
-  const { chart_diameter, chart_favorites, chart_gridStep, chart_reverseVerticalAxis, chart_gridlineColor, chart_gridlineType, chart_displaySize, chart_divStyle, } = wpProps;
+  const { chart_diameter, chart_favorites, chart_gridStep, chart_reverseVerticalAxis, chart_gridlineColor, chart_gridlineType, chart_displaySize, chart_divStyle, chart_autoFadeDots, chart_autoFadeText } = wpProps;
   const favorites: IChartFavorites[] = [];
   const favStrings: string[] = chart_favorites ? chart_favorites.split(';') : [];
 
@@ -47,6 +47,8 @@ export function createChartDisplay( wpProps: IFpsPhotoFormWebPartProps ): IChart
     gridlineType: upperFirstLetter( chart_gridlineType, true ) as IFPSGridLineType,
 
     displaySize: chart_displaySize,
+    autoFadeDots: chart_autoFadeDots,
+    autoFadeText: chart_autoFadeText,
     divStyle: createStyleFromString( chart_divStyle, {}, '', 'createChartDisplay ~ 38'),
   };
 

@@ -22,6 +22,36 @@
   transform-origin: center; /* Scale from the center */
 }
 
+.svg-scatter-container .faded-text {
+    opacity: 0.1; /* Adjust the value as needed for fading */
+    transition: opacity 0.3s ease; /* Smooth transition */
+    pointer-events: none;
+}
+
+.svg-scatter-container.faded-dots {
+  circle {
+    opacity: .5;
+  }
+}
+
+.svg-scatter-container .no-fade * {
+  opacity: 1;
+}
+
+.svg-scatter-container .no-fade {
+  circle {
+    opacity: 1;
+  }
+}
+
+.svg-scatter-container .scatter-point:hover {
+  opacity: 1; /* Fully opaque on hover */
+}
+
+.svg-scatter-container .scatter-point:hover + .faded-text {
+  opacity: 1; /* Fully opaque on hover */
+}
+
 .svg-scatter-container .scatter-point.diameter100:hover {
   /* Adjusted these to make sure the dot stays in place on hover.  Tested on */
 
