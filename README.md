@@ -47,11 +47,11 @@ storedSecrets
 add webpack analyzer into gulpfile.js
 gulp build
 
-- npm install @mikezimm/fps-library-v2@2.0.18; gulp serve --nobrowser
+- npm install @mikezimm/fps-library-v2@2.0.23; gulp serve --nobrowser
 
 - gulp clean; gulp build; gulp bundle --ship; gulp package-solution --ship
 
-- npm install @mikezimm/fps-library-v2@2.0.18; gulp clean; gulp build; gulp bundle --ship; gulp package-solution --ship
+- npm install @mikezimm/fps-library-v2@2.0.23; gulp clean; gulp build; gulp bundle --ship; gulp package-solution --ship
 
 ?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
 - coinfigure-webpack 14s

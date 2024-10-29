@@ -2,7 +2,7 @@
 
 .fpsPhotoForm {
   overflow: hidden;
-  padding: 1em;
+
   color: "[theme:bodyText, default: #323130]";
   color: var(--bodyText);
   &.teams {
@@ -100,19 +100,18 @@
 
   margin: 1em 20px;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   grid-template-areas:
-    "title"
-    "category1"
-    "coordinates"
-    "comments"
-    "category2"
-    "category3"
-    "summary"
-    "submit"
-    "imagePreview"
-    "spacer";
+    "title title"
+    "category1 category1"
+    "coordinates coordinates"
+    "comments comments"
+    "submit summary"
+    "category2 category3"
+    "imagePreview imagePreview"
+    "spacer spacer";
   gap: 1em;
+  row-gap: 0em;
   label {
     font-weight: 600;
   }
@@ -120,6 +119,25 @@
 
 .fpsPhotoFormGrid > * {
   align-self: start;
+}
+@media (min-width: 685px) {
+  .fpsPhotoFormGrid {
+    grid-template-columns: 1fr 125px 125px;
+    grid-template-areas:
+      "title title title"
+      "category1 category1 category1"
+      "coordinates coordinates coordinates"
+      "comments category2 category3"
+      "submit category2 category3"
+      "summary category2 category3"
+      "imagePreview category2 category3"
+      "spacer category2 category3";
+    // grid-template-rows: 64px 24px 48px 140px 50px 100px auto;
+    row-gap: 0em;
+  }
+  .spacer {
+    height: 1000px;
+  }
 }
 
 @media (min-width: 1000px) {
@@ -133,6 +151,11 @@
       "summary summary category2 category3"
       "submit imagePreview category2 category3"
       "spacer spacer category2 category3";
+    grid-template-rows: 64px 24px 48px 140px 90px 100px auto;
+    row-gap: 0em;
+  }
+  .spacer {
+    height: 500px;
   }
 }
 
@@ -175,5 +198,4 @@
 
 .spacer {
   grid-area: spacer;
-  height: 200px;
 }

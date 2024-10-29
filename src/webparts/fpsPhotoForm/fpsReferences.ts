@@ -55,6 +55,9 @@ export { gitPhotoForm } from '@mikezimm/fps-library-v2/lib/components/atoms/Link
  */
 
 export { IStateSource, EmptyStateSource } from '@mikezimm/fps-core-v7/lib/components/molecules/state-source/IStateSource';
+
+export { IAnySourceItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
+
 export { getExpandColumns, } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/getVX/getExpandV2';
 export { getSelectColumns, } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/getVX/getSelectV2';
 export { getHelpfullError, getHelpfullErrorV2 } from '@mikezimm/fps-core-v7/lib/logic/Errors/friendly';

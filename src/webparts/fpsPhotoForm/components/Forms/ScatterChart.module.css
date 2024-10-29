@@ -1,0 +1,43 @@
+
+.scatter-fade-panel {
+  margin: 3em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.scatter-fade-panel .fade-bright {
+  color: #d9d53d;
+}
+
+.scatter-fade-panel .main-Image {
+  margin-top: 1.5em;
+  width: 60%;
+  object-fit: contain;
+  transition: width 0.3s ease; /* Smooth transition */
+}
+
+.scatter-fade-panel .main-Image:hover {
+  width: 80%; /* Increase to 80% width on hover */
+}
+
+.scatter-fade-panel-title {
+  font-size: xxx-large;
+  text-align: center;
+  margin-bottom: .5em;
+}
+
+.scatter-fade-details {
+  display: flex;
+  flex-direction: column;
+  max-width: 70%;
+  text-align: left;
+  margin-bottom: 1em;
+}
+
+.scatter-fade-panel-coords {
+  display: flex;
+  font-size: x-large;
+  gap: 2em;
+  margin-bottom: 1em;
+}

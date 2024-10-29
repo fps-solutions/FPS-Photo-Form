@@ -1,0 +1,45 @@
+/* fps-Slider.css */
+
+.fps-slider-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 10px 0;
+}
+
+.fps-slider-container .fps-slider-label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.fps-slider-container .fps-slider {
+  width: 100%; /* Full width for the slider */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.fps-slider-container .fps-slider input[type="range"] {
+  -webkit-appearance: none; /* Remove default styling in WebKit browsers */
+  appearance: none;
+  background: #ddd; /* Track color */
+  border-radius: 5px;
+  height: 8px;
+  outline: none; /* Remove outline on focus */
+}
+
+.fps-slider-container .fps-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Custom thumb for WebKit */
+  appearance: none;
+  width: 20px; /* Thumb width */
+  height: 20px; /* Thumb height */
+  background: #4caf50; /* Thumb color */
+  border-radius: 50%; /* Rounded thumb */
+  cursor: pointer; /* Change cursor on hover */
+}
+
+.fps-slider-container .fps-slider input[type="range"]::-moz-range-thumb {
+  width: 20px; /* Thumb width */
+  height: 20px; /* Thumb height */
+  background: #4caf50; /* Thumb color */
+  border-radius: 50%; /* Rounded thumb */
+  cursor: pointer; /* Change cursor on hover */
+}

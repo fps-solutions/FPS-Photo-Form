@@ -1,0 +1,78 @@
+/* ScatterChart.module.css */
+.svg-scatter-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* or specific pixel values */
+  height: 400px; /* or percentage for responsiveness */
+  position: relative;
+  border: 1px solid #ccc; /* Optional: border for visibility */
+}
+
+.svg-scatter-container svg {
+  width: 100%; /* Allow it to fill the container */
+  height: 100%; /* Allow it to fill the container */
+  border: 1px solid #ccc; /* Optional: for visibility */
+}
+
+/* Original circle styles */
+.svg-scatter-container .scatter-point {
+  transition: all 0.2s ease; /* Smooth transition */
+  transition: transform 0.2s ease 0.2s; /* Smooth transition with a delay */
+  transform-origin: center; /* Scale from the center */
+}
+
+.svg-scatter-container .faded-text {
+    opacity: 0.1; /* Adjust the value as needed for fading */
+    transition: opacity 0.3s ease; /* Smooth transition */
+    pointer-events: none;
+}
+
+.svg-scatter-container.faded-dots {
+  circle {
+    opacity: .5;
+  }
+}
+
+.svg-scatter-container .no-fade * {
+  opacity: 1;
+}
+
+.svg-scatter-container .no-fade {
+  circle {
+    opacity: 1;
+  }
+}
+
+.svg-scatter-container .scatter-point:hover {
+  opacity: 1; /* Fully opaque on hover */
+}
+
+.svg-scatter-container .scatter-point:hover + .faded-text {
+  opacity: 1; /* Fully opaque on hover */
+}
+
+.svg-scatter-container .scatter-point.diameter100:hover {
+  /* Adjusted these to make sure the dot stays in place on hover.  Tested on */
+
+  /* This worked perfectly when the diameter was at 100.
+    However, it did NOT work when the scale was really large...
+      -.25%, 0.5% shifted it about 1k value to left while at 100 diam, was good */
+
+  /* Found through testing that the translate amount actually is affected by it's X-Y location */
+
+  /* transform: scale(1.2) translate(-0.25%, -.5%); */
+}
+
+.svg-scatter-container .scatter-point.diameter6000:hover {
+  /* Adjusted these to make sure the dot stays in place on hover.  Tested on */
+
+  /* This worked perfectly when the diameter was at 100 and the point was about 25,X.
+      -.25%, 0.5% shifted it about 1k value to left while at 100 diam, was good */
+      /* transform: scale(1.2) translate(-0.25%, -.5%); */
+
+  /* Found through testing that the translate amount actually is affected by it's X-Y location
+        In fact, translate(8.3%, -1.5%) was working well for a point @ -8,000 + 1600  */
+        /* transform: scale(1.2) translate(8.3%, -1.5%); */
+
+}

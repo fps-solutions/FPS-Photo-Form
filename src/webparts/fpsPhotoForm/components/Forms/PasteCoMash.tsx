@@ -2,17 +2,35 @@ import * as React from 'react';
 import { useState, FormEvent, useEffect, } from 'react';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 
+import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
+
 import styles from '../FpsPhotoForm.module.scss';
 import { getButtonStyles } from './getButtonStyles';
 import FPSToggle from '../Toggle/component';
+import { IPhotoButtonStyle } from './IScatterChartProps';
 
 export interface IPhotoFormForm  {
-  SiteUrl: string;
+
+  ListSiteUrl: string;
   ListTitle: string;
+  LibrarySiteUrl: string;
   LibraryName: string;
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+  imageSubfolder2: string;
+
   Category1s: string[];
   Category2s: string[];
   Category3s: string[];
+
+  ListSource: ISourceProps;
+  ImagesSource: ISourceProps;
+  photoButtonStyles: IPhotoButtonStyle[];
+
+}
+
+export interface IPhotoFormInput extends IPhotoFormForm {
+  display: 'block' | 'none';
 }
 
 export interface IPhotoFormFormInterface {
@@ -29,8 +47,8 @@ export interface IPhotoFormFormInterface {
 const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
-const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
-  const { SiteUrl, ListTitle, LibraryName, Category1s, Category2s, Category3s } = props;
+const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
+  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, imageSubfolder2, photoButtonStyles } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
   const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
   const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
@@ -40,6 +58,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
     const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
     const [cats2Title, setCats2Title ] = useState<boolean>(false);
+
 
     // Update wasSubmitted to false whenever formData changes
     useEffect(() => {
@@ -65,9 +84,22 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         }
     };
 
+    useEffect(() => {
+      const handleClipboard = (e: ClipboardEvent): void => handlePaste(e);
+      document.addEventListener('paste', handleClipboard);
+      return () => {
+          document.removeEventListener('paste', handleClipboard);
+      };
+    }, []);
+
+    // Conditionally return null or undefined if shouldRender is false
+    if ( display === 'none' ) {
+      return null; // or return undefined;
+    }
+
     // Create list item in SharePoint
     const createListItem = async (title: string): Promise<any> => {
-      const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+      const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
 
       const saveItem = {
           Title: title,
@@ -94,7 +126,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
       console.log('Save Item:', saveItem);
 
       try {
-          const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items`, {
+          const response = await fetch(`${ListSource.absoluteWebUrl}/_api/web/lists/getbytitle('${ListSource.listTitle}')/items`, {
               method: 'POST',
               headers: {
                   'Accept': 'application/json',
@@ -131,13 +163,14 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
     // Upload image to SiteAssets library
     const uploadImageToLibrary = async (blob: Blob, fileName: string): Promise<string | null> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+        const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl);
         return new Promise((resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.onloadend = async () => {
                 const buffer = fileReader.result as ArrayBuffer;
+                const folderRelativeUrl = imageSubfolder2 ? `${ImagesSource.listTitle}/${imageSubfolder2}` : ImagesSource.listTitle;
                 try {
-                    const response = await fetch(`${SiteUrl}/_api/web/GetFolderByServerRelativeUrl('${LibraryName}')/Files/add(url='${fileName}', overwrite=true)`, {
+                    const response = await fetch(`${ImagesSource.absoluteWebUrl}/_api/web/GetFolderByServerRelativeUrl('${folderRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
                         method: 'POST',
                         headers: {
                             'Accept': 'application/json; odata=verbose',
@@ -164,10 +197,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
 
     // Update list item with image URL
     const updateListItemWithImage = async (itemId: number, imageUrl: string):Promise<void> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(SiteUrl);
+        const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
         const body = { ScreenshotUrl: imageUrl }; // Assuming ScreenshotUrl is the name of your image column
         try {
-            const response = await fetch(`${SiteUrl}/_api/web/lists/getbytitle('${ListTitle}')/items(${itemId})`, {
+            const response = await fetch(`${ListSource.absoluteWebUrl}/_api/web/lists/getbytitle('${ListSource.listTitle}')/items(${itemId})`, {
                 method: 'PATCH',
                 headers: {
                     'Accept': 'application/json',
@@ -186,6 +219,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         }
     };
 
+
     // Handle form submission
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
@@ -195,7 +229,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         }
 
         const listItemResponse = await createListItem(formData.title);
-        let fileDesc = [ `${ Category1s[formData.category1 ]}` ];
+        const fileDesc = [ `${ Category1s[formData.category1 ]}` ];
         fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
         formData.category2.map( idx => { if ( formData.title.indexOf( Category2s[ idx ] ) < 0 ) fileDesc.push( Category2s[ idx ] ); });
         formData.category3.map( idx => { if ( formData.title.indexOf( Category3s[ idx ] ) < 0 ) fileDesc.push( Category3s[ idx ] ); });
@@ -220,13 +254,6 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
         }
     };
 
-    useEffect(() => {
-        const handleClipboard = (e: ClipboardEvent): void => handlePaste(e);
-        document.addEventListener('paste', handleClipboard);
-        return () => {
-            document.removeEventListener('paste', handleClipboard);
-        };
-    }, []);
 
     const handleCategory2Click = (index: number): void => {
       setFormData(prevFormData => {
@@ -293,7 +320,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => setFormData({ ...formData, category1: index })}
-                      style={ {...{ }, ...getButtonStyles( Category1s[ index ] ) } }
+                      style={ {...{ }, ...getButtonStyles( Category1s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>
@@ -324,7 +351,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                     onBlur={() => {
                       setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'x' ]) });
                     }}
-                    style={{ paddingLeft: '.5em', marginLeft: '1em' }}
+                    style={{ width: '80%', paddingLeft: '.5em', marginLeft: '1em' }}
                   />
                 </div>
               ))}
@@ -346,7 +373,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory2Click(index)}
-                      style={ {...{  }, ...getButtonStyles( Category2s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category2s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>
@@ -364,7 +391,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormForm> = ( props ) => {
                       title={ category }
                       type="button"
                       onClick={() => handleCategory3Click(index)}
-                      style={ {...{  }, ...getButtonStyles( Category3s[ index ] ) } }
+                      style={ {...{  }, ...getButtonStyles( Category3s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>

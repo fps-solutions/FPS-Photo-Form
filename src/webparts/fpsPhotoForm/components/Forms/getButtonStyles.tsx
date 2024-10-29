@@ -1,4 +1,7 @@
-const PlaceholderButtons = [
+import { IPhotoButtonStyle } from "./IScatterChartProps";
+
+
+const PlaceholderButtons: IPhotoButtonStyle[] = [
   {
     label: 'Other',
     styles: { }
@@ -13,7 +16,7 @@ const PlaceholderButtons = [
   }
 ]
 
-export const ButtonStylesMinecraftBiomes = [
+export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
   {
     label: 'Desert',
     styles: { background: 'yellow', color: 'black' }
@@ -86,9 +89,21 @@ export const ButtonStylesMinecraftBiomes = [
     label: 'Mangrove',
     styles: { background: '#1E220A', color: '#5BD15E' }
   },
+  {
+    label: 'Moo Shroom',
+    styles: { background: '#ffcc99', color: '#cc0000' }
+  },
+  {
+    label: 'Bassalt',
+    styles: { background: 'black', color: 'orange' }
+  },
+  {
+    label: 'Nether Forest',
+    styles: { background: 'teal', color: 'darkred' }
+  },
   ...PlaceholderButtons,
 ];
-export const ButtonStylesMinecraftDimensions = [
+export const ButtonStylesMinecraftDimensions: IPhotoButtonStyle[] = [
   {
     label: 'Overworld',
     styles: { background: 'green', color: 'white' }
@@ -102,7 +117,7 @@ export const ButtonStylesMinecraftDimensions = [
     styles: { background: 'gray', color: 'yellow' }
   },
 ];
-export const ButtonStylesMinecraftStructures = [
+export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
   {
     label: 'Village',
     styles: { background: '', color: '' }
@@ -144,6 +159,22 @@ export const ButtonStylesMinecraftStructures = [
     styles: { background: '#b85233', color: '#33b873' }
   },
   {
+    label: 'Monument',
+    styles: { background: 'lightblue', color: 'darkblue' }
+  },
+  {
+    label: 'Site Seeing',
+    styles: { background: 'yellow', color: 'black' }
+  },
+  {
+    label: 'Historical',
+    styles: { background: 'khaki', color: 'black' }
+  },
+  {
+    label: 'Outpost',
+    styles: { background: 'darkbrown', color: 'khaki' }
+  },
+  {
     label: 'End Portal',
     styles: { background: '#004b49', color: 'khaki' }
   },
@@ -163,15 +194,21 @@ export const ButtonStylesMinecraftStructures = [
     label: 'Ruin',
     styles: { background: '#004b49', color: 'khaki' }
   },
+  {
+    label: 'Bastion',
+    styles: { background: 'black', color: 'orange' }
+  },
   ...PlaceholderButtons,
 ];
-const ButtonStyles = [
+
+
+export const ButtonStylesMC: IPhotoButtonStyle[] = [
   ...ButtonStylesMinecraftDimensions, ...ButtonStylesMinecraftBiomes, ...ButtonStylesMinecraftStructures
 ];
 
-export function getButtonStyles(label: string): any {
+export function getButtonStyles(label: string, buttonStyles: IPhotoButtonStyle[] ): React.CSSProperties {
   let results = {};
-  ButtonStyles.map(but => {
+  buttonStyles.map(but => {
     if (but.label === label) results = but.styles;
   });
   return results;

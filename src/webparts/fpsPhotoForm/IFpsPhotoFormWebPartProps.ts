@@ -12,10 +12,14 @@
  *
  */
 import { IMinWPBannerProps } from '@mikezimm/fps-core-v7/lib/banner/interfaces/MinWP/IMinWPBannerProps';
+import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
+import { changesAxis, changesChart, IAxisMapWPProps, IChartDisplayWPProps } from './components/Forms/IScatterChartProps';
+import { changesFpsTileComp, IFpsTileComponentWPProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
 
 export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomProps' , ];
 
+export const changePhoto: string[] = [ 'photoButtonStyles' ];
 
  /**
   For props to export to panel but NOT save in analytics
@@ -23,6 +27,10 @@ export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomPro
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const WebPartAnalyticsChanges : any = {
   listPicker: changeListItemPickers,
+  libraryPicker:  [ ...changeListItemPickers2, 'imageSubfolder2' ],
+  axisMap: changesAxis,
+  chartDisplay: changesChart,
+  fpsTile: changesFpsTileComp,
   groupX: changePropertyGroupX,
 }
 
@@ -52,8 +60,12 @@ export const importBlockPropsWP : string[] = [ 'showSomeProps' ];
    * Extend with portions of FPS Props that are needed
    *
    */
-export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps {
+export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListItemPickerWPProps2, IAxisMapWPProps, IChartDisplayWPProps, IFpsTileComponentWPProps {
 
   description: string;
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+  imageSubfolder2: string;
+  photoButtonStyles: string;
 
 }

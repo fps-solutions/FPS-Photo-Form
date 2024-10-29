@@ -1,14 +1,16 @@
 import * as React from 'react';
 import styles from './FpsPhotoForm.module.scss';
 
-import { IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
+import { IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
 
 import { IDefSourceType,  } from './IFpsPhotoFormProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 
+import { Icon } from '@fluentui/react/lib/Icon';
+
 import { saveViewAnalytics } from '../CoreFPS/Analytics';
 
-import FetchBannerX from '@mikezimm/fps-library-v2/lib/banner/bannerX/FetchBannerX';
+import FetchBannerY from '@mikezimm/fps-library-v2/lib/banner/bannerX/FetchBannerY';
 import { checkCert, } from '@mikezimm/fps-core-v7/lib/banner/bannerX/checkCert';
 // import { createSpecialElement } from '@mikezimm/fps-library-v2/lib/banner/components/SpecialBanner/component';
 // import { ISpecialMessage, } from '@mikezimm/fps-library-v2/lib/banner/components/SpecialBanner/interface';
@@ -19,15 +21,13 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
-import ScreenshotForm from './Forms/Paste';
-import { WebPartContext } from '@microsoft/sp-webpart-base';
-import FileUpload from './Forms/Paste2';
-import FileUpload3 from './Forms/Paste3';
 import ScreenshotFormMash from './Forms/PasteCoMash';
-import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './Forms/getButtonStyles';
+import ScatterChart from './Forms/ScatterChart';
+import { IScatterSourceItem } from './Forms/IScatterChartProps';
+import ViewTabs from './ViewTabs/ViewTabs';
 
 //Use this to add more console.logs for this component
-const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
+const consolePrefix: string = 'fpsconsole: FPS Photo Form Webpart';
 
 export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IFpsPhotoFormState> {
 
@@ -79,8 +79,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       refreshId: makeid(5),
       debugMode: false,
       showSpinner: false,
-
-      };
+      tab: this.props.tab ? this.props.tab : 'Input',
+    };
   }
 
   public componentDidMount(): void {
@@ -101,7 +101,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       this._performance.ops.fetch1 = updatePerformanceEnd( this._performance.ops.fetch1, true, 777 );
       this._performance.ops.fetch = updatePerformanceEnd( this._performance.ops.fetch, true, 999 );
 
-      const analyticsWasExecuted = saveViewAnalytics( 'FPS Core 1173 Banner View', 'Views', 'didMount' , this.props, this.state.analyticsWasExecuted, this._performance );
+      const analyticsWasExecuted = this.props.tab === 'Input' ? saveViewAnalytics( 'FPS Photo Form', 'Views', 'didMount' , this.props, this.state.analyticsWasExecuted, this._performance ) : false;
 
       if ( this.state.analyticsWasExecuted !==  analyticsWasExecuted ) {
         this.setState({ analyticsWasExecuted: analyticsWasExecuted });
@@ -201,11 +201,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
   public render(): React.ReactElement<IFpsPhotoFormProps> {
     const {
-      description,
-      isDarkTheme,
-      environmentMessage,
       hasTeamsContext,
-      userDisplayName,
       bannerProps
     } = this.props;
 
@@ -230,9 +226,18 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     //Setting showTricks to false here ( skipping this line does not have any impact on bug #90 )
     if ( this.props.bannerProps.beAUser === false ) {
-      farBannerElementsArray.push(
-        // <div title={'Show Debug Info'}><Icon iconName='TestAutoSolid' onClick={ this.toggleDebugMode.bind(this) } style={ this.debugCmdStyles }></Icon></div>
-      );
+      farBannerElementsArray.push( ...[
+
+        <div key='Gap' style={{ cursor: 'default', marginRight: '.5em' }}>Tabs:</div>,
+        <Icon key='Input' iconName='Questionnaire' title='Form Input View' onClick={ ( event ) => this.handleStateClick( 'Input' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='List' iconName='BulletedList' title='List View' onClick={ ( event ) => this.handleStateClick( 'List' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='Map' iconName='Globe2' title='Coordinates View' onClick={ ( event ) => this.handleStateClick( 'Map' ) } style={ { ...this.props.bannerProps.bannerCmdReactCSS, ...{ marginRight: '2em' } } }/>,
+
+        <div key='Links' style={{ marginLeft: '3em', cursor: 'default', marginRight: '.5em' }}>Links:</div>,
+        <Icon key='Questionnaire' iconName='BulletedListText' title='Open List' onClick={ ( ) => window.open( `${this.props.ListSource.webUrl}${this.props.ListSource.webRelativeLink}`, '_blank' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='Photo2' iconName='Photo2' title='Open Images Folder' onClick={ ( ) => window.open( `${this.props.ImagesSource.webUrl}${this.props.ImagesSource.webRelativeLink}/${this.props.ImagesSource.subFolder}`, '_blank' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+
+      ]);
     }
 
     // const FPSUser : IFPSUser = this.props.bannerProps.FPSUser;
@@ -242,7 +247,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     if ( check4Gulp() === true )  console.log('React Render - this._performance:', JSON.parse(JSON.stringify(this._performance)) );
 
-    const Banner = <FetchBannerX
+    const Banner = <FetchBannerY
 
       // bonusHTML1={ 'BonusHTML1 Text' }
       panelPerformance={ this._performance }
@@ -272,42 +277,102 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
         { checkCert( bannerProps ) === true ? <div>
 
-              {/* <ScreenshotForm
-                SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
-              /> */}
+          <ScreenshotFormMash
+            display={ this.state.tab === 'Input' ? 'block' : 'none' }
+            ListSource = { this.props.ListSource }
+            ImagesSource = { this.props.ImagesSource }
+            ListSiteUrl={ this.props.ListSiteUrl }
+            ListTitle={ this.props.ListTitle }
+            LibrarySiteUrl={ this.props.LibrarySiteUrl }
+            LibraryName={ this.props.LibraryName }
+            Category1s={ this.props.Category1s }
+            Category2s={ this.props.Category2s }
+            Category3s={ this.props.Category3s }
+            imageSubfolder2={ this.props.imageSubfolder2 }
+            photoButtonStyles={ this.props.photoButtonStyles }
+            // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
+            // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
+            // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
+          />
 
-              <ScreenshotFormMash
-                SiteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl }
-                ListTitle={ 'WorldCoords888' }
-                LibraryName={ 'MapImages/888Mashup' }
-                Category1s={ ButtonStylesMinecraftDimensions.map( x => x.label) }
-                Category2s={ButtonStylesMinecraftBiomes.map( x => x.label) }
-                Category3s={ ButtonStylesMinecraftStructures.map( x => x.label) }
-                // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
-                // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
-                // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
-              />
+          <ViewTabs
+            tab={ this.state.tab  }
+            ListSource={ this.props.ListSource  }
+            axisMap={ this.props.axisMap  }
+            chartDisplay={ this.props.chartDisplay  }
+            bannerProps={ bannerProps  }
+            performance={ this._performance  }
+            photoButtonStyles={ this.props.photoButtonStyles }
 
-              {/* <div className={styles.welcome}>
-                <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
-                  src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-                <h2>Well done, {escape(userDisplayName)}!</h2>
-                <div>{environmentMessage}</div>
-                <div>Web part property value: <strong>{escape(description)}</strong></div>
-              </div>
-              <div>
-                <h3>Welcome to SharePoint Framework!</h3>
-                <p>
-                  The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-                </p>
+            FPSItem={ this.props.FPSItem }
+            eleExtras={ this.props.eleExtras }
+            eleProps={ this.props.eleProps }
 
-              </div> */}
+            // WORKS!
+            // diameter={ 12000 }  // Example total height of the chart
+            // hCenter={7000}   // Example center x coordinate
+            // vCenter={-4000}   // Example center y coordinate
+            // gridStep={ 1000 }
+            // stateSource={{
+            //   items: [
+            //     { FPSItem: { Scatter : { horz: -6000, vert: 2000, depth: 2, Category: 'A', Title: 'BottomLeft', Shape: 'circle', Color: 'red' } }},
+            //     { FPSItem: { Scatter : { horz: -2000, vert: 0, depth: 33, Category: 'B', Title: 'Center', Shape: 'circle', Color: 'black' } }},
+            //     { FPSItem: { Scatter : { horz: -1000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
+            //     // { FPSItem: { Scatter : { horz: 9000, vert: -10000, depth: 12, Category: 'G', Title: 'TopRight', Shape: 'circle', Color: 'green' } }},
+            //   ],
+            // }}
+            // reverseVerticalAxis={ true }
 
-            </div> : undefined }
-          </section>
+
+
+
+                // { FPSItem: { Scatter : { horz: 10, vert: 20, depth: 5, Category: 'C', Title: 'Point 1', Shape: 'circle', Color: 'blue' } }},
+                // { FPSItem: { Scatter : { horz: 15, vert: 25, depth: 10, Category: 'D', Title: 'Point 2', Shape: 'circle', Color: 'yellow' } }},
+                // { FPSItem: { Scatter : { horz: 20, vert: 15, depth: 7, Category: 'E', Title: 'Point 3', Shape: 'circle', Color: 'orange' } }},
+                // { FPSItem: { Scatter : { horz: 25, vert: 30, depth: 3, Category: 'F', Title: 'Point 4', Shape: 'circle', Color: 'teal' } }},
+
+
+
+
+            // hCenter={0}   // Example center x coordinate
+            // vCenter={0}   // Example center y coordinate
+            // diameter={80}  // Example total height of the chart
+
+            // hCenter={0}   // Example center x coordinate
+            // vCenter={0}   // Example center y coordinate
+            // diameter={100}  // Example total height of the chart
+
+            // gridStep={ 10 }
+
+            // reverseVerticalAxis={ true }
+            // axisMap={this.props.axisMap}
+
+          />
+
+          {/* <div className={styles.welcome}>
+            <img alt="" style={{ cursor: 'pointer'}} onClick={ () => this._doSomething( 'cmd1', 'cmd2' )}
+              src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
+            <h2>Well done, {escape(userDisplayName)}!</h2>
+            <div>{environmentMessage}</div>
+            <div>Web part property value: <strong>{escape(description)}</strong></div>
+          </div>
+          <div>
+            <h3>Welcome to SharePoint Framework!</h3>
+            <p>
+              The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
+            </p>
+
+          </div> */}
+
+        </div> : undefined }
+      </section>
 
     );
   }
+
+  handleStateClick = (icon: IDefaultFormTab): void => {
+    this.setState({ tab: icon }); // Update with your desired state
+  };
 
   private _doSomething( cmd: string, cmd2: string ): void {
     console.log( '_doSomething and props', cmd, cmd2 );
