@@ -2,6 +2,9 @@ import * as React from 'react';
 import styles from './ViewTabs.module.scss';
 
 import { getSourceItemsAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/items/getSourceItemsAPI';
+import { addSearchMeta1 } from '@mikezimm/fps-core-v7/lib/components/molecules/SearchPage/functions/addSearchMeta1';
+
+import { buildFPSAnyTileItems } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/Any/buildFPSAnyTileItems';
 
 import { IViewTabsProps, IViewTabsState } from './IViewTabsProps';
 
@@ -12,8 +15,10 @@ import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fp
 import ScatterChart from '../Forms/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
-import { IStateSourceScatter } from '../Forms/IScatterChartProps';
+import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
 import { transformCoordinates } from './transformCoordinates';
+import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
+import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -54,6 +59,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
       stateSource: EmptyStateSource as unknown as IStateSourceScatter,
       filteredSource: EmptyStateSource as unknown as IStateSourceScatter,
       filteredIds: [],
+      filteredItems: [],
       showSpinner: false,
       analyticsWasExecuted: false,
     };
@@ -113,9 +119,14 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
   private async fetchItems(): Promise<void> {
 
     // return;
-    const FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, true ) as IStateSourceScatter;
+    let FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, true ) as IStateSourceScatter;
 
-    FetchedSource.items = transformCoordinates( FetchedSource.items, this.props.axisMap );
+    FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null);
+    FetchedSource.itemsY = transformCoordinates( FetchedSource.itemsY, this.props.axisMap );
+
+    const FPSItemCopy: IFPSItem = JSON.parse(JSON.stringify(this.props.FPSItem));
+
+    FetchedSource = buildFPSAnyTileItems(FetchedSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
 
     this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId });
 
@@ -156,14 +167,26 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
           stateSource={ this.state.stateSource as IStateSourceScatter }
           filteredIds={ this.state.filteredIds  }
+          filteredItems={ this.state.filteredItems  }
 
           axisMap={ this.props.axisMap }
+
+          FPSItem={ this.props.FPSItem }
+          eleExtras={ this.props.eleExtras }
+          eleProps={ this.props.eleProps }
 
         />
 
       </div>
 
     );
+  }
+
+
+  private _searchItems( str: string ): void {
+
+    return null;
+
   }
 
 }

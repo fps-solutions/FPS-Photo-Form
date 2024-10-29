@@ -2,6 +2,8 @@
 
 import { IFPSCoreReactComponentProps } from '@mikezimm/fps-core-v7/lib/banner/mainReact/ReactComponentProps';
 import { IFPSCorePinMeReactComponentState } from '@mikezimm/fps-core-v7/lib/banner/mainReact/ReactComponentState';
+import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
+import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 
 import { ILoadPerformance } from '../fpsReferences';
 import { IPhotoFormForm } from './Forms/PasteCoMash';
@@ -24,6 +26,11 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   chartDisplay: IChartDisplayProps;
 
   photoButtonStyles: IPhotoButtonStyle[];
+
+  FPSItem: IFPSItem;
+  eleExtras: IFPSTileElementExtras;
+  eleProps: IFPSTileElementProps;
+
 }
 
 /**

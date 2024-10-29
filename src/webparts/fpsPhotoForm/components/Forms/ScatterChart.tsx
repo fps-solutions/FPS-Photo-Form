@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { IScatterChartProps, IScatterSourceItem } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
+import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
@@ -31,6 +32,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
   const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
+  const [itemHistory, setItemHistory] = useState( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
   const [centerY, setCenterY] = useState( vCenter - (diameter / 2) );  // Initial centerY
@@ -52,6 +54,10 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     setClickedIdx( -1 );
   };
 
+  const historyClick = (event: IMinReactMouseEvent, item: IScatterSourceItem): void => {
+    setClickedIdx( item.Id )
+  }
+
   const onDotClick = ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ): void =>  {
     const newCenterX: number = item.FPSItem.Scatter.horz;
     const newCenterY: number = item.FPSItem.Scatter.vert;
@@ -68,6 +74,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     } else if ( event.ctrlKey === true ) {
       setHighlightIds( [ Id ] );
       setIdHistory( [ Id, ...idHistory ] );
+      item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
+      setItemHistory( [ item, ...itemHistory ] );
       setCenterX(newCenterX);
       setCenterY(newCenterY);
 
@@ -75,10 +83,14 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       const idx: any = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
       setHighlightIds( [ Id ] );
       setIdHistory( [ Id, ...idHistory ] );
+      item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
+      setItemHistory( [ item, ...itemHistory ] );
       setClickedIdx( idx === false ? -1 : parseInt( idx ) );
     }
 
   };
+
+
 
   const handleScaleScroll = (value: number): void => {
     setGridScale( value );

@@ -1,6 +1,8 @@
-import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
+
 import { IUnifiedPerformanceOps } from "@mikezimm/fps-core-v7/lib/types/fps-returns/common/IFpsErrorObject";
 import { IAnySourceItem, IStateSource } from "../../fpsReferences";
+import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
+import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 
 export type ICustomScatterType = 'Normal' | 'MC';
 
@@ -96,8 +98,12 @@ export interface IScatterChartProps extends IScatterChartSettings {
   vCenter: number; // Center y coordinate
   stateSource: IStateSourceScatter;
   filteredIds: number[];
+  filteredItems: IScatterSourceItem[];
   onDotClick?: ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ) => void;
   onLineClick?: ( line: 'Horizontal' | 'Vertical', value: number, event: React.MouseEvent<SVGLineElement, MouseEvent> ) => void;
+  FPSItem: IFPSItem;
+  eleExtras: IFPSTileElementExtras;
+  eleProps: IFPSTileElementProps;
 }
 
 // show, diameter, stateSource, gridStep, reverseVerticalAxis = false, ratio = 1, minX, minY, svgHeight, divHeight,

@@ -1,7 +1,9 @@
 import { ILoadPerformance, IWebpartBannerProps } from "../../fpsReferences";
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { IDefaultFormTab } from "../IFpsPhotoFormProps";
-import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle, IStateSourceScatter } from "../Forms/IScatterChartProps";
+import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle, IScatterSourceItem, IStateSourceScatter } from "../Forms/IScatterChartProps";
+import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
+import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 
 export interface IViewTabsProps {
   ListSource: ISourceProps;
@@ -13,6 +15,9 @@ export interface IViewTabsProps {
 
   photoButtonStyles: IPhotoButtonStyle[];
 
+  FPSItem: IFPSItem;
+  eleExtras: IFPSTileElementExtras;
+  eleProps: IFPSTileElementProps;
 }
 
 export interface IViewTabsState {
@@ -29,9 +34,9 @@ export interface IViewTabsState {
   stateSource: IStateSourceScatter;
   filteredSource: IStateSourceScatter;
   filteredIds: number[];
+  filteredItems: IScatterSourceItem[];
 
   showSpinner: boolean;
   analyticsWasExecuted: boolean;
-
 
 }

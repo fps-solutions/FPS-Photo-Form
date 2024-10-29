@@ -11,6 +11,7 @@
 
 // import { encrptMeOriginalTest } from '../fpsReferences';
 
+import { PreConfigFpsTileCompProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
 import { ButtonStylesMC } from '../components/Forms/getButtonStyles';
 import { PresetFPSBanner, } from '../fpsReferences';
 import { IPreConfigSettings, IAllPreConfigSettings,  } from '../fpsReferences';
@@ -43,7 +44,7 @@ export const WPForceEverywhere : IPreConfigSettings = {
 export const WPPresetEverywhere : IPreConfigSettings = {
     source: 'WPPresetEverywhere',
     location: '*',
-    props: {
+    props: {...PreConfigFpsTileCompProps,
         bannerTitle: 'FPS Photo Form',
         defPinState: 'disabled',
         webUrlPickerValue: 'CurrentSite',
@@ -81,6 +82,8 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         chart_divStyle: '', // {}
         chart_autoFadeDots: false,
         chart_autoFadeText: true,
+
+        tileLayout: 'med',
 
     }
 };

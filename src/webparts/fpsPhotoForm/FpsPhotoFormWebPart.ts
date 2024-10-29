@@ -116,6 +116,10 @@ import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from '.
 import { buildListColumnsGroup } from './PropPaneGroups/ListColumns';
 import { buildChartDisplayGroup } from './PropPaneGroups/ChartDisplay';
 
+import { FPSTileWPGroup } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/FPSTileWPGroup";
+import { buildFpsTileWPProps } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageFPSTileProps";
+import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageWPPropsExtras";
+import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -232,9 +236,11 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       console.log( `Unable to parse buttonStyles `);
 
     }
+
+
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
-    const ChartDisplay: IChartDisplayProps = createChartDisplay( this.properties )
+    const ChartDisplay: IChartDisplayProps = createChartDisplay( this.properties );
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
@@ -242,7 +248,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
     ImagesSource.subFolder = this.properties.imageSubfolder2;
 
-
+    const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
       FpsPhotoForm,
@@ -276,6 +282,11 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
         axisMap: AxisMap,
         chartDisplay: ChartDisplay,
+
+        FPSItem: FPSItem,
+        eleProps: buildFPSTileEleWPProps( this.properties ),
+        eleExtras: buildFPSTileEleWPExtras( this.properties ),
+
         // axisMap: {
         //   type: 'MC',
         //   Title: 'Title',
@@ -428,6 +439,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
       groups.push( buildListColumnsGroup( thisAsAny ));
       groups.push( buildChartDisplayGroup( thisAsAny ));
+
+      if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
 
       // LOOCKPROOPS REFACTOR:  ADD THIS Loop for all other groups
       if ( propsEasyMode !== true ) {

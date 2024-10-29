@@ -7,7 +7,9 @@ export function transformCoordinates(
 ): IScatterSourceItem[] {
 
     items.map(( item: IScatterSourceItem ) => {
+
       // Create a new scatter item with mapped coordinates
+
       const newScatterItem: IScatterPlotItem = {
         horz: item[axisMap.horz as keyof IScatterSourceItem] as unknown as number, // Get the y coordinate from the mapped property
         vert: item[axisMap.vert as keyof IScatterSourceItem] as unknown as number, // Get the y coordinate from the mapped property
@@ -24,6 +26,11 @@ export function transformCoordinates(
       item.FPSItem.Image = {
         src: item[axisMap.Screenshot as keyof IScatterSourceItem],
       }
+
+      // Setting this prop so buildFPSAnyTileItems will do the rest
+      item.PictureThumbnailURL = item[axisMap.Screenshot as keyof IScatterSourceItem];
+      const Description: string = item[axisMap.Comments as keyof IScatterSourceItem] as unknown as string;
+      if ( !item.Description && Description ) item.Description = Description;
 
       // Return the modified item with the updated scatter properties
       return item;

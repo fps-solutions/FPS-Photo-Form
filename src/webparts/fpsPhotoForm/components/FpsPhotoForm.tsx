@@ -304,6 +304,10 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             performance={ this._performance  }
             photoButtonStyles={ this.props.photoButtonStyles }
 
+            FPSItem={ this.props.FPSItem }
+            eleExtras={ this.props.eleExtras }
+            eleProps={ this.props.eleProps }
+
             // WORKS!
             // diameter={ 12000 }  // Example total height of the chart
             // hCenter={7000}   // Example center x coordinate
