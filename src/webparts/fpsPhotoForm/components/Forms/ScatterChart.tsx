@@ -16,7 +16,9 @@ import './ScatterChart.module.css';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
-const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
+function roundToNearestMultiple(current: number, roundTo: number): number {
+  return Math.round(current / roundTo) * roundTo;
+}
 
 const ScatterChart: React.FC<IScatterChartProps> = ({
   show,

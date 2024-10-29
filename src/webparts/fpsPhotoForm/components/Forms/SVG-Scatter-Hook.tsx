@@ -6,8 +6,6 @@ import { ISVGScatterHookProps } from './IScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
 import { check4This } from '../../fpsReferences';
 
-const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
-
 const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
   const { show, stateSource,
