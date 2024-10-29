@@ -6,13 +6,18 @@ export interface IFPSToggleProps {
   label: string;
   onText: string;
   offText: string;
+  disabled?: boolean;
+  containerStyle?: React.CSSProperties;
+  labelStyle?: React.CSSProperties;
+  onOffTextStyle?: React.CSSProperties;
+  forceChecked?: boolean; // Set to disable to ignore
   onChange?: (checked: boolean) => void; // Optional callback when toggle changes
 }
 
 const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
-  const { label, onText, offText, onChange } = props;
+  const { label, onText, offText, onChange, containerStyle = {}, labelStyle = {}, onOffTextStyle = {}, disabled = false, forceChecked } = props;
 
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState( forceChecked === true || forceChecked === false ? forceChecked : false );
 
   const handleToggleChange = (): void => {
     setIsChecked((prevState) => {
@@ -23,18 +28,19 @@ const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
   };
 
   return (
-    <div className="fps-toggle-container">
-      <label className="toggle-label">{label}</label>
+    <div className="fps-toggle-container" style={ containerStyle }>
+      <label className="toggle-label" style={ labelStyle }>{label}</label>
       <div className="toggle-switch">
         <input
           type="checkbox"
           checked={isChecked}
           onChange={handleToggleChange}
           id="toggle"
+          disabled={ disabled }
         />
         <span className="slider"/>
       </div>
-      <div className="toggle-texts">
+      <div className="toggle-texts"  style={ onOffTextStyle }>
         <span style={{ opacity: isChecked ? 1 : 0, transition: 'opacity 0.4s ease' }}>
           {onText}
         </span>

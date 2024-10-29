@@ -65,12 +65,12 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
       setWasSubmitted(false);
     }, [formData]);
 
-    const handleToggleChange = (checked: boolean) => {
+    const handleToggleChange = (checked: boolean): void => {
       setAutoClear(checked); // Update the state when toggle changes
     };
 
     // Handle pasting the image from the clipboard
-    const handlePaste = (e: ClipboardEvent) => {
+    const handlePaste = (e: ClipboardEvent): void => {
         const clipboardItems = e.clipboardData?.items;
         for (let i = 0; i < clipboardItems?.length; i++) {
             if (clipboardItems[i].type.indexOf('image') !== -1) {

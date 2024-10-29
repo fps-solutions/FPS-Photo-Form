@@ -13,6 +13,8 @@ import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReac
 import { makeid } from '../../fpsReferences';
 
 import './ScatterChart.module.css';
+import FPSToggle from '../Toggle/component';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
@@ -47,6 +49,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
   const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
   const [historyRefresh, setHistoryRefresh ] = useState( makeid(5) )
+  const [chartHistory, setChartHistory] = useState( false ); // Initial centerX
   const [itemHistory, setItemHistory] = useState( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
@@ -93,7 +96,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       setCenterY(newCenterY);
 
     } else {
-      const idx: any = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
+      const idx: boolean | string = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
       setHighlightIds( [ Id ] );
       setClickedIdx( idx === false ? -1 : parseInt( idx ) );
     }
@@ -106,6 +109,21 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       setItemHistory( [ item, ...itemHistory.filter( item => item.Id !== Id ) ] ); // Remove the item if it was further down in the pile... just keep latest
       setHistoryRefresh( makeid(5) );
     }
+  };
+
+  const handleHighlightHistory = (): void => {
+    setHighlightIds( idHistory );
+  };
+
+  const handleClearHistory = (): void => {
+    setIdHistory( [] );
+    setItemHistory( [] );
+    setChartHistory( false );
+    setHistoryRefresh( makeid(5) );
+  };
+
+  const handleToggleHistory = (): void => {
+    setChartHistory( chartHistory ? false : true );
   };
 
   const handleScaleScroll = (value: number): void => {
@@ -170,6 +188,27 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     <img className='main-Image' src={ clickedItem.FPSItem.Image.src } style={{  }} />
   </div>;
 
+  const disableClearHistory: boolean = itemHistory.length > 0 ? false : true;
+  const disableHighlightHistory: boolean = idHistory.length > 0 ? false : true;
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/45
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/46
+  const HistoryHeader: JSX.Element = <div style={{ display: 'flex' , gap: '2em', alignItems: 'center', color: disableClearHistory ? 'gray' : '' }}>
+    <h3>Clicked History</h3>
+    <FPSToggle
+      containerStyle={ { paddingTop: '.25em' } }
+      onOffTextStyle={ { width: '90px' } }
+      label="Chart History"
+      onText="Just history"
+      offText="All items"
+      forceChecked= { null }
+      disabled= { false }
+      onChange={ handleToggleHistory }
+    />
+    <Icon key='Input' iconName='Highlight' title='Highlight History' onClick={ handleHighlightHistory } style={{ cursor: disableHighlightHistory ? 'default' : 'pointer', padding: '.5em', margin: '.5em', fontSize: 'x-large', fontWeight: 600 }}/>
+    <Icon key='Input' iconName='FormatPainter' title='Clear History' onClick={ handleClearHistory } style={{ cursor: disableClearHistory ? 'default' : 'pointer', padding: '.5em', margin: '.5em', fontSize: 'x-large', fontWeight: 600 }}/>
+    {/* <Icon key='Input' iconName='Delete' title='Clear History' onClick={ ( event ) => handleClearHistory } style={{ cursor: disableClearHistory ? 'default' : 'pointer', padding: '.5em', margin: '.5em', fontSize: 'x-large', fontWeight: 600 }}/> */}
+  </div>
+
   return (
     // Not sure why but have to make this a little smaller here ;(
     <div style={{ width: '97%', }}>
@@ -188,7 +227,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
         chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
-        stateSource={ stateSource }
+        stateSource={ !chartHistory ? stateSource : { ...stateSource, ...{ items: itemHistory, itemsY: itemHistory }} }
         highlightIds={ highlightIds }
 
         onDotClick={ onDotClick }
@@ -205,7 +244,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         reactStyles={ {} }
         componentClassName={ undefined }
         tilesClassName={ undefined }
-        header={ <h3>Clicked History</h3>         }
+        header={ HistoryHeader }
         // reactStyles={ { background: 'yellow' } }
         tiles={ itemHistory }
         refreshId={ historyRefresh }

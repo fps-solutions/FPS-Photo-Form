@@ -110,7 +110,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
         {/* Draw circles from items */}
         {/* CIRCLES ARE LAST - because that way they are on top of the other elements */}
-        {stateSource.items.map((item, index) => {
+        {stateSource.itemsY.map((item, index) => {
 
         const { Scatter } = item.FPSItem;
         const horzPercent = calculatePercentageInRange(Scatter.horz, horizontalMin, horizontalMax);

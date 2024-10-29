@@ -1,6 +1,6 @@
 // import * as React from 'react';
 
-// import { Icon } from 'office-ui-fabric-react';
+// import { Icon } from '@fluentui/react/lib/Icon';
 
 // import { IHelpTable, } from '../../fpsReferences';
 // import { IRepoLinks, repoLink, } from '../../fpsReferences';
@@ -25,7 +25,7 @@ export function whyContent( ): undefined  {
     // //     paddingLeft: '10px',
     // // }};
 
-    // // let gridIcon = <Icon iconName={"GridViewSmall"}  style={ iconStyles } />; 
+    // // let gridIcon = <Icon iconName={"GridViewSmall"}  style={ iconStyles } />;
 
     // let thisBenefits = <div>
     //     <ul>
@@ -47,7 +47,7 @@ export function whyContent( ): undefined  {
     // table.rows.push( createWhyRow(<b>Pnp Content Editor</b>, <span>See notes below.</span>, repoLinks ) );
     // table.rows.push( createWhyRow(<b>Classic Content Editor</b>, <span>See notes below.</span>, repoLinks ) );
     // table.rows.push( createWhyRow(<b>Classic Content Editor</b>, <span>See notes below.</span>, repoLinks ) );
-    
+
     // table.rows.push( createWhyRow(``, ``, repoLinks ) );
 
     // let ootbLimitations = <div>
@@ -64,7 +64,7 @@ export function whyContent( ): undefined  {
     // return { table: table };
 
 }
-  
+
 // function createWhyRow( webpart: any, comments: any, repoLinks: IRepoLinks | null ) {
 
 //     let fullFocus = convertIssuesMarkdownStringToSpan( comments, repoLinks );
