@@ -3,12 +3,14 @@ import * as React from 'react';
 
 import FadePanel from '@mikezimm/fps-library-v2/lib/components/molecules/FadePanel/component';
 import { doesObjectExistInArray } from '@mikezimm/fps-core-v7/lib/logic/Arrays/searching/objectfind';
+import FpsTileComponent from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FpsTileComponent';
 
 import { useState, useEffect } from 'react';
 import { IScatterChartProps, IScatterSourceItem } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
+import { makeid } from '../../fpsReferences';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
@@ -21,6 +23,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   chartDisplay,
   axisMap,
   stateSource,
+  eleProps,
+  eleExtras
 }) => {
 
   const { diameter, gridStep, reverseVerticalAxis = false, displaySize, } = chartDisplay;
@@ -32,6 +36,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
   const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
+  const [ historyRefresh, setHistoryRefresh ] = useState( makeid(5) )
   const [itemHistory, setItemHistory] = useState( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
@@ -76,6 +81,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       setIdHistory( [ Id, ...idHistory ] );
       item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
       setItemHistory( [ item, ...itemHistory ] );
+      setHistoryRefresh( makeid(5) );
       setCenterX(newCenterX);
       setCenterY(newCenterY);
 
@@ -85,6 +91,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       setIdHistory( [ Id, ...idHistory ] );
       item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
       setItemHistory( [ item, ...itemHistory ] );
+      setHistoryRefresh( makeid(5) );
       setClickedIdx( idx === false ? -1 : parseInt( idx ) );
     }
 
@@ -150,7 +157,18 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         verticalMax={ verticalMax }
 
       />
-
+      <FpsTileComponent
+        reactStyles={ {} }
+        componentClassName={ undefined }
+        tilesClassName={ undefined }
+        header={ <h3>Clicked History</h3>         }
+        // reactStyles={ { background: 'yellow' } }
+        tiles={ itemHistory }
+        refreshId={ historyRefresh }
+        // Have to add eleProps in to get width because it is not on the item level but on the tiles component level via grid width
+        eleProps= { eleProps }
+        eleExtras={ eleExtras }
+      />
     </div>
   );
 };
