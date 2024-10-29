@@ -1,10 +1,12 @@
 import * as React from 'react';
 // import './ScatterChart.css';
 
+import FadePanel from '@mikezimm/fps-library-v2/lib/components/molecules/FadePanel/component';
+import { doesObjectExistInArray } from '@mikezimm/fps-core-v7/lib/logic/Arrays/searching/objectfind';
+
 import { useState, useEffect } from 'react';
-import { IScatterChartProps } from './IScatterChartProps';
+import { IScatterChartProps, IScatterSourceItem } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
-import { check4This } from '../../fpsReferences';
 import SVGScatterHook from './SVG-Scatter-Hook';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
@@ -26,6 +28,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const maxRange: number = gridGaps[ gridScale ] * 10;
 
+  const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
+
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
   const [centerY, setCenterY] = useState( vCenter - (diameter / 2) );  // Initial centerY
 
@@ -41,6 +45,24 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   // const [step, setStep] = useState( roundToNearest( diameter / 10 ) );  // Initial centerY
 
   const useDisplaySize = displaySize ? displaySize : diameter / 75; // Default display size for circles
+
+  const closePanel = (): void => {
+    setClickedIdx( -1 );
+  };
+
+  const onDotClick = ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ): void =>  {
+    const newCenterX: number = item.FPSItem.Scatter.horz;
+    const newCenterY: number = item.FPSItem.Scatter.vert;
+    // setGridScale(3);
+    if ( event.ctrlKey === true ) {
+      setCenterX(newCenterX);
+      setCenterY(newCenterY);
+    } else {
+      const idx: any = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
+      setClickedIdx( idx === false ? -1 : parseInt( idx ) );
+    }
+
+  };
 
   const handleScaleScroll = (value: number): void => {
     setGridScale( value );
@@ -66,14 +88,20 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
+  const PanelContent: JSX.Element = clickedIdx < 0 ? undefined : <div>
+    <img src={ stateSource.items[ clickedIdx ].FPSItem.Image.src } style={{ maxWidth: '100%' }} />
+  </div>;
+
   return (
     // Not sure why but have to make this a little smaller here ;(
     <div style={{ width: '97%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
-        <FPSSlider label={ 'Scale' } initial={ gridGaps.length -1 } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.horz } initial={ centerX } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ centerY } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
+        <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
       </div>
+
+      { <FadePanel show={ PanelContent ? true : false } content={ PanelContent } refreshId={ `${clickedIdx}`} _hideBack={ closePanel } /> }
 
       <SVGScatterHook
 
@@ -84,7 +112,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
         stateSource={ stateSource }
 
-        onDotClick={ null }
+        onDotClick={ onDotClick }
         onLineClick={ null }
 
         horizontalMin={ horizontalMin }

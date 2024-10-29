@@ -63,12 +63,14 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         axis_Category2: 'Category2',
         axis_Category3: 'Category3',
         axis_Color: '',
+        axis_Screenshot: 'ScreenshotUrl',
         axis_Shape: '',
         axis_horz: 'CoordX', // raw item property key representing Horizontal Axis
         axis_vert: 'CoordZ', // raw item property key representing Vertical Chart Axis
         axis_depth: 'CoordY', // raw item property key representing Depth Axis
 
         chart_diameter: 6000, // Total height of the chart
+        chart_favorites: `ID#X | Label | IconName | HTMLColor ; ID#Y`, // Total height of the chart
         chart_gridStep: 1000, // Step for grid lines
         chart_reverseVerticalAxis: true, // Flag to reverse the vertical axis  = false
 

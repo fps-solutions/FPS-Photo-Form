@@ -113,6 +113,8 @@ import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecu
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
 import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
 import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
+import { buildListColumnsGroup } from './PropPaneGroups/ListColumns';
+import { buildChartDisplayGroup } from './PropPaneGroups/ChartDisplay';
 
 
 
@@ -423,6 +425,9 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       groups.push( FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' ) );
 
       groups.push( LibraryGroup );
+
+      groups.push( buildListColumnsGroup( thisAsAny ));
+      groups.push( buildChartDisplayGroup( thisAsAny ));
 
       // LOOCKPROOPS REFACTOR:  ADD THIS Loop for all other groups
       if ( propsEasyMode !== true ) {

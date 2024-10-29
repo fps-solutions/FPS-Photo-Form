@@ -4,7 +4,7 @@ import { IAnySourceItem, IStateSource } from "../../fpsReferences";
 
 export type ICustomScatterType = 'Normal' | 'MC';
 
-export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'horz', 'vert', 'depth' ].map( (str => `axis_${str}`));
+export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth' ].map( (str => `axis_${str}`));
 
 export interface IAxisMapWPProps {
   axis_type: ICustomScatterType;
@@ -15,6 +15,7 @@ export interface IAxisMapWPProps {
   axis_Category3: string;
   axis_Color: string;
   axis_Shape: string;
+  axis_Screenshot: string;
   axis_horz: string; // raw item property key representing Horizontal Axis
   axis_vert: string; // raw item property key representing Vertical Chart Axis
   axis_depth: string; // raw item property key representing Depth Axis
@@ -34,6 +35,7 @@ export interface IAxisMap {
   Category3: string;
   Color: string;
   Shape: string;
+  Screenshot: string;
   horz: string; // raw item property key representing Horizontal Axis
   vert: string; // raw item property key representing Vertical Chart Axis
   depth: string; // raw item property key representing Depth Axis
@@ -41,10 +43,11 @@ export interface IAxisMap {
 
 export type IFPSGridLineType = 'Solid' | 'Dashed' | 'Dotted';
 
-export const changesChart: string[] = [ 'diameter', 'gridStep', 'reverseVerticalAxis', 'gridlineColor', 'gridlineType', 'displaySize', 'divStyle', ].map( (str => `chart_${str}`));
+export const changesChart: string[] = [ 'diameter', 'favorites', 'gridStep', 'reverseVerticalAxis', 'gridlineColor', 'gridlineType', 'displaySize', 'divStyle', ].map( (str => `chart_${str}`));
 
 export interface IChartDisplayWPProps {
   chart_diameter: number; // Total height of the chart
+  chart_favorites: string; // List of semi-colon separated Ids OR add more to it after the | character
   chart_gridStep: number; // Step for grid lines
   chart_reverseVerticalAxis: boolean; // Flag to reverse the vertical axis  = false
 
@@ -55,8 +58,16 @@ export interface IChartDisplayWPProps {
   chart_divStyle: string; // {}
 }
 
+export interface IChartFavorites {
+  Id: number;
+  Label: string;
+  Icon: string;
+  Color: string;
+}
+
 export interface IChartDisplayProps {
   diameter: number; // Total height of the chart
+  favorites: IChartFavorites[]; // List of semi-colon separated Ids OR add more to it after the | character
   gridStep: number; // Step for grid lines
   reverseVerticalAxis?: boolean; // Flag to reverse the vertical axis  = false
 
@@ -100,6 +111,8 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   ratio?: number; // 1
   svgHeight?: string; // '90%'
   divHeight?: string; // '90vh'
+
+  titleIds?: number[]; // Pass in array of Ids to show Titles for.  If empty, shows for all.
 
 }
 

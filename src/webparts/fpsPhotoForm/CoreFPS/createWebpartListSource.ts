@@ -5,8 +5,8 @@ import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules
 import { createStyleFromString } from '@mikezimm/fps-library-v2/lib/logic/Strings/reactCSS';
 import { getExpandColumns, getSelectColumns, } from '../fpsReferences';
 import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
-import { changesAxis, changesChart, IAxisMap, IAxisMapWPProps, IChartDisplayProps, } from '../components/Forms/IScatterChartProps';
-
+import { changesAxis, changesChart, IAxisMap, IAxisMapWPProps, IChartDisplayProps, IChartFavorites, IFPSGridLineType, } from '../components/Forms/IScatterChartProps';
+import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 
 export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {
 
@@ -23,16 +23,31 @@ export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {
 
 export function createChartDisplay( wpProps: IFpsPhotoFormWebPartProps ): IChartDisplayProps {
 
+  const { chart_diameter, chart_favorites, chart_gridStep, chart_reverseVerticalAxis, chart_gridlineColor, chart_gridlineType, chart_displaySize, chart_divStyle, } = wpProps;
+  const favorites: IChartFavorites[] = [];
+  const favStrings: string[] = chart_favorites ? chart_favorites.split(';') : [];
+
+  favStrings.map( str => {
+    const splits = str.trim().split('|');
+    favorites.push({
+      Id: parseInt( splits[0] ),
+      Label: splits[1] ? splits[1].trim() : ``,
+      Icon: splits[2] ? splits[2].trim() : ``,
+      Color: splits[3] ? splits[3].trim() : ``,
+    });
+  });
+
   const ChartDisplay: IChartDisplayProps = {
-    diameter: wpProps.chart_diameter,
-    gridStep: wpProps.chart_gridStep,
-    reverseVerticalAxis: wpProps.chart_reverseVerticalAxis,
+    diameter: chart_diameter,
+    favorites: favorites,
+    gridStep: chart_gridStep,
+    reverseVerticalAxis: chart_reverseVerticalAxis,
 
-    gridlineColor: wpProps.chart_gridlineColor,
-    gridlineType: wpProps.chart_gridlineType,
+    gridlineColor: chart_gridlineColor,
+    gridlineType: upperFirstLetter( chart_gridlineType, true ) as IFPSGridLineType,
 
-    displaySize: wpProps.chart_displaySize,
-    divStyle: createStyleFromString( wpProps.chart_divStyle, {}, '', 'createChartDisplay ~ 38'),
+    displaySize: chart_displaySize,
+    divStyle: createStyleFromString( chart_divStyle, {}, '', 'createChartDisplay ~ 38'),
   };
 
   return ChartDisplay;

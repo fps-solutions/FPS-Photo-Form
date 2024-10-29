@@ -21,6 +21,9 @@ export function transformCoordinates(
       };
       if ( !item.FPSItem ) item.FPSItem = {} as IFPSItemWithScatter;
       item.FPSItem.Scatter = newScatterItem;
+      item.FPSItem.Image = {
+        src: item[axisMap.Screenshot as keyof IScatterSourceItem],
+      }
 
       // Return the modified item with the updated scatter properties
       return item;

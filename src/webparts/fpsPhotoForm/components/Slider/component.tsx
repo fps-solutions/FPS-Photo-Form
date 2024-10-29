@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
+
 import './fps-Slider.css'; // Import your CSS file
 
 interface FPSSliderValueProps {
@@ -24,6 +26,10 @@ const FPSSlider: React.FC<FPSSliderProps> = (props) => {
   const { min, max, step, initial, onChange, label, style, className, htmlFor, values } = props;
   const [value, setValue] = React.useState<number>(initial);
   const useHtmlFor = htmlFor ? htmlFor : 'fpsSlider';
+
+  useEffect(() => {
+    setValue( initial );
+  }, [initial]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement> | number): void => {
     const newValue = typeof event === 'number' ? event : Number(event.target.value);
