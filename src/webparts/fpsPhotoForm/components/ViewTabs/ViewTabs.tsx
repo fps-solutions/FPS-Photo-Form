@@ -109,7 +109,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     let refresh = this.props.bannerProps.displayMode !== prevProps.bannerProps.displayMode ? true : false;
 
-    if ( refresh === false && this.state.stateSource.ok !== true ) refresh = true;
+    if ( refresh === false && this.state.stateSource.ok !== true && this.state.stateSource.status === 'Unknown' ) refresh = true;
     if ( refresh === false && JSON.stringify( this.props.ListSource ) !== JSON.stringify( prevProps.ListSource ) ) refresh = true;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
