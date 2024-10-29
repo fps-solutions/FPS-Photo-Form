@@ -3,26 +3,9 @@ import { useState, useEffect } from 'react';
 
 import './fps-Slider.css'; // Import your CSS file
 
-interface FPSSliderValueProps {
-  min: number;
-  max: number;
-  step: number;
-  initial: number;
-  values?: string[] | number[];
-}
+import { IFPSSliderProps } from './IFPSSliderProps';
 
-interface FPSSliderBaseProps {
-  onChange: (value: number) => void; // Handler for the value
-  htmlFor?: string;
-  label?: string; // Optional label
-  style?: React.CSSProperties; // Optional inline styles
-  className?: string; // Optional class names
-}
-
-interface FPSSliderProps extends FPSSliderValueProps, FPSSliderBaseProps {
-}
-
-const FPSSlider: React.FC<FPSSliderProps> = (props) => {
+const FPSSlider: React.FC<IFPSSliderProps> = (props) => {
   const { min, max, step, initial, onChange, label, style, className, htmlFor, values } = props;
   const [value, setValue] = useState<number>(initial);
   const useHtmlFor = htmlFor ? htmlFor : 'fpsSlider';

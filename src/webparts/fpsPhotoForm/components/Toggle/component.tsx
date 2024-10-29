@@ -1,18 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import './fps-Toggle.css';  // Import the CSS file for styling
-
-export interface IFPSToggleProps {
-  label: string;
-  onText: string;
-  offText: string;
-  disabled?: boolean;
-  containerStyle?: React.CSSProperties;
-  labelStyle?: React.CSSProperties;
-  onOffTextStyle?: React.CSSProperties;
-  forceChecked?: boolean; // Set to disable to ignore
-  onChange?: (checked: boolean) => void; // Optional callback when toggle changes
-}
+import { IFPSToggleProps } from './IFPSToggleProps';
 
 const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
   const { label, onText, offText, onChange, containerStyle = {}, labelStyle = {}, onOffTextStyle = {}, disabled = false, forceChecked } = props;

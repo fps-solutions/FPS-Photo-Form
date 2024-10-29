@@ -33,7 +33,7 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
      * WARNING:  DO NOT add any CDNs to Global Warn or Approve unless you want it to apply to JS as well.
      */
 
-    table.rows.push( createAboutRow('2024-10-30',"0.0.6","#44, #45, #46, #47", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    table.rows.push( createAboutRow('2024-10-30',"0.0.6","#44, #45, #46, #47, #48, #49", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-10-29',"0.0.5","#40 - No List Title Throttle hotfix", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-10-29',"0.0.4","#31, #32, #33, #34, #35, #36, #37, #38, #39", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('V',"V","#14, #17, #20, #22, #24, #25, #26, #28, #29, ", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );

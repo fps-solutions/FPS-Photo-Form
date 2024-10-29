@@ -40,7 +40,7 @@ import { SPPermission, } from '@microsoft/sp-page-context';
 
 import * as strings from 'FpsPhotoFormWebPartStrings';
 import FpsPhotoForm from './components/FpsPhotoForm';
-import { IFpsPhotoFormProps } from './components/IFpsPhotoFormProps';
+import { IDefaultFormTab, IFpsPhotoFormProps } from './components/IFpsPhotoFormProps';
 import { IFpsPhotoFormWebPartProps } from './IFpsPhotoFormWebPartProps';
 
  /***
@@ -120,6 +120,8 @@ import { FPSTileWPGroup } from "@mikezimm/fps-library-v2/lib/components/molecule
 import { buildFpsTileWPProps } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageFPSTileProps";
 import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageWPPropsExtras";
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
+import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
+import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -264,7 +266,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         errMessage: '',
         bannerProps: bannerProps,
 
-        tab: 'Map',
+        tab: upperFirstLetter( this.properties.defaultTab, true ) as IDefaultFormTab,
         ListSource: ListSource,
         ImagesSource: ImagesSource,
 
@@ -400,6 +402,9 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // await onListItemPickerChanged( this as any, propertyPath, oldValue, newValue, );
 
+    // https://github.com/fps-solutions/FPS-Photo-Form/issues/49
+    this.properties.expandListPickerGroups = false;
+
     this.context.propertyPane.refresh();
 
     this.render();
@@ -434,12 +439,16 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
           label: 'Image Library Folder',
         })
       );
-      groups.push( FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' ) );
-
+      groups.push(   FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' ) );
       groups.push( LibraryGroup );
+
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/49
+      if ( this.properties.expandListPickerGroups === false ) groups[ groups.length -1 ].isCollapsed = true;  // Collapse the group by default
+      if ( this.properties.expandListPickerGroups === false ) groups[ groups.length -2 ].isCollapsed = true;
 
       groups.push( buildListColumnsGroup( thisAsAny ));
       groups.push( buildChartDisplayGroup( thisAsAny ));
+      groups.push( buildMiscPropsGroup( thisAsAny ));
 
       if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
 

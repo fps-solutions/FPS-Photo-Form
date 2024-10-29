@@ -65,6 +65,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
     super(props);
 
     if ( this._performance === null ) { this._performance = this.props.performance;  }
+    const defaultTab: IDefaultFormTab = this.props.tab === 'List' || this.props.tab === 'Map' ? this.props.tab : 'Input';
 
     this.state = {
       pinState: this.props.bannerProps.fpsPinMenu.defPinState ? this.props.bannerProps.fpsPinMenu.defPinState : 'normal',
@@ -74,7 +75,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       refreshId: makeid(5),
       debugMode: false,
       showSpinner: false,
-      tab: this.props.tab ? this.props.tab : 'Input',
+      tab: defaultTab,
     };
   }
 

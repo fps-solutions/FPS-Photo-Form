@@ -16,6 +16,7 @@ import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fp
 import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 import { changesAxis, changesChart, IAxisMapWPProps, IChartDisplayWPProps } from './components/Forms/IScatterChartProps';
 import { changesFpsTileComp, IFpsTileComponentWPProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
+import { IDefaultFormTab } from './components/IFpsPhotoFormProps';
 
 export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomProps' , ];
 
@@ -68,4 +69,6 @@ export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListIt
   imageSubfolder2: string;
   photoButtonStyles: string;
 
+  defaultTab: IDefaultFormTab;
+  expandListPickerGroups: boolean;
 }
