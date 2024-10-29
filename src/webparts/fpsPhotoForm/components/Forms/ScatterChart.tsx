@@ -12,6 +12,8 @@ import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
 import { makeid } from '../../fpsReferences';
 
+import './ScatterChart.module.css';
+
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
 const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
@@ -36,7 +38,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
   const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
-  const [ historyRefresh, setHistoryRefresh ] = useState( makeid(5) )
+  const [historyRefresh, setHistoryRefresh ] = useState( makeid(5) )
   const [itemHistory, setItemHistory] = useState( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
@@ -60,7 +62,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   };
 
   const historyClick = (event: IMinReactMouseEvent, item: IScatterSourceItem): void => {
-    setClickedIdx( item.Id )
+    const idx: any = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
+    setClickedIdx( idx === false ? -1 : parseInt( idx ) );
   }
 
   const onDotClick = ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ): void =>  {
@@ -78,23 +81,23 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
     } else if ( event.ctrlKey === true ) {
       setHighlightIds( [ Id ] );
-      setIdHistory( [ Id, ...idHistory ] );
-      item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
-      setItemHistory( [ item, ...itemHistory ] );
-      setHistoryRefresh( makeid(5) );
       setCenterX(newCenterX);
       setCenterY(newCenterY);
 
     } else {
       const idx: any = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
       setHighlightIds( [ Id ] );
-      setIdHistory( [ Id, ...idHistory ] );
-      item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
-      setItemHistory( [ item, ...itemHistory ] );
-      setHistoryRefresh( makeid(5) );
       setClickedIdx( idx === false ? -1 : parseInt( idx ) );
     }
 
+    if ( event.altKey === true && currentIds.indexOf( Id ) > -1 ) {
+      // Do not add to history if it was already added
+    } else {
+      setIdHistory( [ Id, ...idHistory ] );
+      item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
+      setItemHistory( [ item, ...itemHistory.filter( item => item.Id !== Id ) ] ); // Remove the item if it was further down in the pile... just keep latest
+      setHistoryRefresh( makeid(5) );
+    }
   };
 
 
@@ -123,8 +126,25 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
-  const PanelContent: JSX.Element = clickedIdx < 0 ? undefined : <div>
-    <img src={ stateSource.items[ clickedIdx ].FPSItem.Image.src } style={{ maxWidth: '100%' }} />
+  const clickedItem: IScatterSourceItem = clickedIdx < 0 ? undefined : stateSource.items[ clickedIdx ];
+  const scatterItem = clickedIdx < 0 ? undefined : clickedItem.FPSItem.Scatter;
+  const PanelContent: JSX.Element = clickedIdx < 0 ? undefined : <div className={ 'scatter-fade-panel' }>
+    <div className='scatter-fade-panel-title'>{ clickedItem.FPSItem.Scatter.Title }</div>
+    <div className='scatter-fade-details'>
+      <div className='scatter-fade-panel-coords'>
+        <div>{ axisMap.horz }: { scatterItem.horz }</div>
+        <div>{ axisMap.vert }: { scatterItem.vert }</div>
+        <div>{ axisMap.depth }: { scatterItem.depth }</div>
+      </div>
+      <div className='scatter-fade-panel-coords'>
+        <div>{ axisMap.Category1 }: { scatterItem.Category1 }</div>
+        <div>{ axisMap.Category2 }: {  scatterItem.Category2 ? scatterItem.Category2.join(' | ') : 'none' }</div>
+        <div>{ axisMap.Category3 }: {  scatterItem.Category3 ? scatterItem.Category3 .join(' | ') : 'none' }</div>
+      </div>
+      <div style={{ fontSize: 'xx-large'}}>{ axisMap.Comments }:</div>
+      <div style={{ fontSize: 'x-large'}}>{ scatterItem.Comments }</div>
+    </div>
+    <img className='main-Image' src={ clickedItem.FPSItem.Image.src } style={{  }} />
   </div>;
 
   return (

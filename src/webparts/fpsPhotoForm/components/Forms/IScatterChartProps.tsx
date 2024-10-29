@@ -154,6 +154,7 @@ export interface IScatterPlotItem {
   Category2: string[];
   Category3: string[];
   Title: string;
+  Comments: string;
   Shape: 'circle' | 'triangle' | 'square' | 'X' | '-' | 'image';
   Color: string;
 }

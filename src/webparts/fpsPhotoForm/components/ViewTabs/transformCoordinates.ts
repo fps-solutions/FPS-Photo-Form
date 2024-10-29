@@ -18,6 +18,7 @@ export function transformCoordinates(
         Category2: item[axisMap.Category2 as keyof IScatterSourceItem] as unknown as string[], // Get the z coordinate from the mapped property
         Category3: item[axisMap.Category3 as keyof IScatterSourceItem] as unknown as string[], // Get the z coordinate from the mapped property
         Title: item[axisMap.Title as keyof IScatterSourceItem] as unknown as string, // Get the z coordinate from the mapped property
+        Comments: item[axisMap.Comments as keyof IScatterSourceItem] as unknown as string, // Get the z coordinate from the mapped property
         Shape: 'circle', // Get the z coordinate from the mapped property
         Color: 'blue', // Get the z coordinate from the mapped property
       };
