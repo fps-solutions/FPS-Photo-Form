@@ -10,7 +10,7 @@ import { IHelpTable, } from '@mikezimm/fps-core-v7/lib/banner/components/SingleH
 import { createAboutRow } from '@mikezimm/fps-library-v2/lib/banner/components/Panel/createAboutRow';
 import { IWebpartBannerProps } from '@mikezimm/fps-core-v7/lib/banner/mainReact/IWebpartBannerProps';
 
-export const panelVersionNumber = '2024-10-29 - 0.0.5 PF'; //Added to show in panel
+export const panelVersionNumber = '2024-10-29 - 0.0.6 PF'; //Added to show in panel
 
 export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTable } {
 
@@ -33,6 +33,7 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
      * WARNING:  DO NOT add any CDNs to Global Warn or Approve unless you want it to apply to JS as well.
      */
 
+    table.rows.push( createAboutRow('2024-10-30',"0.0.6","#", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-10-29',"0.0.5","#40 - No List Title Throttle hotfix", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-10-29',"0.0.4","#31, #32, #33, #34, #35, #36, #37, #38, #39", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('V',"V","#14, #17, #20, #22, #24, #25, #26, #28, #29, ", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
