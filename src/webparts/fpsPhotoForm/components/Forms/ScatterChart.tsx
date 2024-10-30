@@ -6,17 +6,21 @@ import { doesObjectExistInArray } from '@mikezimm/fps-core-v7/lib/logic/Arrays/s
 import FpsTileComponent from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FpsTileComponent';
 
 import { useState, useEffect } from 'react';
-import { IScatterChartProps, IScatterSourceItem } from './IScatterChartProps';
+import { IScatterChartProps, IScatterChartSize, IScatterSourceItem } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
-import { makeid } from '../../fpsReferences';
+import { IAnySourceItem, makeid } from '../../fpsReferences';
 
 import './ScatterChart.module.css';
+import FPSToggle from '../Toggle/component';
+import { Icon } from '@fluentui/react/lib/Icon';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
-const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
+function roundToNearestMultiple(current: number, roundTo: number): number {
+  return Math.round(current / roundTo) * roundTo;
+}
 
 const ScatterChart: React.FC<IScatterChartProps> = ({
   show,
@@ -29,7 +33,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   eleExtras
 }) => {
 
-  const { diameter, gridStep, reverseVerticalAxis = false, displaySize, } = chartDisplay;
+  const { diameter, displaySize, } = chartDisplay;
 
   const [gridScale, setGridScale] = useState( gridGaps.length -1 );  // Initial minY
 
@@ -37,17 +41,19 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   const { tileHighlightColor } = eleExtras;
 
-  const [highlightCSS, setHighlightCSS] = useState( tileHighlightColor ? { paddingLeft: '0.5em', color: tileHighlightColor, opacity: tileHighlightColor === 'yellow' ? .8 : 1 } : { paddingLeft: '0.5em', } ); // Initial centerX
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [highlightCSS, setHighlightCSS] = useState<React.CSSProperties>( tileHighlightColor ? { paddingLeft: '0.5em', color: tileHighlightColor, opacity: tileHighlightColor === 'yellow' ? .8 : 1 } : { paddingLeft: '0.5em', } ); // Initial centerX
 
 
-  const [clickedIdx, setClickedIdx] = useState( -1 ); // Initial centerX
-  const [highlightIds, setHighlightIds] = useState( [] ); // Initial centerX
-  const [idHistory, setIdHistory] = useState( [] ); // Initial centerX
-  const [historyRefresh, setHistoryRefresh ] = useState( makeid(5) )
-  const [itemHistory, setItemHistory] = useState( [] ); // Initial centerX
+  const [clickedIdx, setClickedIdx] = useState<number>( -1 ); // Initial centerX
+  const [highlightIds, setHighlightIds] = useState<number[]>( [] ); // Initial centerX
+  const [idHistory, setIdHistory] = useState<number[]>( [] ); // Initial centerX
+  const [historyRefresh, setHistoryRefresh ] = useState<string>( makeid(5) )
+  const [chartHistory, setChartHistory] = useState<boolean>( false ); // Initial centerX
+  const [itemHistory, setItemHistory] = useState<IScatterSourceItem[]>( [] ); // Initial centerX
 
-  const [centerX, setCenterX] = useState( hCenter - (diameter / 2) ); // Initial centerX
-  const [centerY, setCenterY] = useState( vCenter - (diameter / 2) );  // Initial centerY
+  const [centerX, setCenterX] = useState<number>( hCenter - (diameter / 2) ); // Initial centerX
+  const [centerY, setCenterY] = useState<number>( vCenter - (diameter / 2) );  // Initial centerY
 
   // Effect to update Y when Z changes
   useEffect(() => {
@@ -66,8 +72,15 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     setClickedIdx( -1 );
   };
 
-  const historyClick = (event: IMinReactMouseEvent, item: IScatterSourceItem): void => {
-    const idx: any = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
+  const historyClick = (event: IMinReactMouseEvent, item: IAnySourceItem): void => {
+
+    if ( event.shiftKey === true ) { // Remove item from history  https://github.com/fps-solutions/FPS-Photo-Form/issues/48
+      setItemHistory( itemHistory.filter( itemX => itemX.Id !== item.Id ) ); // Remove the item from the history list
+      setIdHistory( idHistory.filter( IdH => IdH !== item.Id ) );
+      return;
+    }
+
+    const idx: boolean | string = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
     setClickedIdx( idx === false ? -1 : parseInt( idx ) );
   }
 
@@ -75,6 +88,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     const newCenterX: number = item.FPSItem.Scatter.horz;
     const newCenterY: number = item.FPSItem.Scatter.vert;
     const currentIds: number[] = JSON.parse(JSON.stringify( highlightIds ));
+
     // setGridScale(3);
     if ( event.altKey === true && currentIds.indexOf( Id ) > -1 ) {
       // Remove selected item from highlights
@@ -90,7 +104,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       setCenterY(newCenterY);
 
     } else {
-      const idx: any = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
+      const idx: boolean | string = doesObjectExistInArray( stateSource.items, 'Id', Id, false );
       setHighlightIds( [ Id ] );
       setClickedIdx( idx === false ? -1 : parseInt( idx ) );
     }
@@ -99,10 +113,24 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       // Do not add to history if it was already added
     } else {
       setIdHistory( [ Id, ...idHistory ] );
-      item.FPSItem.Link.callbackClick = historyClick; // Adding the callback here
-      setItemHistory( [ item, ...itemHistory.filter( item => item.Id !== Id ) ] ); // Remove the item if it was further down in the pile... just keep latest
+      setItemHistory( [ item, ...itemHistory.filter( itemX => itemX.Id !== Id ) ] ); // Remove the item if it was further down in the pile... just keep latest
       setHistoryRefresh( makeid(5) );
     }
+  };
+
+  const handleHighlightHistory = (): void => {
+    setHighlightIds( idHistory );
+  };
+
+  const handleClearHistory = (): void => {
+    setIdHistory( [] );
+    setItemHistory( [] );
+    setChartHistory( false );
+    setHistoryRefresh( makeid(5) );
+  };
+
+  const handleToggleHistory = (): void => {
+    setChartHistory( chartHistory ? false : true );
   };
 
   const handleScaleScroll = (value: number): void => {
@@ -119,13 +147,15 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
   if ( show === false ) return null;
 
-  const horizontalMin = centerX - maxRange/2;
-  const horizontalMax = centerX + maxRange/2;
-  const verticalMin = centerY - maxRange/2;
-  const verticalMax = centerY + maxRange/2;
+  const ScatterSize: IScatterChartSize = {
+      horizontalMin: roundToNearestMultiple( centerX - maxRange/2, gridGaps[ gridScale ] ),
+      horizontalMax: roundToNearestMultiple( centerX + maxRange/2, gridGaps[ gridScale ] ),
+      verticalMin: roundToNearestMultiple( centerY - maxRange/2, gridGaps[ gridScale ] ),
+      verticalMax: roundToNearestMultiple( centerY + maxRange/2, gridGaps[ gridScale ] ),
+  }
 
-  console.log(`Scatter Range H Grid:  C ${centerX} min ${horizontalMin} to ${horizontalMax}`);
-  console.log(`Scatter Range V Grid:  C ${centerY} min ${verticalMin} to ${verticalMax}`);
+  console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
+  console.log(`Scatter Range V Grid:  C ${centerY} min ${ScatterSize.verticalMin} to ${ScatterSize.verticalMax}`);
 
   const sliderStyle: React.CSSProperties = { minWidth: '300px' };
 
@@ -161,12 +191,39 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     <img className='main-Image' src={ clickedItem.FPSItem.Image.src } style={{  }} />
   </div>;
 
+  const disableClearHistory: boolean = itemHistory.length > 0 ? false : true;
+  const disableHighlightHistory: boolean = idHistory.length > 0 ? false : true;
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/45
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/46
+  const HistoryHeader: JSX.Element = <div className='history-header' style={{ color: disableClearHistory ? 'gray' : '' }}>
+    <h3>Clicked History</h3>
+    <FPSToggle
+      containerStyle={ { paddingTop: '.25em' } }
+      onOffTextStyle={ { width: '90px' } }
+      label="Chart History"
+      onText="Just history"
+      offText="All items"
+      forceChecked= { null }
+      disabled= { false }
+      onChange={ handleToggleHistory }
+    />
+    <div className='history-icon' style={{ cursor: disableHighlightHistory ? 'default' : 'pointer',  }} title='Highlight History' onClick={ handleHighlightHistory } >
+      <span>Highlight</span>
+      <Icon key='Input' iconName='Highlight' style={{  }}/>
+    </div>
+    <div className='history-icon' style={{ cursor: disableClearHistory ? 'default' : 'pointer',  }} title='Clear History' onClick={ handleClearHistory } >
+      <span>Clear</span>
+      <Icon key='Input' iconName='FormatPainter' style={{  }}/>
+    </div>
+    {/* <Icon key='Input' iconName='Delete' title='Clear History' onClick={ ( event ) => handleClearHistory } style={{ cursor: disableClearHistory ? 'default' : 'pointer', padding: '.5em', margin: '.5em', fontSize: 'x-large', fontWeight: 600 }}/> */}
+  </div>
+
   return (
     // Not sure why but have to make this a little smaller here ;(
     <div style={{ width: '97%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ centerX } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ centerY } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
         <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
       </div>
 
@@ -179,29 +236,31 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
         chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
-        stateSource={ stateSource }
+        stateSource={ !chartHistory ? stateSource : { ...stateSource, ...{ items: itemHistory, itemsY: itemHistory }} }
         highlightIds={ highlightIds }
 
         onDotClick={ onDotClick }
         onLineClick={ null }
 
-        horizontalMin={ horizontalMin }
-        horizontalMax={ horizontalMax }
-        verticalMin={ verticalMin }
-        verticalMax={ verticalMax }
+        scatterSize={ScatterSize}
+        // horizontalMin={ horizontalMin }
+        // horizontalMax={ horizontalMax }
+        // verticalMin={ verticalMin }
+        // verticalMax={ verticalMax }
 
       />
       <FpsTileComponent
         reactStyles={ {} }
         componentClassName={ undefined }
         tilesClassName={ undefined }
-        header={ <h3>Clicked History</h3>         }
+        header={ HistoryHeader }
         // reactStyles={ { background: 'yellow' } }
         tiles={ itemHistory }
         refreshId={ historyRefresh }
         // Have to add eleProps in to get width because it is not on the item level but on the tiles component level via grid width
         eleProps= { eleProps }
         eleExtras={ eleExtras }
+        overRideCallback={ historyClick }
       />
     </div>
   );

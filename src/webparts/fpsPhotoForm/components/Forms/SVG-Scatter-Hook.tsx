@@ -6,16 +6,11 @@ import { ISVGScatterHookProps } from './IScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
 import { check4This } from '../../fpsReferences';
 
-const roundToNearest = (num: number ): number => Math.round(num / Math.pow(10, Math.floor(Math.log10(num)))) * Math.pow(10, Math.floor(Math.log10(num)));
-
 const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
   const { show, stateSource,
     chartDisplay,
-    horizontalMin,
-    horizontalMax,
-    verticalMin,
-    verticalMax,
+    scatterSize,
 
     highlightIds,
 
@@ -23,12 +18,11 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
     svgHeight = '70vh',
     divHeight = '70vh',
-    ratio = 1,
+
   } = props
 
-
-
   const { diameter, gridStep, displaySize, autoFadeDots, autoFadeText, gridlineColor = 'lightgray', gridlineType = 'Solid', reverseVerticalAxis = false, divStyle = {} } = chartDisplay;
+  const { horizontalMin, horizontalMax, verticalMin, verticalMax, ratio = 1, } = scatterSize;
 
   if ( show === false ) return null;
 
@@ -116,7 +110,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
         {/* Draw circles from items */}
         {/* CIRCLES ARE LAST - because that way they are on top of the other elements */}
-        {stateSource.items.map((item, index) => {
+        {stateSource.itemsY.map((item, index) => {
 
         const { Scatter } = item.FPSItem;
         const horzPercent = calculatePercentageInRange(Scatter.horz, horizontalMin, horizontalMax);

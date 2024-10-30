@@ -41,3 +41,20 @@
   gap: 2em;
   margin-bottom: 1em;
 }
+
+.history-header {
+  display: flex;
+   gap: 2em;
+   align-items: center;
+}
+
+.history-icon {
+  display: flex;
+  align-items: center;
+}
+.history-icon i {
+  padding: .5em;
+  margin: .5em .5em .5em 0em;
+  font-size: x-large;
+  font-weight: 600;
+}

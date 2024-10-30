@@ -6,38 +6,32 @@
 
 import {
   IPropertyPaneGroup,
-  PropertyPaneToggle,
+  PropertyPaneTextField,
   IPropertyPaneField,
   // PropertyPaneTextField,
 } from '@microsoft/sp-property-pane';
 
-// import * as strings from 'PivotTiles20WebPartStrings';
-
 import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IThisFPSWebPartClass1152';
 
-export function buildEasyModeGroup( thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  // const thisProps: any = thisWPClass.properties as IFpsPhotoFormWebPartProps;
-  // const { enableTabs } = thisProps;
+export function buildMiscPropsGroup( thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupFields: IPropertyPaneField<any>[] = [];
 
-  // const propsEasyMode: boolean = thisProps.propsEasyMode;
-
   groupFields.push(
     // propsEasyMode
-    PropertyPaneToggle('propsEasyMode', {
-      label: 'Easy Mode - Property Pane options',
-      onText: 'Easy Mode - Keep it simple mode',
-      offText : 'Complex - All options',
-    }));
+    ...[
+      PropertyPaneTextField('defaultTab', {
+        label: 'Default Tab',
+        description: 'Input | List | Map',
+      }),
+    ]
+  );
 
   groupFields.push();
 
   const ExportThisGroup: IPropertyPaneGroup = {
-    groupName: `Easy Mode properties`,
+    groupName: `Misc Photo Form`,
     isCollapsed: true,
     groupFields: groupFields
   };

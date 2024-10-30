@@ -106,6 +106,14 @@ export interface IScatterChartProps extends IScatterChartSettings {
   eleProps: IFPSTileElementProps;
 }
 
+export interface IScatterChartSize {
+  ratio?: number; // 1
+  horizontalMin: number;
+  horizontalMax: number;
+  verticalMin: number;
+  verticalMax: number;
+}
+
 // show, diameter, stateSource, gridStep, reverseVerticalAxis = false, ratio = 1, minX, minY, svgHeight, divHeight,
 //     onDotClick, onLineClick,
 
@@ -115,12 +123,9 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   onDotClick?: ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ) => void;
   onLineClick?: ( line: 'Horizontal' | 'Vertical', value: number, event: React.MouseEvent<SVGLineElement, MouseEvent> ) => void;
 
-  horizontalMin: number;
-  horizontalMax: number;
-  verticalMin: number;
-  verticalMax: number;
+  scatterSize: IScatterChartSize;
 
-  ratio?: number; // 1
+
   svgHeight?: string; // '90%'
   divHeight?: string; // '90vh'
 

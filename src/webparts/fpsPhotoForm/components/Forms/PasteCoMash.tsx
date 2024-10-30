@@ -49,15 +49,15 @@ const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [],
 
 const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
   const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, imageSubfolder2, photoButtonStyles } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
-  const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
-  const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
+  // const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
+  // const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
 // export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
     const [imageData, setImageData] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
     const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
-    const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
-    const [cats2Title, setCats2Title ] = useState<boolean>(false);
+    // const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
+    // const [cats2Title, setCats2Title ] = useState<boolean>(false);
 
 
     // Update wasSubmitted to false whenever formData changes
@@ -65,12 +65,12 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
       setWasSubmitted(false);
     }, [formData]);
 
-    const handleToggleChange = (checked: boolean) => {
+    const handleToggleChange = (checked: boolean): void => {
       setAutoClear(checked); // Update the state when toggle changes
     };
 
     // Handle pasting the image from the clipboard
-    const handlePaste = (e: ClipboardEvent) => {
+    const handlePaste = (e: ClipboardEvent): void => {
         const clipboardItems = e.clipboardData?.items;
         for (let i = 0; i < clipboardItems?.length; i++) {
             if (clipboardItems[i].type.indexOf('image') !== -1) {
@@ -98,6 +98,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
     }
 
     // Create list item in SharePoint
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const createListItem = async (title: string): Promise<any> => {
       const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
 
@@ -307,6 +308,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
 
     return (
         <form className={ styles.fpsPhotoFormGrid }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSubmit={handleSubmit} onPaste={handlePaste as any}>
 
             <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>

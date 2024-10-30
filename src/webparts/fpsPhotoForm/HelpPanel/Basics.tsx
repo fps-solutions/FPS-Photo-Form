@@ -1,6 +1,6 @@
 // import * as React from 'react';
 
-// import { Icon } from 'office-ui-fabric-react';
+// import { Icon } from '@fluentui/react/lib/Icon';
 
 // import { IHelpTable, } from '../../fpsReferences';
 // import { IRepoLinks, repoLink, } from '../../fpsReferences';
@@ -9,7 +9,7 @@
 export function basicsContent(  ) : undefined {
 
     return null;
-    
+
 //     let messageRows : IHelpTableRow = [];
 
 //     let iconSize = 'large';
@@ -21,8 +21,8 @@ export function basicsContent(  ) : undefined {
 //         paddingLeft: '10px',
 //     }};
 
-//     let gridIcon = <Icon iconName={"GridViewSmall"}  style={ iconStyles } />; 
-//     let tilesIcon = <Icon iconName={"Tiles"}  style={ iconStyles } />; 
+//     let gridIcon = <Icon iconName={"GridViewSmall"}  style={ iconStyles } />;
+//     let tilesIcon = <Icon iconName={"Tiles"}  style={ iconStyles } />;
 //     let filterIcon = <Icon iconName={"ClearFilter"}  style={ iconStyles } />;
 //     let dashIcon = <Icon iconName={"ChromeMinimize"}  style={ iconStyles } />;
 
@@ -47,14 +47,14 @@ export function basicsContent(  ) : undefined {
 
 
 // /***
-// *              d8888b. d88888b d888888b db    db d8888b. d8b   db 
-// *              88  `8D 88'     `~~88~~' 88    88 88  `8D 888o  88 
-// *              88oobY' 88ooooo    88    88    88 88oobY' 88V8o 88 
-// *              88`8b   88~~~~~    88    88    88 88`8b   88 V8o88 
-// *              88 `88. 88.        88    88b  d88 88 `88. 88  V888 
-// *              88   YD Y88888P    YP    ~Y8888P' 88   YD VP   V8P 
-// *                                                                 
-// *                                                                 
+// *              d8888b. d88888b d888888b db    db d8888b. d8b   db
+// *              88  `8D 88'     `~~88~~' 88    88 88  `8D 888o  88
+// *              88oobY' 88ooooo    88    88    88 88oobY' 88V8o 88
+// *              88`8b   88~~~~~    88    88    88 88`8b   88 V8o88
+// *              88 `88. 88.        88    88b  d88 88 `88. 88  V888
+// *              88   YD Y88888P    YP    ~Y8888P' 88   YD VP   V8P
+// *
+// *
 // */
 
 //     let html1 =
@@ -65,5 +65,5 @@ export function basicsContent(  ) : undefined {
 //     return { html1: html1 };
 
 }
-  
+
 

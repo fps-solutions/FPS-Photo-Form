@@ -20,7 +20,7 @@
     "group": { "default": "Advanced" },
     "title": { "default": "FPS Photo Form" },
     "description": { "default": "FPS Photo Form description" },
-    "officeFabricIconFontName": "Page",
+    "officeFabricIconFontName": "AltText",
     "properties": {
       "description": "FPS Photo Form"
     }

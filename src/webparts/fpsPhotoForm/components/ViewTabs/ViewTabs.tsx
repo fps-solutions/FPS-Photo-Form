@@ -15,10 +15,9 @@ import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fp
 import ScatterChart from '../Forms/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
-import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
+import { IStateSourceScatter } from '../Forms/IScatterChartProps';
 import { transformCoordinates } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
-import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -138,9 +137,9 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
   }
 
   public render(): React.ReactElement<IViewTabsProps> {
-    const {
+    // const {
 
-    } = this.props;
+    // } = this.props;
 
     return (
       <div className={`${styles.viewTabs}`}>
