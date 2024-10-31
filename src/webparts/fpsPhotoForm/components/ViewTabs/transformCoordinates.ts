@@ -1,5 +1,6 @@
 
-import { IScatterSourceItem, IAxisMap, IScatterPlotItem, IFPSItemWithScatter } from "../Forms/IScatterChartProps";
+import { doesObjectExistInArrayInt } from "@mikezimm/fps-library-v2/lib/logic/Arrays/searching/objectfind";
+import { IScatterSourceItem, IAxisMap, IScatterPlotItem, IFPSItemWithScatter, IChartFavorites } from "../Forms/IScatterChartProps";
 
 export function transformCoordinates(
   items: IScatterSourceItem[],
@@ -44,4 +45,12 @@ export function transformCoordinates(
     });
 
     return items;
+  }
+
+  export function updateFavorites( favorites: IChartFavorites[], items: IScatterSourceItem[] ) : IChartFavorites[] {
+    favorites.map( ( fav, idx ) => {
+      const i = doesObjectExistInArrayInt( items, 'Id', fav.Id, false );
+      if ( i > -1 ) fav.item = items[i];
+    });
+    return favorites;
   }

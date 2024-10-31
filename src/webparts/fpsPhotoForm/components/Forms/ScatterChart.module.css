@@ -58,3 +58,26 @@
   font-size: x-large;
   font-weight: 600;
 }
+
+.favButton {
+  transition: all 0.5s ease;
+  font-size: x-large;
+  padding: .5em 1em;
+  margin-left: 1em;
+  font-weight: 600;
+  border: 1px solid transparent;
+  cursor: pointer;
+  opacity: .6;
+  border-radius: .5em;
+}
+
+.favButton span {
+  margin-right: .5em;
+}
+
+.favButton:hover {
+  background: rgb(122, 255, 122);
+  border-color: #373737; /* Darker border color */
+  opacity: 1;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5); /* Shadow effect on hover */
+}

@@ -34,7 +34,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   eleExtras,
   filteredItems,
   filteredIds,
-  refreshId
+  refreshId,
+  favorites,
 }) => {
 
   const { diameter, displaySize, gridStep } = chartDisplay;
@@ -183,6 +184,24 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     return  <span className='fade-bright' style={highlightCSS}>{ str }</span>
   };
 
+  const favoriteButtons: JSX.Element[] = [];
+
+  favorites.map( fav => {
+    if ( fav.item ) {
+      favoriteButtons.push(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <button onClick={(event) => onDotClick( fav.item.Id, 'DotClick', fav.item, event as any)}
+          className='favButton' style={{ background: fav.Color }} title={ `CTRL-Click to recenter on location` }>
+          { fav.Label ? <span>{ fav.Label }</span> : undefined }
+          <Icon iconName={ fav.Icon } />
+        </button>
+      );
+    }
+  });
+
+  const favoriteElement: JSX.Element = favoriteButtons.length === 0 ? undefined : <div style={{ display: 'flex', gap: '1em' }}>
+    { favoriteButtons }
+  </div>
 
   const clickedItem: IScatterSourceItem = clickedIdx < 0 ? undefined : stateSource.items[ clickedIdx ];
   const scatterItem = clickedIdx < 0 ? undefined : clickedItem.FPSItem.Scatter;
@@ -192,6 +211,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       <div className='scatter-fade-panel-coords'>
         <div>Created: {  brightSpan(clickedItem.FPSItem.Stamp.createdNote) }</div>
         <div>Days ago: {  brightSpan( clickedItem.FPSItem.Stamp.created.age.toFixed(1) ) }</div>
+        <div>Id: {  brightSpan( clickedItem.Id ) }</div>
       </div>
       <div className='scatter-fade-panel-coords'>
         <div>{ axisMap.horz }: { brightSpan(  `${scatterItem.horz}` ) }</div>
@@ -245,6 +265,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
         <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
         <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
+        { favoriteElement }
       </div>
 
       { <FadePanel show={ PanelContent ? true : false } content={ PanelContent } refreshId={ `${clickedIdx}`} _hideBack={ closePanel } /> }

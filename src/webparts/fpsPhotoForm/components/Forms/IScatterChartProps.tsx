@@ -80,6 +80,10 @@ export interface IChartFavorites {
   Label: string;
   Icon: string;
   Color: string;
+  item?: IScatterSourceItem;
+  horz?: number; // raw item property key representing Horizontal Axis
+  vert?: number; // raw item property key representing Vertical Chart Axis
+  depth?: number; // raw item property key representing Depth Axis
 }
 
 // Should match:  IUserHistoryDefault = 'Mine' | 'Everyone' |'Others';
@@ -140,6 +144,7 @@ export interface IScatterChartProps extends IScatterChartSettings {
   stateSource: IStateSourceScatter;
   filteredIds: number[];
   filteredItems: IScatterSourceItem[];
+  favorites: IChartFavorites[];
   onDotClick?: ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ) => void;
   onLineClick?: ( line: 'Horizontal' | 'Vertical', value: number, event: React.MouseEvent<SVGLineElement, MouseEvent> ) => void;
   FPSItem: IFPSItem;

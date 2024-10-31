@@ -16,7 +16,7 @@ import ScatterChart from '../Forms/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
 import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
-import { transformCoordinates } from './transformCoordinates';
+import { transformCoordinates, updateFavorites } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { getHistoryPresetItems } from '../Forms/ScatterLogic';
 
@@ -60,6 +60,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
       filteredSource: EmptyStateSource as unknown as IStateSourceScatter,
       filteredIds: [],
       filteredItems: [],
+      favorites: [],
       showSpinner: false,
       analyticsWasExecuted: false,
     };
@@ -130,8 +131,9 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     const filteredItems: IScatterSourceItem[] = getHistoryPresetItems( FetchedSource, this.props.chartDisplay );
     const filteredIds = filteredItems.map(( item: IScatterSourceItem ) => item.Id );
+    const favorites = updateFavorites( this.props.chartDisplay.favorites, FetchedSource.itemsY, )
 
-    this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId, filteredIds: filteredIds, filteredItems: filteredItems });
+    this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId, filteredIds: filteredIds, filteredItems: filteredItems, favorites: favorites });
 
     //End tracking performance
     this._performance.ops.fetch2 = FetchedSource.unifiedPerformanceOps.fetch;
@@ -172,6 +174,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           refreshId={ this.state.stateSource.refreshId }
           filteredIds={ this.state.filteredIds  }
           filteredItems={ this.state.filteredItems  }
+          favorites={ this.state.favorites  }
 
           axisMap={ this.props.axisMap }
 
