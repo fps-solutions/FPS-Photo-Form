@@ -7,7 +7,7 @@ import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-libra
 
 import { ILoadPerformance } from '../fpsReferences';
 import { IPhotoFormForm } from './Forms/PasteCoMash';
-import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
+import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
@@ -23,7 +23,7 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   performance: ILoadPerformance;
   tab: IDefaultFormTab;
   axisMap: IAxisMap;
-  chartDisplay: IChartDisplayProps;
+  chartDisplay: IChartTabProps;
 
   photoButtonStyles: IPhotoButtonStyle[];
 

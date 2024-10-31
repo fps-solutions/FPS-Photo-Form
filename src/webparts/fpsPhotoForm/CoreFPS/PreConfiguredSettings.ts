@@ -72,18 +72,23 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         axis_vert: 'CoordZ', // raw item property key representing Vertical Chart Axis
         axis_depth: 'CoordY', // raw item property key representing Depth Axis
 
-        chart_diameter: 6000, // Total height of the chart
-        chart_favorites: `ID#X | Label | IconName | HTMLColor ; ID#Y`, // Total height of the chart
-        chart_gridStep: 1000, // Step for grid lines
-        chart_reverseVerticalAxis: true, // Flag to reverse the vertical axis  = false
+        chart_G_diameter: 6000, // Total height of the chart
+        chart_G_gridStep: 1000, // Step for grid lines
+        chart_G_reverseVerticalAxis: true, // Flag to reverse the vertical axis  = false
 
-        chart_gridlineColor: 'lightgray', // = 'lightgray'
-        chart_gridlineType: 'Dashed', // 'solid'
+        chart_G_gridlineColor: 'lightgray', // = 'lightgray'
+        chart_G_displaySize: null, // Default display size for circles
+        chart_G_gridlineType: 'Dashed', // 'solid'
 
-        chart_displaySize: null, // Default display size for circles
-        chart_divStyle: '', // {}
-        chart_autoFadeDots: false,
-        chart_autoFadeText: true,
+        chart_F_favorites: `ID#X | Label | IconName | HTMLColor ; ID#Y`, // Total height of the chart
+        chart_F_divStyle: '', // {}
+        chart_F_autoFadeDots: false,
+        chart_F_autoFadeText: true,
+        chart_F_centerLatest: true,
+
+        chart_F_userHistory: 'Mine',
+        chart_F_qtyHistory: '7Days',
+        chart_F_defHistoryCap: 10,
 
         tileLayout: 'med',
 

@@ -111,10 +111,10 @@ import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonSty
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
-import { IAxisMap, IChartDisplayProps, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
+import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
 import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
 import { buildListColumnsGroup } from './PropPaneGroups/ListColumns';
-import { buildChartDisplayGroup } from './PropPaneGroups/ChartDisplay';
+import { buildChartDisplayGroup } from './PropPaneGroups/ChartGrid';
 
 import { FPSTileWPGroup } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/FPSTileWPGroup";
 import { buildFpsTileWPProps } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageFPSTileProps";
@@ -122,6 +122,7 @@ import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-l
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
+import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -242,7 +243,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
-    const ChartDisplay: IChartDisplayProps = createChartDisplay( this.properties );
+    const ChartDisplay: IChartTabProps = createChartDisplay( this.properties );
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
@@ -448,6 +449,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
       groups.push( buildListColumnsGroup( thisAsAny ));
       groups.push( buildChartDisplayGroup( thisAsAny ));
+      groups.push( buildChartFeatureGroup( thisAsAny ));
       groups.push( buildMiscPropsGroup( thisAsAny ));
 
       if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
