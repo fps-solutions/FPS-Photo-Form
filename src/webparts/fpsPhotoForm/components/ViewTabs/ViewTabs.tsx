@@ -19,6 +19,7 @@ import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartP
 import { transformCoordinates, updateFavorites } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { getHistoryPresetItems } from '../Forms/ScatterLogic';
+import GpsLocationForm from '../Forms/GeoLocation/GeoLocation';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -183,6 +184,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           eleProps={ this.props.eleProps }
 
         />
+        { this.props.tab === 'List' ? <GpsLocationForm /> : undefined }
 
       </div>
 
