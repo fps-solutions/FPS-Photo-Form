@@ -69,7 +69,12 @@ export function createPhotoListSourceProps( wpProps: IFpsPhotoFormWebPartProps, 
 
   const allColumns: string[] = [];
   Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { if ( col !== 'type' )  allColumns.push( axisMap[ col ] ) } );
-  allColumns.push( ...StandardMetaViewProps )
+  allColumns.push( ...StandardMetaViewProps );
+
+  // Added this for https://github.com/fps-solutions/FPS-Photo-Form/issues/56
+  // Will also need to add the same for any other User column
+  // VERIFIED EMail is correct casing on list items or else it errors out
+  allColumns.push( ...[ 'Author/Name', 'Editor/Name', 'Author/EMail', 'Editor/EMail' ] );
 
   ListSource.selectThese = getSelectColumns(allColumns).map( col => { return col.replace('.Url', '' )});
   ListSource.expandThese = getExpandColumns(allColumns).map( col => { return col.replace('.Url', '' )});

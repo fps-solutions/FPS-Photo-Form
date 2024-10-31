@@ -6,7 +6,7 @@ import { doesObjectExistInArray } from '@mikezimm/fps-core-v7/lib/logic/Arrays/s
 import FpsTileComponent from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FpsTileComponent';
 
 import { useState, useEffect } from 'react';
-import { IScatterChartProps, IScatterChartSize, IScatterSourceItem } from './IScatterChartProps';
+import { IScatterChartProps, IScatterChartSize, IScatterPlotItem, IScatterSourceItem } from './IScatterChartProps';
 import FPSSlider from '../Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
@@ -15,6 +15,7 @@ import { IAnySourceItem, makeid } from '../../fpsReferences';
 import './ScatterChart.module.css';
 import FPSToggle from '../Toggle/component';
 import { Icon } from '@fluentui/react/lib/Icon';
+import { getHistoryPresetItems } from './ScatterLogic';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
@@ -30,12 +31,16 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   axisMap,
   stateSource,
   eleProps,
-  eleExtras
+  eleExtras,
+  filteredItems,
+  filteredIds,
+  refreshId
 }) => {
 
-  const { diameter, displaySize, } = chartDisplay;
+  const { diameter, displaySize, gridStep } = chartDisplay;
+  const { centerLatest, } = chartDisplay;
 
-  const [gridScale, setGridScale] = useState( gridGaps.length -1 );  // Initial minY
+  const [gridScale, setGridScale] = useState( gridGaps.indexOf( gridStep ) ? gridGaps.indexOf( gridStep ) : gridGaps.length -1 );  // Initial minY
 
   const maxRange: number = gridGaps[ gridScale ] * 10;
 
@@ -44,16 +49,31 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [highlightCSS, setHighlightCSS] = useState<React.CSSProperties>( tileHighlightColor ? { paddingLeft: '0.5em', color: tileHighlightColor, opacity: tileHighlightColor === 'yellow' ? .8 : 1 } : { paddingLeft: '0.5em', } ); // Initial centerX
 
-
   const [clickedIdx, setClickedIdx] = useState<number>( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState<number[]>( [] ); // Initial centerX
-  const [idHistory, setIdHistory] = useState<number[]>( [] ); // Initial centerX
+  const [itemHistory, setItemHistory] = useState<IScatterSourceItem[]>( filteredItems ); // Initial centerX
+  const [idHistory, setIdHistory] = useState<number[]>( filteredIds ); // Initial centerX
   const [historyRefresh, setHistoryRefresh ] = useState<string>( makeid(5) )
   const [chartHistory, setChartHistory] = useState<boolean>( false ); // Initial centerX
-  const [itemHistory, setItemHistory] = useState<IScatterSourceItem[]>( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState<number>( hCenter - (diameter / 2) ); // Initial centerX
   const [centerY, setCenterY] = useState<number>( vCenter - (diameter / 2) );  // Initial centerY
+
+  // Update when stateSource is updated
+  useEffect(() => {
+    setItemHistory( filteredItems );
+    setIdHistory( filteredIds );
+
+    // Update grid scale down if there are filtered items found
+    if ( filteredItems.length > 0 ) setGridScale( gridGaps.length > 3 ? 3 : gridScale );
+
+    if ( !centerLatest ) return; // Do not recenter if feature is turned off
+    const centerItem: IScatterSourceItem = filteredItems.length > 0 ? filteredItems[0] : stateSource.itemsY.length > 0 ? stateSource.itemsY[0] : null;
+    if ( !centerItem ) return; // Do not move on or it will cause error
+    setCenterX(centerItem.FPSItem.Scatter.horz);
+    setCenterY(centerItem.FPSItem.Scatter.vert);
+
+  }, [refreshId]);
 
   // Effect to update Y when Z changes
   useEffect(() => {

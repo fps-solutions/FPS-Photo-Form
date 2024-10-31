@@ -66,7 +66,7 @@ export interface IChartFeatureWPProps {
 
   chart_F_centerLatest: boolean;
   chart_F_userHistory: IUserHistoryDefault;
-  chart_F_qtyHistory: IHistorCapyDefault;
+  chart_F_qtyHistory: IHistoryCapDefault;
   chart_F_defHistoryCap: string;
 }
 
@@ -90,16 +90,16 @@ export const UserHistoryDefaultChoices = [
 ];
 
 
-// Should match:  IHistorCapyDefault = 'Last5' | 'Last10' | '24Hours' | '7days';
+// Should match:  IHistoryCapDefault = 'Last5' | 'Last10' | '24Hours' | '7Days';
 export const QtyHistoryDefaultChoices = [
   { index: 0, key: 'Last5', text: "Last5" },
   { index: 1, key: 'Last10', text: "Last10" },
   { index: 2, key: '24Hours', text: "24Hours" },
-  { index: 3, key: '7days', text: "7days" },
+  { index: 3, key: '7Days', text: "7Days" },
 ];
 
 export type IUserHistoryDefault = 'Mine' | 'Everyone' |'Others';
-export type IHistorCapyDefault = 'Last5' | 'Last10' | '24Hours' | '7days';
+export type IHistoryCapDefault = 'Last5' | 'Last10' | '24Hours' | '7Days';
 
 export interface IChartGridProps {
   diameter: number; // Total height of the chart
@@ -118,7 +118,7 @@ export interface IChartFeatureProps {
 
   centerLatest: boolean;
   userHistory: IUserHistoryDefault;
-  qtyHistory: IHistorCapyDefault;
+  qtyHistory: IHistoryCapDefault;
   defHistoryCap: number;
 }
 
@@ -136,6 +136,7 @@ export interface IScatterChartProps extends IScatterChartSettings {
   Category1: string;
   hCenter: number; // Center x coordinate
   vCenter: number; // Center y coordinate
+  refreshId: string; // Used to rerender on stateSource changes... aka also update pre-filtered items
   stateSource: IStateSourceScatter;
   filteredIds: number[];
   filteredItems: IScatterSourceItem[];
@@ -178,6 +179,7 @@ export interface IStateSourceScatter extends IStateSource {
   refreshId: string;
   unifiedPerformanceOps: IUnifiedPerformanceOps;
   items: IScatterSourceItem[];
+  itemsY: IScatterSourceItem[];
 }
 
 // Extend IFPSItem to include the Scatter property

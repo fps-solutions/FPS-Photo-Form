@@ -15,9 +15,10 @@ import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fp
 import ScatterChart from '../Forms/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
-import { IStateSourceScatter } from '../Forms/IScatterChartProps';
+import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
 import { transformCoordinates } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
+import { getHistoryPresetItems } from '../Forms/ScatterLogic';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -120,14 +121,17 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
     // return;
     let FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, true ) as IStateSourceScatter;
 
-    FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null);
+    FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null) as IScatterSourceItem[];
     FetchedSource.itemsY = transformCoordinates( FetchedSource.itemsY, this.props.axisMap );
 
     const FPSItemCopy: IFPSItem = JSON.parse(JSON.stringify(this.props.FPSItem));
 
     FetchedSource = buildFPSAnyTileItems(FetchedSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
 
-    this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId });
+    const filteredItems: IScatterSourceItem[] = getHistoryPresetItems( FetchedSource, this.props.chartDisplay );
+    const filteredIds = filteredItems.map(( item: IScatterSourceItem ) => item.Id );
+
+    this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId, filteredIds: filteredIds, filteredItems: filteredItems });
 
     //End tracking performance
     this._performance.ops.fetch2 = FetchedSource.unifiedPerformanceOps.fetch;
@@ -165,6 +169,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           // vCenter={ 1000 }   // Example center y coordinate
 
           stateSource={ this.state.stateSource as IStateSourceScatter }
+          refreshId={ this.state.stateSource.refreshId }
           filteredIds={ this.state.filteredIds  }
           filteredItems={ this.state.filteredItems  }
 
