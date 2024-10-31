@@ -7,13 +7,15 @@ export function transformCoordinates(
 ): IScatterSourceItem[] {
 
     items.map(( item: IScatterSourceItem ) => {
+      const horz = item[axisMap.horz as keyof IScatterSourceItem];
+      const vert = item[axisMap.vert as keyof IScatterSourceItem];
+      const depth = item[axisMap.depth as keyof IScatterSourceItem];
 
       // Create a new scatter item with mapped coordinates
-
       const newScatterItem: IScatterPlotItem = {
-        horz: item[axisMap.horz as keyof IScatterSourceItem] as unknown as number, // Get the y coordinate from the mapped property
-        vert: item[axisMap.vert as keyof IScatterSourceItem] as unknown as number, // Get the y coordinate from the mapped property
-        depth: item[axisMap.depth as keyof IScatterSourceItem] as unknown as number, // Get the z coordinate from the mapped property
+        horz: horz, // Get the y coordinate from the mapped property
+        vert: vert, // Get the y coordinate from the mapped property
+        depth: depth, // Get the z coordinate from the mapped property
         Category1: item[axisMap.Category1 as keyof IScatterSourceItem] as unknown as string, // Get the z coordinate from the mapped property
         Category2: item[axisMap.Category2 as keyof IScatterSourceItem] as unknown as string[], // Get the z coordinate from the mapped property
         Category3: item[axisMap.Category3 as keyof IScatterSourceItem] as unknown as string[], // Get the z coordinate from the mapped property
@@ -30,7 +32,11 @@ export function transformCoordinates(
 
       // Setting this prop so buildFPSAnyTileItems will do the rest
       item.PictureThumbnailURL = item[axisMap.Screenshot as keyof IScatterSourceItem];
-      const Description: string = item[axisMap.Comments as keyof IScatterSourceItem] as unknown as string;
+
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/60 - Add coords to description
+      let Description: string = item[axisMap.Comments as keyof IScatterSourceItem] as unknown as string;
+      const Coords: string = `${'\u2B0C'}: ${horz}, ${'\u2B0D'}: ${vert}, ${'\u2B67'}: ${depth}`;
+      Description = !Description ? Coords : `${Coords} ${'\u2003'}${axisMap.Comments}: ${Description}`;
       if ( !item.Description && Description ) item.Description = Description;
 
       // Return the modified item with the updated scatter properties
