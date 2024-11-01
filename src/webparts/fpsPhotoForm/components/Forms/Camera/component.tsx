@@ -5,11 +5,18 @@ require('./fps-Camera.css'); // Import your local CSS file
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component'; // Import custom toggle component
 
 // Component to display the video feed from the camera
-const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ videoRef }) => {
+const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement>; isCameraOn: boolean }> = ({ videoRef, isCameraOn }) => {
   return (
-    <div>
+    <div className="video-feed-container">
       <h3>Live Camera:</h3>
-      <video ref={videoRef} className="video-feed" />
+      {isCameraOn ? (
+        <video ref={videoRef} className="video-feed" autoPlay playsInline />
+      ) : (
+        <div className="placeholder">
+          <h3>Live Feed is Disabled</h3>
+          <span className="camera-icon">🚫📷</span> {/* Icon for disabled camera */}
+        </div>
+      )}
     </div>
   );
 };
@@ -28,7 +35,11 @@ const ActionButtons: React.FC<{
       <button onClick={onToggleCamera} className="action-button">
         {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
       </button>
-      <button onClick={onCapture} disabled={!isCameraOn} className={`action-button ${!isCameraOn ? 'disabled' : ''}`}>
+      <button
+        onClick={onCapture}
+        disabled={!isCameraOn}
+        className={`action-button ${!isCameraOn ? 'disabled' : ''}`}
+      >
         Capture Image
       </button>
       <button onClick={onClear} className="action-button">
@@ -36,7 +47,7 @@ const ActionButtons: React.FC<{
       </button>
       {/* Custom toggle for imprinting timestamp */}
       <FPSToggle
-        containerStyle={ { marginLeft: 'auto', minWidth: '0px' }}
+        containerStyle={{ marginLeft: 'auto', minWidth: '0px' }}
         label="Include Timestamp"
         onText=""
         offText=""
@@ -85,6 +96,7 @@ const CameraCapture: React.FC = () => {
       }
     } catch (err) {
       setError('No camera available.'); // Handle errors
+      console.error(err); // Log error for debugging
     }
   };
 
@@ -176,7 +188,7 @@ const CameraCapture: React.FC = () => {
         <p>{error}</p> // Display error message if any
       ) : (
         <div className="grid-container">
-          <VideoFeed videoRef={videoRef} />
+          <VideoFeed videoRef={videoRef} isCameraOn={isCameraOn} />
           <ImageDisplay image={image} />
         </div>
       )}

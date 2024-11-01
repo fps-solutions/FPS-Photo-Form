@@ -64,23 +64,17 @@
   max-width: 100%; /* Responsive image */
   border: 2px solid #ccc; /* Light gray border */
 }
-/* Styling for the placeholder when the camera is disabled */
 .placeholder {
   border: 2px dashed #ccc; /* Dashed border */
-  border-radius: 15px; /* Rounded corners */
-  padding: 20px; /* Padding inside the box */
+  border-radius: 10px; /* Rounded corners */
   text-align: center; /* Center text */
-  color: #999; /* Light gray text color */
-  background-color: #f9f9f9; /* Light background color */
+  padding: 20px; /* Padding */
+  font-size: 18px; /* Larger text */
+  color: #666; /* Text color */
 }
 
-/* Large text for the placeholder */
-.placeholder h3 {
-  font-size: 24px; /* Larger font size */
-  margin: 0; /* Remove margin */
-}
-
-/* Icon styling (optional) */
 .camera-icon {
-  font-size: 40px; /* Larger icon size */
+  font-size: 48px; /* Size of the camera icon */
+  display: block; /* Block display for the icon */
+  margin-top: 10px; /* Space above the icon */
 }
