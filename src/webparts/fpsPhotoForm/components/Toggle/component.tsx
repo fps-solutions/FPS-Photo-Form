@@ -16,6 +16,7 @@ const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
     });
   };
 
+  const toggleTextsStyle = { ...{ width: !onText && !offText ? '0em' : null}, ...onOffTextStyle  }
   return (
     <div className="fps-toggle-container" style={ containerStyle }>
       <label className="toggle-label" style={ labelStyle }>{label}</label>
@@ -29,7 +30,7 @@ const FPSToggle = (props: IFPSToggleProps): JSX.Element => {
         />
         <span className="slider"/>
       </div>
-      <div className="toggle-texts"  style={ onOffTextStyle }>
+      <div className="toggle-texts" style={ toggleTextsStyle }>
         <span style={{ opacity: isChecked ? 1 : 0, transition: 'opacity 0.4s ease' }}>
           {onText}
         </span>

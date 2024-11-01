@@ -45,21 +45,34 @@ export interface IAxisMap {
 
 export type IFPSGridLineType = 'Solid' | 'Dashed' | 'Dotted';
 
-export const changesChart: string[] = [ 'diameter', 'favorites', 'gridStep', 'reverseVerticalAxis', 'gridlineColor', 'gridlineType', 'displaySize', 'divStyle', 'autoFadeDots', 'autoFadeText' ].map( (str => `chart_${str}`));
+export const changesChartGrid: string[] = [ 'diameter', 'gridStep', 'reverseVerticalAxis', 'displaySize', 'gridlineColor', 'gridlineType', ].map( (str => `chart_G_${str}`));
+export const changesChartFeature: string[] = [ 'favorites', 'divStyle', 'autoFadeDots', 'autoFadeText', 'centerLatest', 'userHistory', 'qtyHistory', 'defHistoryCap' ].map( (str => `chart_F_${str}`));
 
-export interface IChartDisplayWPProps {
-  chart_diameter: number; // Total height of the chart
-  chart_favorites: string; // List of semi-colon separated Ids OR add more to it after the | character
-  chart_gridStep: number; // Step for grid lines
-  chart_reverseVerticalAxis: boolean; // Flag to reverse the vertical axis  = false
+export interface IChartGridWPProps {
+  chart_G_diameter: number; // Total height of the chart
+  chart_G_gridStep: number; // Step for grid lines
+  chart_G_reverseVerticalAxis: boolean; // Flag to reverse the vertical axis  = false
+  chart_G_displaySize: number; // Default display size for circles
+  chart_G_gridlineColor: string; // = 'lightgray'
+  chart_G_gridlineType: IFPSGridLineType; // 'solid'
+}
 
-  chart_gridlineColor: string; // = 'lightgray'
-  chart_gridlineType: IFPSGridLineType; // 'solid'
+export interface IChartFeatureWPProps {
+  chart_F_favorites: string; // List of semi-colon separated Ids OR add more to it after the | character
 
-  chart_displaySize: number; // Default display size for circles
-  chart_divStyle: string; // {}
-  chart_autoFadeDots: boolean; // AutoFade children by default
-  chart_autoFadeText: boolean; // AutoFade children by default
+  chart_F_divStyle: string; // {}
+  chart_F_autoFadeDots: boolean; // AutoFade children by default
+  chart_F_autoFadeText: boolean; // AutoFade children by default
+
+  chart_F_centerLatest: boolean;
+  chart_F_userHistory: IUserHistoryDefault;
+  chart_F_qtyHistory: IHistoryCapDefault;
+  chart_F_defHistoryCap: string;
+}
+
+
+export interface IChartTabWPProps extends IChartGridWPProps, IChartFeatureWPProps {
+
 }
 
 export interface IChartFavorites {
@@ -67,28 +80,59 @@ export interface IChartFavorites {
   Label: string;
   Icon: string;
   Color: string;
+  item?: IScatterSourceItem;
+  horz?: number; // raw item property key representing Horizontal Axis
+  vert?: number; // raw item property key representing Vertical Chart Axis
+  depth?: number; // raw item property key representing Depth Axis
 }
 
-export interface IChartDisplayProps {
+// Should match:  IUserHistoryDefault = 'Mine' | 'Everyone' |'Others';
+export const UserHistoryDefaultChoices = [
+  { index: 0, key: 'Mine', text: "Mine" },
+  { index: 1, key: 'Everyone', text: "Everyone" },
+  { index: 2, key: 'Others', text: "Others" },
+];
+
+
+// Should match:  IHistoryCapDefault = 'Last5' | 'Last10' | '24Hours' | '7Days';
+export const QtyHistoryDefaultChoices = [
+  { index: 0, key: 'Last5', text: "Last5" },
+  { index: 1, key: 'Last10', text: "Last10" },
+  { index: 2, key: '24Hours', text: "24Hours" },
+  { index: 3, key: '7Days', text: "7Days" },
+];
+
+export type IUserHistoryDefault = 'Mine' | 'Everyone' |'Others';
+export type IHistoryCapDefault = 'Last5' | 'Last10' | '24Hours' | '7Days';
+
+export interface IChartGridProps {
   diameter: number; // Total height of the chart
-  favorites: IChartFavorites[]; // List of semi-colon separated Ids OR add more to it after the | character
   gridStep: number; // Step for grid lines
-  reverseVerticalAxis?: boolean; // Flag to reverse the vertical axis  = false
-
-  gridlineColor?: string; // = 'lightgray'
+  reverseVerticalAxis: boolean; // Flag to reverse the vertical axis  = false
+  displaySize: number; // Default display size for circles
+  gridlineColor: string; // = 'lightgray'
   gridlineType: IFPSGridLineType; // 'solid'
-
-  displaySize?: number; // Default display size for circles
-  divStyle?: React.CSSProperties; // {}
-
-  autoFadeDots: boolean;
-  autoFadeText: boolean;
 }
 
+export interface IChartFeatureProps {
+  favorites: IChartFavorites[]; // List of semi-colon separated Ids OR add more to it after the | character
+  divStyle: React.CSSProperties; // {}
+  autoFadeDots: boolean; // AutoFade children by default
+  autoFadeText: boolean; // AutoFade children by default
+
+  centerLatest: boolean;
+  userHistory: IUserHistoryDefault;
+  qtyHistory: IHistoryCapDefault;
+  defHistoryCap: number;
+}
+
+export interface IChartTabProps extends IChartGridProps, IChartFeatureProps {
+
+}
 
 export interface IScatterChartSettings {
   axisMap: IAxisMap;
-  chartDisplay: IChartDisplayProps;
+  chartDisplay: IChartTabProps;
 }
 
 export interface IScatterChartProps extends IScatterChartSettings {
@@ -96,9 +140,11 @@ export interface IScatterChartProps extends IScatterChartSettings {
   Category1: string;
   hCenter: number; // Center x coordinate
   vCenter: number; // Center y coordinate
+  refreshId: string; // Used to rerender on stateSource changes... aka also update pre-filtered items
   stateSource: IStateSourceScatter;
   filteredIds: number[];
   filteredItems: IScatterSourceItem[];
+  favorites: IChartFavorites[];
   onDotClick?: ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ) => void;
   onLineClick?: ( line: 'Horizontal' | 'Vertical', value: number, event: React.MouseEvent<SVGLineElement, MouseEvent> ) => void;
   FPSItem: IFPSItem;
@@ -138,6 +184,7 @@ export interface IStateSourceScatter extends IStateSource {
   refreshId: string;
   unifiedPerformanceOps: IUnifiedPerformanceOps;
   items: IScatterSourceItem[];
+  itemsY: IScatterSourceItem[];
 }
 
 // Extend IFPSItem to include the Scatter property

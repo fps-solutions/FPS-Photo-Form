@@ -1,0 +1,113 @@
+/* Camera Capture Styles */
+
+/* Container for the main component */
+.camera-capture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* Grid layout for video feed and captured image */
+.grid-container {
+  display: grid;
+  grid-template-columns: 100%; /* 40% for video feed, 60% for captured image */
+  gap: 20px; /* Gap between columns */
+  width: 100%; /* Full width of the parent */
+}
+
+/* Video feed styling */
+.video-feed {
+  width: 100%; /* Full width of its container */
+}
+
+/* Styling for action buttons */
+.action-buttons {
+  margin: 20px 0; /* Margin above and below the button row */
+  display: flex;
+  flex-direction: row; /* Stack buttons vertically */
+  align-items: flex-start; /* Align buttons to the left */
+  gap: 2em; /* Gap between buttons */
+  width: 100%; /* Full width */
+}
+
+/* Individual action button styling */
+.action-button {
+  padding: 10px 20px; /* Padding for buttons */
+  font-size: 16px; /* Larger font size */
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text color */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+/* Disabled button styling */
+.action-button.disabled {
+  background-color: #ccc; /* Gray background for disabled state */
+  cursor: not-allowed; /* Not allowed cursor */
+}
+
+/* Hover effect for buttons */
+.action-button:hover:not(.disabled) {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+/* Styling for the captured image display */
+.image-display {
+  text-align: center; /* Center text in the display */
+}
+
+.image-display img {
+  max-width: 100%; /* Responsive image */
+  border: 6px solid #00000026; /* Light gray border */
+  border-radius: 2em;
+}
+
+/* Styling for the placeholder when the camera is disabled */
+.placeholder {
+  padding: 36px; /* Padding inside the box */
+  text-align: center; /* Center text */
+  color: #5b5b5b; /* Light gray text color */
+  background-color: #f9f9f9; /* Light background color */
+
+  /* width: 100%; Full width of its container */
+  position: relative;
+}
+.video-feed, .placeholder {
+  border: 6px solid #00000026; /* Light gray border */
+  border-radius: 2em; /* Rounded corners */
+  min-width: 350px;
+  min-height: 185px;
+}
+
+/* Large text for the placeholder */
+.placeholder h3 {
+  font-size: 24px; /* Larger font size */
+  margin: 0; /* Remove margin */
+}
+
+/* Icon styling (optional) */
+.camera-icon {
+  font-size: 48px; /* Larger icon size */
+}
+
+/* Responsive layout for wider screens */
+@media (min-width: 800px) {
+  .placeholder {
+    position: absolute;
+  }
+  .grid-container {
+    grid-template-columns: 40% 60%; /* 40% for video feed, 60% for captured image */
+    width: 100%; /* Full width of the parent */
+  }
+  /* .form {
+    grid-template-columns: 100px 100px 1fr;
+  }
+
+  .form.fps-altitude {
+    grid-template-columns: 100px 100px 100px 1fr;
+  } */
+
+}

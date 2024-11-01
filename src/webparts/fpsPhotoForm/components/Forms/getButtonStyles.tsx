@@ -42,10 +42,6 @@ export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
     styles: { background: 'green', color: '#FFFE94' }
   },
   {
-    label: 'Extreme Towers',
-    styles: { background: '#d9d8d8', color: 'rgb(1 61 5)' }
-  },
-  {
     label: 'Lush Cave',
     styles: { background: '#447200', color: '#E8BDFF' } // #ffa9ea
   },
@@ -60,6 +56,14 @@ export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
   {
     label: 'Warm Ocean',
     styles: { background: 'Aquamarine', color: 'magenta' }
+  },
+  {
+    label: 'Badlands',
+    styles: { background: '#110A02', color: '#851313' }
+  },
+  {
+    label: 'Savanah',
+    styles: { background: '#110A02', color: '#851313' }
   },
   {
     label: 'Dark Oak',
@@ -139,12 +143,36 @@ export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
     styles: { background: 'black', color: 'mediumpurple' }
   },
   {
+    label: 'Extreme Towers',
+    styles: { background: '#d9d8d8', color: 'rgb(1 61 5)' }
+  },
+  {
     label: 'Buzz Base',
     styles: { background: 'green', color: 'yellow' }
   },
   {
     label: 'Cat Base',
     styles: { background: 'black', color: 'pink' }
+  },
+  {
+    label: 'Rare Ores',
+    styles: { background: '#01e2fe', color: 'black' }
+  },
+  {
+    label: 'Other Ores',
+    styles: { background: '#cb2700', color: 'lightgray' }
+  },
+  {
+    label: 'Vein',
+    styles: { background: 'yellow', color: 'black' }
+  },
+  {
+    label: 'Furry Friends',
+    styles: { background: 'saddlebrown', color: 'khaki' }
+  },
+  {
+    label: 'Lava',
+    styles: { background: 'orangered', color: 'yellow' }
   },
   {
     label: 'Geode',
@@ -162,6 +190,7 @@ export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
     label: 'Monument',
     styles: { background: 'lightblue', color: 'darkblue' }
   },
+
   {
     label: 'Site Seeing',
     styles: { background: 'yellow', color: 'black' }
@@ -172,7 +201,7 @@ export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
   },
   {
     label: 'Outpost',
-    styles: { background: 'darkbrown', color: 'khaki' }
+    styles: { background: '#573202', color: 'khaki' }
   },
   {
     label: 'End Portal',

@@ -15,9 +15,12 @@ import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fp
 import ScatterChart from '../Forms/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
-import { IStateSourceScatter } from '../Forms/IScatterChartProps';
-import { transformCoordinates } from './transformCoordinates';
+import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
+import { transformCoordinates, updateFavorites } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
+import { getHistoryPresetItems } from '../Forms/ScatterLogic';
+import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
+import CameraCapture from '../Forms/Camera/component';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -59,6 +62,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
       filteredSource: EmptyStateSource as unknown as IStateSourceScatter,
       filteredIds: [],
       filteredItems: [],
+      favorites: [],
       showSpinner: false,
       analyticsWasExecuted: false,
     };
@@ -120,14 +124,18 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
     // return;
     let FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, true ) as IStateSourceScatter;
 
-    FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null);
+    FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null) as IScatterSourceItem[];
     FetchedSource.itemsY = transformCoordinates( FetchedSource.itemsY, this.props.axisMap );
 
     const FPSItemCopy: IFPSItem = JSON.parse(JSON.stringify(this.props.FPSItem));
 
     FetchedSource = buildFPSAnyTileItems(FetchedSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
 
-    this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId });
+    const filteredItems: IScatterSourceItem[] = getHistoryPresetItems( FetchedSource, this.props.chartDisplay );
+    const filteredIds = filteredItems.map(( item: IScatterSourceItem ) => item.Id );
+    const favorites = updateFavorites( this.props.chartDisplay.favorites, FetchedSource.itemsY, )
+
+    this.setState({ stateSource: FetchedSource, filteredSource: FetchedSource, refreshId: FetchedSource.refreshId, filteredIds: filteredIds, filteredItems: filteredItems, favorites: favorites });
 
     //End tracking performance
     this._performance.ops.fetch2 = FetchedSource.unifiedPerformanceOps.fetch;
@@ -152,21 +160,11 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           hCenter={ 0 }   // Example center x coordinate
           vCenter={ 0 }   // Example center y coordinate
 
-
-          // chartDisplay={ { ...this.props.chartDisplay, ...{  } } }
-
-          // hCenter={ 0 }   // Example center x coordinate
-          // vCenter={ 0 }   // Example center y coordinate
-
-
-          // chartDisplay={ { ...this.props.chartDisplay, ...{ gridStep: 1000, diameter: 6000 } } }
-
-          // hCenter={-5000 }   // Example center x coordinate
-          // vCenter={ 1000 }   // Example center y coordinate
-
           stateSource={ this.state.stateSource as IStateSourceScatter }
+          refreshId={ this.state.stateSource.refreshId }
           filteredIds={ this.state.filteredIds  }
           filteredItems={ this.state.filteredItems  }
+          favorites={ this.state.favorites  }
 
           axisMap={ this.props.axisMap }
 
@@ -175,6 +173,8 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           eleProps={ this.props.eleProps }
 
         />
+        { this.props.tab === 'List' ? <FpsGpsLocationForm heading=''/> : undefined }
+        { this.props.tab === 'List' ? <CameraCapture /> : undefined }
 
       </div>
 

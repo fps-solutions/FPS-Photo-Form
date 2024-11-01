@@ -6,8 +6,8 @@ import { doesObjectExistInArray } from '@mikezimm/fps-core-v7/lib/logic/Arrays/s
 import FpsTileComponent from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FpsTileComponent';
 
 import { useState, useEffect } from 'react';
-import { IScatterChartProps, IScatterChartSize, IScatterSourceItem } from './IScatterChartProps';
-import FPSSlider from '../Slider/component';
+import { IScatterChartProps, IScatterChartSize, IScatterPlotItem, IScatterSourceItem } from './IScatterChartProps';
+import FPSSlider from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
 import { IAnySourceItem, makeid } from '../../fpsReferences';
@@ -30,12 +30,17 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   axisMap,
   stateSource,
   eleProps,
-  eleExtras
+  eleExtras,
+  filteredItems,
+  filteredIds,
+  refreshId,
+  favorites,
 }) => {
 
-  const { diameter, displaySize, } = chartDisplay;
+  const { diameter, displaySize, gridStep } = chartDisplay;
+  const { centerLatest, } = chartDisplay;
 
-  const [gridScale, setGridScale] = useState( gridGaps.length -1 );  // Initial minY
+  const [gridScale, setGridScale] = useState( gridGaps.indexOf( gridStep ) ? gridGaps.indexOf( gridStep ) : gridGaps.length -1 );  // Initial minY
 
   const maxRange: number = gridGaps[ gridScale ] * 10;
 
@@ -44,16 +49,31 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [highlightCSS, setHighlightCSS] = useState<React.CSSProperties>( tileHighlightColor ? { paddingLeft: '0.5em', color: tileHighlightColor, opacity: tileHighlightColor === 'yellow' ? .8 : 1 } : { paddingLeft: '0.5em', } ); // Initial centerX
 
-
   const [clickedIdx, setClickedIdx] = useState<number>( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState<number[]>( [] ); // Initial centerX
-  const [idHistory, setIdHistory] = useState<number[]>( [] ); // Initial centerX
+  const [itemHistory, setItemHistory] = useState<IScatterSourceItem[]>( filteredItems ); // Initial centerX
+  const [idHistory, setIdHistory] = useState<number[]>( filteredIds ); // Initial centerX
   const [historyRefresh, setHistoryRefresh ] = useState<string>( makeid(5) )
   const [chartHistory, setChartHistory] = useState<boolean>( false ); // Initial centerX
-  const [itemHistory, setItemHistory] = useState<IScatterSourceItem[]>( [] ); // Initial centerX
 
   const [centerX, setCenterX] = useState<number>( hCenter - (diameter / 2) ); // Initial centerX
   const [centerY, setCenterY] = useState<number>( vCenter - (diameter / 2) );  // Initial centerY
+
+  // Update when stateSource is updated
+  useEffect(() => {
+    setItemHistory( filteredItems );
+    setIdHistory( filteredIds );
+
+    // Update grid scale down if there are filtered items found
+    if ( filteredItems.length > 0 ) setGridScale( gridGaps.length > 3 ? 3 : gridScale );
+
+    if ( !centerLatest ) return; // Do not recenter if feature is turned off
+    const centerItem: IScatterSourceItem = filteredItems.length > 0 ? filteredItems[0] : stateSource.itemsY.length > 0 ? stateSource.itemsY[0] : null;
+    if ( !centerItem ) return; // Do not move on or it will cause error
+    setCenterX(centerItem.FPSItem.Scatter.horz);
+    setCenterY(centerItem.FPSItem.Scatter.vert);
+
+  }, [refreshId]);
 
   // Effect to update Y when Z changes
   useEffect(() => {
@@ -163,6 +183,24 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     return  <span className='fade-bright' style={highlightCSS}>{ str }</span>
   };
 
+  const favoriteButtons: JSX.Element[] = [];
+
+  favorites.map( fav => {
+    if ( fav.item ) {
+      favoriteButtons.push(
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <button onClick={(event) => onDotClick( fav.item.Id, 'DotClick', fav.item, event as any)}
+          className='favButton' style={{ background: fav.Color }} title={ `CTRL-Click to recenter on location` }>
+          { fav.Label ? <span>{ fav.Label }</span> : undefined }
+          <Icon iconName={ fav.Icon } />
+        </button>
+      );
+    }
+  });
+
+  const favoriteElement: JSX.Element = favoriteButtons.length === 0 ? undefined : <div style={{ display: 'flex', gap: '1em' }}>
+    { favoriteButtons }
+  </div>
 
   const clickedItem: IScatterSourceItem = clickedIdx < 0 ? undefined : stateSource.items[ clickedIdx ];
   const scatterItem = clickedIdx < 0 ? undefined : clickedItem.FPSItem.Scatter;
@@ -172,6 +210,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       <div className='scatter-fade-panel-coords'>
         <div>Created: {  brightSpan(clickedItem.FPSItem.Stamp.createdNote) }</div>
         <div>Days ago: {  brightSpan( clickedItem.FPSItem.Stamp.created.age.toFixed(1) ) }</div>
+        <div>Id: {  brightSpan( clickedItem.Id ) }</div>
       </div>
       <div className='scatter-fade-panel-coords'>
         <div>{ axisMap.horz }: { brightSpan(  `${scatterItem.horz}` ) }</div>
@@ -225,6 +264,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
         <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
         <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
+        { favoriteElement }
       </div>
 
       { <FadePanel show={ PanelContent ? true : false } content={ PanelContent } refreshId={ `${clickedIdx}`} _hideBack={ closePanel } /> }

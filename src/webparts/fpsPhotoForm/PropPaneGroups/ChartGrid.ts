@@ -22,50 +22,36 @@ export function buildChartDisplayGroup( thisWPClass: IThisFPSWebPartClass ): IPr
   groupFields.push(
     // propsEasyMode
     ...[
-      PropertyPaneTextField('chart_diameter', {
+      PropertyPaneTextField('chart_G_diameter', {
         label: 'Diamter / Width in Units',
         description: '',
       }),
-      PropertyPaneTextField('chart_favorites', {
-        label: 'Favorites - See Click Yellow Icon',
-        description: '1;3;6 OR 1 | Label | Color | Icon; 2 | NewLabel...',
-      }),
-      PropertyPaneTextField('chart_gridStep', {
+
+      PropertyPaneTextField('chart_G_gridStep', {
         label: 'Default Grid Scale',
         description: 'Pick one:  10, 100, 250, 500, 1000, 2000',
       }),
-      PropertyPaneToggle('chart_reverseVerticalAxis', {
+
+      PropertyPaneToggle('chart_G_reverseVerticalAxis', {
         label: 'Reverse Vertical Axis',
         onText: 'Up is Negative -',
         offText: 'Up is Positive +',
       }),
 
-      PropertyPaneTextField('chart_gridlineColor', {
+      PropertyPaneTextField('chart_G_displaySize', {
+        label: 'SVG Display Size factor',
+        description: '',
+        disabled: true,
+      }),
+
+      PropertyPaneTextField('chart_G_gridlineColor', {
         label: 'Gridline Color (name or code)',
         description: '',
       }),
-      PropertyPaneTextField('chart_gridlineType', {
+
+      PropertyPaneTextField('chart_G_gridlineType', {
         label: 'Gridline Type:  Dashed, Dotted, Solid',
         description: '',
-      }),
-      // PropertyPaneTextField('chart_displaySize', {
-      //   label: '',
-      //   description: '',
-      // }),
-      PropertyPaneTextField('chart_divStyle', {
-        label: 'Chart css - React.CSSProperties',
-        description: `{ background: 'limegreen', padding: '3em' }`,
-      }),
-
-      PropertyPaneToggle('chart_autoFadeDots', {
-        label: 'Auto-Fade Dots',
-        onText: 'On',
-        offText: 'Off',
-      }),
-      PropertyPaneToggle('chart_autoFadeText', {
-        label: 'Auto-Fade Text',
-        onText: 'On',
-        offText: 'Off',
       }),
 
     ]
@@ -76,7 +62,7 @@ export function buildChartDisplayGroup( thisWPClass: IThisFPSWebPartClass ): IPr
   groupFields.push();
 
   const ExportThisGroup: IPropertyPaneGroup = {
-    groupName: `Chart Display settings`,
+    groupName: `Chart Grid`,
     isCollapsed: true,
     groupFields: groupFields
   };
