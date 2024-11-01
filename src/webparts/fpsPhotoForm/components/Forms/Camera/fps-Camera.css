@@ -66,17 +66,18 @@
   border: 6px solid #00000026; /* Light gray border */
   border-radius: 2em;
 }
+
 /* Styling for the placeholder when the camera is disabled */
 .placeholder {
-  padding: 20px; /* Padding inside the box */
+  padding: 36px; /* Padding inside the box */
   text-align: center; /* Center text */
-  color: #999; /* Light gray text color */
+  color: #5b5b5b; /* Light gray text color */
   background-color: #f9f9f9; /* Light background color */
 
   /* width: 100%; Full width of its container */
   border: 6px solid #00000026; /* Light gray border */
   border-radius: 2em; /* Rounded corners */
-
+  position: absolute;
 }
 
 /* Large text for the placeholder */
@@ -87,5 +88,20 @@
 
 /* Icon styling (optional) */
 .camera-icon {
-  font-size: 40px; /* Larger icon size */
+  font-size: 48px; /* Larger icon size */
+}
+
+/* Responsive layout for wider screens */
+@media (min-width: 800px) {
+  .placeholder {
+    position: relative;
+  }
+  /* .form {
+    grid-template-columns: 100px 100px 1fr;
+  }
+
+  .form.fps-altitude {
+    grid-template-columns: 100px 100px 100px 1fr;
+  } */
+
 }

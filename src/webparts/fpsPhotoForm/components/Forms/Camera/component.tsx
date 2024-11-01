@@ -174,7 +174,7 @@ const CameraCapture: React.FC = () => {
 
     // Component to display the video feed from the camera
   const TurnCameraOnElement: JSX.Element =
-  <div className="placeholder" style={{ position: 'absolute' }}>
+  <div className="placeholder" style={{  }}>
     <h3>Live Feed is Disabled</h3>
     <div>Press button to turn camera on</div>
     <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
@@ -190,6 +190,10 @@ const CameraCapture: React.FC = () => {
       <h3>Live Camera:</h3>
       { isCameraOn === true ? undefined : TurnCameraOnElement }
       <video ref={videoRef} className="video-feed" autoPlay playsInline />
+
+      {/* This does NOT work at all */}
+      {/* { isCameraOn === true ? <video ref={videoRef} className="video-feed" autoPlay playsInline /> : TurnCameraOnElement } */}
+
     </div>;
 
   return (
