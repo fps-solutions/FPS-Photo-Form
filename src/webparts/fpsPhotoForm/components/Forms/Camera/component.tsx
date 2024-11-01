@@ -180,7 +180,11 @@ const CameraCapture: React.FC = () => {
     <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
   </div>;
 
-  // Component to display the video feed from the camera
+  /**
+   * Component to display the video feed from the camera
+   *    NOTE:  Was UNABLE to get the TurnCameraOnElement component to work properly when VideoFeed was outside of the FC as it's own FC.
+   *    This seems to work well though
+   */
   const VideoFeed: JSX.Element =
     <div>
       <h3>Live Camera:</h3>
