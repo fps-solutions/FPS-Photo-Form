@@ -17,10 +17,6 @@ const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement>; isCamer
           <span className="camera-icon">🚫📷</span> {/* Icon for disabled camera */}
         </div>
       )}
-
-      <video ref={videoRef} className="video-feed" />
-
-
     </div>
   );
 };
