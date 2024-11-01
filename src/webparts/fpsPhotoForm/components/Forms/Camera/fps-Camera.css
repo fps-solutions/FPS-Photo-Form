@@ -19,7 +19,8 @@
 /* Video feed styling */
 .video-feed {
   width: 100%; /* Full width of its container */
-  border: 2px solid #ccc; /* Light gray border */
+  border: 6px solid #00000026; /* Light gray border */
+  border-radius: 2em;
 }
 
 /* Styling for action buttons */
@@ -62,7 +63,8 @@
 
 .image-display img {
   max-width: 100%; /* Responsive image */
-  border: 2px solid #ccc; /* Light gray border */
+  border: 6px solid #00000026; /* Light gray border */
+  border-radius: 2em;
 }
 /* Styling for the placeholder when the camera is disabled */
 .placeholder {
