@@ -9,7 +9,7 @@ const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ 
   return (
     <div>
       <h3>Live Camera:</h3>
-      <video ref={videoRef} className="video-feed" />
+      <video ref={videoRef} className="video-feed" autoPlay playsInline />
     </div>
   );
 };
@@ -36,7 +36,7 @@ const ActionButtons: React.FC<{
       </button>
       {/* Custom toggle for imprinting timestamp */}
       <FPSToggle
-        containerStyle={ { marginLeft: 'auto', minWidth: '0px' }}
+        containerStyle={{ marginLeft: 'auto', minWidth: '0px' }}
         label="Include Timestamp"
         onText=""
         offText=""
@@ -77,11 +77,11 @@ const CameraCapture: React.FC = () => {
   const initCamera = async () => {
     try {
       const newStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = newStream;
-        await videoRef.current.play();
-        setStream(newStream);
-        setIsCameraOn(true);
+      if (videoRef.current) { // Check if videoRef is still available
+        videoRef.current.srcObject = newStream; // Set the video source to the stream
+        await videoRef.current.play(); // Start playing the video
+        setStream(newStream); // Store the stream
+        setIsCameraOn(true); // Update camera status
       }
     } catch (err) {
       setError('No camera available.'); // Handle errors
@@ -176,8 +176,8 @@ const CameraCapture: React.FC = () => {
         <p>{error}</p> // Display error message if any
       ) : (
         <div className="grid-container">
-          <VideoFeed videoRef={videoRef} />
-          <ImageDisplay image={image} />
+          <VideoFeed videoRef={videoRef} /> {/* Pass videoRef to VideoFeed */}
+          <ImageDisplay image={image} /> {/* Display the captured image */}
         </div>
       )}
       <canvas ref={canvasRef} style={{ display: 'none' }} /> {/* Hidden canvas for image capture */}
