@@ -5,18 +5,11 @@ require('./fps-Camera.css'); // Import your local CSS file
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component'; // Import custom toggle component
 
 // Component to display the video feed from the camera
-const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement>; isCameraOn: boolean }> = ({ videoRef, isCameraOn }) => {
+const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ videoRef }) => {
   return (
-    <div className="video-feed-container">
+    <div>
       <h3>Live Camera:</h3>
-      {isCameraOn ? (
-        <video ref={videoRef} className="video-feed" autoPlay playsInline />
-      ) : (
-        <div className="placeholder">
-          <h3>Live Feed is Disabled</h3>
-          <span className="camera-icon">🚫📷</span> {/* Icon for disabled camera */}
-        </div>
-      )}
+      <video ref={videoRef} className="video-feed" autoPlay playsInline />
     </div>
   );
 };
@@ -35,11 +28,7 @@ const ActionButtons: React.FC<{
       <button onClick={onToggleCamera} className="action-button">
         {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
       </button>
-      <button
-        onClick={onCapture}
-        disabled={!isCameraOn}
-        className={`action-button ${!isCameraOn ? 'disabled' : ''}`}
-      >
+      <button onClick={onCapture} disabled={!isCameraOn} className={`action-button ${!isCameraOn ? 'disabled' : ''}`}>
         Capture Image
       </button>
       <button onClick={onClear} className="action-button">
@@ -88,15 +77,14 @@ const CameraCapture: React.FC = () => {
   const initCamera = async () => {
     try {
       const newStream = await navigator.mediaDevices.getUserMedia({ video: true });
-      if (videoRef.current) {
-        videoRef.current.srcObject = newStream;
-        await videoRef.current.play();
-        setStream(newStream);
-        setIsCameraOn(true);
+      if (videoRef.current) { // Check if videoRef is still available
+        videoRef.current.srcObject = newStream; // Set the video source to the stream
+        await videoRef.current.play(); // Start playing the video
+        setStream(newStream); // Store the stream
+        setIsCameraOn(true); // Update camera status
       }
     } catch (err) {
       setError('No camera available.'); // Handle errors
-      console.error(err); // Log error for debugging
     }
   };
 
@@ -188,8 +176,8 @@ const CameraCapture: React.FC = () => {
         <p>{error}</p> // Display error message if any
       ) : (
         <div className="grid-container">
-          <VideoFeed videoRef={videoRef} isCameraOn={isCameraOn} />
-          <ImageDisplay image={image} />
+          <VideoFeed videoRef={videoRef} /> {/* Pass videoRef to VideoFeed */}
+          <ImageDisplay image={image} /> {/* Display the captured image */}
         </div>
       )}
       <canvas ref={canvasRef} style={{ display: 'none' }} /> {/* Hidden canvas for image capture */}
