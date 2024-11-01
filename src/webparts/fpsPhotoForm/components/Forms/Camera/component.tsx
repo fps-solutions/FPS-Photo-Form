@@ -2,16 +2,25 @@ import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 // require('@mikezimm/fps-styles/dist/fps-Camera.css'); // Uncomment if using external styles
 require('./fps-Camera.css'); // Import your local CSS file
+import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component'; // Import custom toggle component
 
 // Component to display the video feed from the camera
-const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ videoRef }) => {
+const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement>; isCameraOn: boolean }> = ({ videoRef, isCameraOn }) => {
   return (
-    <div>
+    <div className="video-feed-container">
       <h3>Live Camera:</h3>
-      <video ref={videoRef} className="video-feed" />
+      {isCameraOn ? (
+        <video ref={videoRef} className="video-feed" />
+      ) : (
+        <div className="placeholder">
+          <h3>Live Feed is Disabled</h3>
+          <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
+        </div>
+      )}
     </div>
   );
 };
+
 
 // Component for action buttons: Capture, Clear, and Toggle Camera
 const ActionButtons: React.FC<{
@@ -24,19 +33,24 @@ const ActionButtons: React.FC<{
 }> = ({ onCapture, onClear, isCameraOn, onToggleCamera, imprintTimestamp, toggleImprint }) => {
   return (
     <div className="action-buttons">
-      <button onClick={onCapture} disabled={!isCameraOn} className="action-button">
+      <button onClick={onToggleCamera} className="action-button">
+        {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
+      </button>
+      <button onClick={onCapture} disabled={!isCameraOn} className={`action-button ${!isCameraOn ? 'disabled' : ''}`}>
         Capture Image
       </button>
       <button onClick={onClear} className="action-button">
         Clear
       </button>
-      <button onClick={onToggleCamera} className="action-button">
-        {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
-      </button>
-      <label>
-        <input type="checkbox" checked={imprintTimestamp} onChange={toggleImprint} />
-        Imprint Timestamp
-      </label>
+      {/* Custom toggle for imprinting timestamp */}
+      <FPSToggle
+        containerStyle={ { marginLeft: 'auto', minWidth: '0px' }}
+        label="Include Timestamp"
+        onText=""
+        offText=""
+        onChange={toggleImprint}
+        forceChecked={imprintTimestamp}
+      />
     </div>
   );
 };
@@ -170,7 +184,7 @@ const CameraCapture: React.FC = () => {
         <p>{error}</p> // Display error message if any
       ) : (
         <div className="grid-container">
-          <VideoFeed videoRef={videoRef} />
+          <VideoFeed videoRef={videoRef} isCameraOn={isCameraOn}/>
           <ImageDisplay image={image} />
         </div>
       )}

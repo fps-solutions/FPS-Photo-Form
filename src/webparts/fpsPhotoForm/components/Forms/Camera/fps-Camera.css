@@ -26,7 +26,9 @@
 .action-buttons {
   margin: 20px 0; /* Margin above and below the button row */
   display: flex;
-  justify-content: space-around; /* Space buttons evenly */
+  flex-direction: row; /* Stack buttons vertically */
+  align-items: flex-start; /* Align buttons to the left */
+  gap: 2em; /* Gap between buttons */
   width: 100%; /* Full width */
 }
 
@@ -42,8 +44,14 @@
   transition: background-color 0.3s; /* Smooth background color transition */
 }
 
+/* Disabled button styling */
+.action-button.disabled {
+  background-color: #ccc; /* Gray background for disabled state */
+  cursor: not-allowed; /* Not allowed cursor */
+}
+
 /* Hover effect for buttons */
-.action-button:hover {
+.action-button:hover:not(.disabled) {
   background-color: #45a049; /* Darker green on hover */
 }
 
@@ -55,4 +63,24 @@
 .image-display img {
   max-width: 100%; /* Responsive image */
   border: 2px solid #ccc; /* Light gray border */
+}
+/* Styling for the placeholder when the camera is disabled */
+.placeholder {
+  border: 2px dashed #ccc; /* Dashed border */
+  border-radius: 15px; /* Rounded corners */
+  padding: 20px; /* Padding inside the box */
+  text-align: center; /* Center text */
+  color: #999; /* Light gray text color */
+  background-color: #f9f9f9; /* Light background color */
+}
+
+/* Large text for the placeholder */
+.placeholder h3 {
+  font-size: 24px; /* Larger font size */
+  margin: 0; /* Remove margin */
+}
+
+/* Icon styling (optional) */
+.camera-icon {
+  font-size: 40px; /* Larger icon size */
 }
