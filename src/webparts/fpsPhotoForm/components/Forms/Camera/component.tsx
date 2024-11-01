@@ -5,22 +5,14 @@ require('./fps-Camera.css'); // Import your local CSS file
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component'; // Import custom toggle component
 
 // Component to display the video feed from the camera
-const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement>; isCameraOn: boolean }> = ({ videoRef, isCameraOn }) => {
+const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ videoRef }) => {
   return (
-    <div className="video-feed-container">
+    <div>
       <h3>Live Camera:</h3>
-      {isCameraOn ? (
-        <video ref={videoRef} className="video-feed" />
-      ) : (
-        <div className="placeholder">
-          <h3>Live Feed is Disabled</h3>
-          <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
-        </div>
-      )}
+      <video ref={videoRef} className="video-feed" />
     </div>
   );
 };
-
 
 // Component for action buttons: Capture, Clear, and Toggle Camera
 const ActionButtons: React.FC<{
@@ -184,7 +176,7 @@ const CameraCapture: React.FC = () => {
         <p>{error}</p> // Display error message if any
       ) : (
         <div className="grid-container">
-          <VideoFeed videoRef={videoRef} isCameraOn={isCameraOn}/>
+          <VideoFeed videoRef={videoRef} />
           <ImageDisplay image={image} />
         </div>
       )}
