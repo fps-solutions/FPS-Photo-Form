@@ -1,0 +1,55 @@
+/* Container for the camera capture component */
+.camera-capture-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #f9f9f9;
+}
+
+/* Header styling */
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+/* Button styling */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 5px; /* Add space between buttons */
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Video styling */
+video {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 20px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Image display styling */
+img {
+  max-width: 100%;
+  border-radius: 4px;
+}
+
+/* Info message styling */
+p {
+  text-align: center;
+  color: #666;
+  font-size: 0.9em;
+}

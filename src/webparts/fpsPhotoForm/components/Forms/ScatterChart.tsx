@@ -7,7 +7,7 @@ import FpsTileComponent from '@mikezimm/fps-library-v2/lib/components/molecules/
 
 import { useState, useEffect } from 'react';
 import { IScatterChartProps, IScatterChartSize, IScatterPlotItem, IScatterSourceItem } from './IScatterChartProps';
-import FPSSlider from '../Slider/component';
+import FPSSlider from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Slider/component';
 import SVGScatterHook from './SVG-Scatter-Hook';
 import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReactEvents';
 import { IAnySourceItem, makeid } from '../../fpsReferences';
@@ -15,7 +15,6 @@ import { IAnySourceItem, makeid } from '../../fpsReferences';
 import './ScatterChart.module.css';
 import FPSToggle from '../Toggle/component';
 import { Icon } from '@fluentui/react/lib/Icon';
-import { getHistoryPresetItems } from './ScatterLogic';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];
 
