@@ -19,7 +19,7 @@ import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartP
 import { transformCoordinates, updateFavorites } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { getHistoryPresetItems } from '../Forms/ScatterLogic';
-import GpsLocationForm from '../Forms/GeoLocation/GeoLocation';
+import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -159,18 +159,6 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           hCenter={ 0 }   // Example center x coordinate
           vCenter={ 0 }   // Example center y coordinate
 
-
-          // chartDisplay={ { ...this.props.chartDisplay, ...{  } } }
-
-          // hCenter={ 0 }   // Example center x coordinate
-          // vCenter={ 0 }   // Example center y coordinate
-
-
-          // chartDisplay={ { ...this.props.chartDisplay, ...{ gridStep: 1000, diameter: 6000 } } }
-
-          // hCenter={-5000 }   // Example center x coordinate
-          // vCenter={ 1000 }   // Example center y coordinate
-
           stateSource={ this.state.stateSource as IStateSourceScatter }
           refreshId={ this.state.stateSource.refreshId }
           filteredIds={ this.state.filteredIds  }
@@ -184,7 +172,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           eleProps={ this.props.eleProps }
 
         />
-        { this.props.tab === 'List' ? <GpsLocationForm /> : undefined }
+        { this.props.tab === 'List' ? <FpsGpsLocationForm heading=''/> : undefined }
 
       </div>
 

@@ -24,6 +24,7 @@ export function getGeoLocation(): Promise<IFpsGeolocationPosition> {
           result = JSON.parse(JSON.stringify(position));
           result.status = 'Success';
           result.localTime = new Date( result.timestamp ).toLocaleString();
+          result.message = `@${result.localTime}`;
           resolve(result); // Resolve the promise with the result
         },
         (error) => {

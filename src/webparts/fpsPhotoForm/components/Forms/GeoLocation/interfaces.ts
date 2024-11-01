@@ -3,6 +3,18 @@
  *    Happy Halloween 2024!
  */
 
+export interface IFpsGpsLocationFormProps {
+  heading?: string; // 'GPS Location Form' by default
+  style?: React.CSSProperties; // Optional inline styles
+  className?: string; // Optional class names
+  buttonClass?: string; // Optional class names
+  onGetLocation?: ( position: IFpsGeolocationPosition ) => void; // Handler for the value
+  onSubmit?: ( position: IFpsGeolocationPosition ) => void; // Handler for the value
+  enableDetails?: boolean; // true by default
+  allowEditing?: boolean; // false by default
+  showAltitude?: boolean;
+}
+
 export interface IFpsGeolocationPosition {
   timestamp: number; // in milliseconds since the Unix epoch
   localTime: string;
