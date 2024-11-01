@@ -162,7 +162,7 @@ const CameraCapture: React.FC = () => {
 
   return (
     <div className="camera-capture-container">
-      <h2>Camera Capture</h2>
+      <h2>Camera Capture - Does NOT save</h2>
       {/* Action buttons for capturing, clearing, and toggling the camera */}
       <ActionButtons
         onCapture={captureImage}
