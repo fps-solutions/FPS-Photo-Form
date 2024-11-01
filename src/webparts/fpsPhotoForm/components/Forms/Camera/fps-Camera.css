@@ -11,7 +11,7 @@
 /* Grid layout for video feed and captured image */
 .grid-container {
   display: grid;
-  grid-template-columns: 40% 60%; /* 40% for video feed, 60% for captured image */
+  grid-template-columns: 100%; /* 40% for video feed, 60% for captured image */
   gap: 20px; /* Gap between columns */
   width: 100%; /* Full width of the parent */
 }
@@ -19,8 +19,6 @@
 /* Video feed styling */
 .video-feed {
   width: 100%; /* Full width of its container */
-  border: 6px solid #00000026; /* Light gray border */
-  border-radius: 2em;
 }
 
 /* Styling for action buttons */
@@ -75,9 +73,13 @@
   background-color: #f9f9f9; /* Light background color */
 
   /* width: 100%; Full width of its container */
+  position: relative;
+}
+.video-feed, .placeholder {
   border: 6px solid #00000026; /* Light gray border */
   border-radius: 2em; /* Rounded corners */
-  position: absolute;
+  min-width: 350px;
+  min-height: 185px;
 }
 
 /* Large text for the placeholder */
@@ -94,7 +96,11 @@
 /* Responsive layout for wider screens */
 @media (min-width: 800px) {
   .placeholder {
-    position: relative;
+    position: absolute;
+  }
+  .grid-container {
+    grid-template-columns: 40% 60%; /* 40% for video feed, 60% for captured image */
+    width: 100%; /* Full width of the parent */
   }
   /* .form {
     grid-template-columns: 100px 100px 1fr;

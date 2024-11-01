@@ -66,7 +66,7 @@ const ImageDisplay: React.FC<{ image: string | null }> = ({ image }) => {
           <img src={image} alt="Captured" />
         </>
       ) : (
-        <p>Press the "Capture Image" button to take a picture.</p>
+        <h3>Press the "Capture Image" button to take a picture.</h3>
       )}
     </div>
   );
