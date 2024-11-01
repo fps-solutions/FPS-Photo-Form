@@ -5,10 +5,19 @@ require('./fps-Camera.css'); // Import your local CSS file
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component'; // Import custom toggle component
 
 // Component to display the video feed from the camera
+const TurnCameraOnElement: JSX.Element =
+  <div className="placeholder" style={{ position: 'absolute' }}>
+    <h3>Live Feed is Disabled</h3>
+    <div>Press button to turn camera on</div>
+    <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
+  </div>;
+
+// Component to display the video feed from the camera
 const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ videoRef }) => {
   return (
     <div>
       <h3>Live Camera:</h3>
+      { TurnCameraOnElement }
       <video ref={videoRef} className="video-feed" autoPlay playsInline />
     </div>
   );
@@ -65,8 +74,10 @@ const ImageDisplay: React.FC<{ image: string | null }> = ({ image }) => {
 
 // Main Camera Capture component
 const CameraCapture: React.FC = () => {
+
   const [image, setImage] = useState<string | null>(null); // State to hold captured image
   const [error, setError] = useState<string | null>(null); // State to hold error messages
+  const [showTurnOnCam, setShowTurnOnCam] = useState<boolean>(true); // State to track camera status
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false); // State to track camera status
   const [imprintTimestamp, setImprintTimestamp] = useState<boolean>(false); // State for timestamp toggle
   const videoRef = useRef<HTMLVideoElement | null>(null); // Reference to video element
