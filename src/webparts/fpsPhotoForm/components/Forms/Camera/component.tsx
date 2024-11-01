@@ -171,6 +171,23 @@ const CameraCapture: React.FC = () => {
     setImprintTimestamp(prev => !prev);
   };
 
+
+    // Component to display the video feed from the camera
+  const TurnCameraOnElement: JSX.Element =
+  <div className="placeholder" style={{ position: 'absolute' }}>
+    <h3>Live Feed is Disabled</h3>
+    <div>Press button to turn camera on</div>
+    <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
+  </div>;
+
+  // Component to display the video feed from the camera
+  const VideoFeed: JSX.Element =
+    <div>
+      <h3>Live Camera:</h3>
+      { isCameraOn === true ? undefined : TurnCameraOnElement }
+      <video ref={videoRef} className="video-feed" autoPlay playsInline />
+    </div>;
+
   return (
     <div className="camera-capture-container">
       <h2>Camera Capture - Does NOT save</h2>
@@ -187,7 +204,7 @@ const CameraCapture: React.FC = () => {
         <p>{error}</p> // Display error message if any
       ) : (
         <div className="grid-container">
-          <VideoFeed videoRef={videoRef} /> {/* Pass videoRef to VideoFeed */}
+          { VideoFeed } {/* Pass videoRef to VideoFeed */}
           <ImageDisplay image={image} /> {/* Display the captured image */}
         </div>
       )}
