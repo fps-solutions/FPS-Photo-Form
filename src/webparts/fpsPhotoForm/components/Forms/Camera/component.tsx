@@ -90,13 +90,13 @@ export interface ICameraFormInput {
   ImagesSource: ISourceProps;
 }
 // Main Camera Capture component
-const CameraCapture: React.FC<ICameraFormInput> = ( props ) => {
+const CameraCapture: React.FC<ICameraFormInput> = (props) => {
 
   const { ImagesSource } = props;
 
   const [image, setImage] = useState<string | null>(null); // State to hold captured image
   const [error, setError] = useState<string | null>(null); // State to hold error messages
-  const [ debugMode, setDebugMode ] = useState<boolean>( false );
+  const [debugMode, setDebugMode] = useState<boolean>(false);
   const [showTurnOnCam, setShowTurnOnCam] = useState<boolean>(true); // State to track camera status
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false); // State to track camera status
   const [useFrontCamera, setUseFrontCamera] = useState<boolean>(true); // State to track camera status
@@ -110,9 +110,14 @@ const CameraCapture: React.FC<ICameraFormInput> = ( props ) => {
     try {
       const constraints = {
         video: {
-          facingMode: useFrontCamera ? 'environment' : 'user'  // Use 'user' for front camera, 'environment' for rear camera
+          facingMode: useFrontCamera ? 'user' : 'environment'  // Use 'user' for front camera, 'environment' for rear camera
         }
       };
+
+      // Stop previous stream if it exists (added on 2024-11-01)
+      if (stream) { // Check if there is an existing stream
+        stream.getTracks().forEach(track => track.stop()); // Stop all tracks of the previous stream
+      }
 
       const newStream = await navigator.mediaDevices.getUserMedia(constraints);
       if (videoRef.current) { // Check if videoRef is still available
@@ -120,6 +125,7 @@ const CameraCapture: React.FC<ICameraFormInput> = ( props ) => {
         await videoRef.current.play(); // Start playing the video
         setStream(newStream); // Store the stream
         setIsCameraOn(true); // Update camera status
+        setError(null); // Clear any previous error (added on 2024-11-01)
       }
     } catch (err) {
       setError('No camera available.'); // Handle errors
@@ -142,7 +148,7 @@ const CameraCapture: React.FC<ICameraFormInput> = ( props ) => {
   };
 
   // Toggle camera on/off
-  const toggleCamera = async (useFrontCamera: boolean = false ) => {
+  const toggleCamera = async (useFrontCamera: boolean = false): Promise<void> => {
     if (isCameraOn) {
       turnCameraOff();
     } else {
@@ -208,7 +214,7 @@ const CameraCapture: React.FC<ICameraFormInput> = ( props ) => {
   };
 
   const saveImage = async () => {
-    const fileName = `${ `Camera_${ useFrontCamera ? 'Front' : 'User'}` }_${new Date().toISOString().replace(/[:.]/g, '-')}_${ `Camera` }.png`;
+    const fileName = `${ `Camera_${ useFrontCamera ? 'User' : 'Back' }` }_${new Date().toISOString().replace(/[:.]/g, '-')}_${ `Camera` }.png`;
     await uploadBase64ImageToLibrary( ImagesSource, image ,fileName );
   }
 
@@ -217,7 +223,7 @@ const CameraCapture: React.FC<ICameraFormInput> = ( props ) => {
   <div className="placeholder" style={{  }}>
     <h3>Live Feed is Disabled</h3>
     <div style={{ fontSize: 'larger' }}>Use toggle to <b>pick Front or User Camera</b></div>
-    <div style={{ fontSize: 'larger' }}>Press button to activate <b style={{ fontSize: 'x-large', color: useFrontCamera ? 'blue' : 'purple' }}>{ useFrontCamera ? 'Front' : 'User' }</b> camera</div>
+    <div style={{ fontSize: 'larger' }}>Press button to activate <b style={{ fontSize: 'x-large', color: useFrontCamera ? 'blue' : 'purple' }}>{ useFrontCamera ? 'User' : 'Back' }</b> camera</div>
     <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
   </div>;
 

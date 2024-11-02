@@ -120,44 +120,6 @@
 .fpsPhotoFormGrid > * {
   align-self: start;
 }
-@media (min-width: 685px) {
-  .fpsPhotoFormGrid {
-    grid-template-columns: 1fr 125px 125px;
-    grid-template-areas:
-      "title title title"
-      "category1 category1 category1"
-      "coordinates coordinates coordinates"
-      "comments category2 category3"
-      "submit category2 category3"
-      "summary category2 category3"
-      "imagePreview category2 category3"
-      "spacer category2 category3";
-    // grid-template-rows: 64px 24px 48px 140px 50px 100px auto;
-    row-gap: 0em;
-  }
-  .spacer {
-    height: 1000px;
-  }
-}
-
-@media (min-width: 1000px) {
-  .fpsPhotoFormGrid {
-    grid-template-columns: 1fr 1fr 175px 175px;
-    grid-template-areas:
-      "category1 category1 category2 category3"
-      "title title category2 category3"
-      "coordinates coordinates category2 category3"
-      "comments comments category2 category3"
-      "summary summary category2 category3"
-      "submit imagePreview category2 category3"
-      "spacer spacer category2 category3";
-    grid-template-rows: 64px 24px 48px 140px 90px 100px auto;
-    row-gap: 0em;
-  }
-  .spacer {
-    height: 500px;
-  }
-}
 
 .title {
   grid-area: title;
@@ -174,6 +136,8 @@
 
 .category1 {
   grid-area: category1;
+  display: flex;
+  gap: 1em;
 }
 
 .category2 {
@@ -198,4 +162,52 @@
 
 .spacer {
   grid-area: spacer;
+}
+
+@media (min-width: 685px) {
+  .fpsPhotoFormGrid {
+    grid-template-columns: 1fr 125px 125px;
+    grid-template-areas:
+      "title title title"
+      "category1 category1 category1"
+      "coordinates coordinates coordinates"
+      "comments category2 category3"
+      "submit category2 category3"
+      "summary category2 category3"
+      "imagePreview category2 category3"
+      "spacer category2 category3";
+    // grid-template-rows: 64px 24px 48px 140px 50px 100px auto;
+    row-gap: 0em;
+  }
+  .spacer {
+    height: 1000px;
+  }
+  .category2, .category3 {
+    display: grid;
+  }
+}
+
+@media (min-width: 1000px) {
+  .fpsPhotoFormGrid {
+    grid-template-columns: 1fr 1fr 175px 175px;
+    grid-template-areas:
+      "category1 category1 category2 category3"
+      "title title category2 category3"
+      "coordinates coordinates category2 category3"
+      "comments comments category2 category3"
+      "summary summary category2 category3"
+      "submit imagePreview category2 category3"
+      "spacer spacer category2 category3";
+    grid-template-rows: 64px 24px 48px 140px 90px 100px auto;
+    row-gap: 0em;
+  }
+  .spacer {
+    height: 500px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .category2 .categoryButtons, .category3 .categoryButtons {
+    display: contents;
+  }
 }

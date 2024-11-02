@@ -2,6 +2,7 @@
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 
+// 2024-11-02:  https://github.com/fps-solutions/FPS-Photo-Form/issues/66
 
 // Convert base64 image to a Blob
 export const base64ToBlob = (base64: string): Blob => {
