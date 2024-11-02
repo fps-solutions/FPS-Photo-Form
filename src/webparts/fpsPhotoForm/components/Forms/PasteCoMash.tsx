@@ -9,6 +9,7 @@ import { getButtonStyles } from './getButtonStyles';
 import FPSToggle from '../Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
 import { uploadBase64ImageToLibrary } from './functions/ImageSave';
+import { categoryButtons } from './PasteFormPieces';
 
 export interface IPhotoFormForm  {
 
@@ -300,7 +301,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSubmit={handleSubmit} onPaste={handlePaste as any}>
 
-            <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
+            { categoryButtons( 1, [ formData.category1 ], props, handleCategoryXClick ) }
+            {/* <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
               <div style={{ }}>
               <h4 style={{ margin: '0px' }}>Category 1</h4>
                 <div className={ styles.categoryButtons }>
@@ -319,7 +321,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className={ styles.title }style={{  }}>
                 <label>Title</label>
@@ -355,7 +357,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                     style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
             </div>
 
-              <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
+            { categoryButtons( 2, formData.category2, props, handleCategoryXClick ) }
+            { categoryButtons( 3, formData.category3, props, handleCategoryXClick ) }
+
+              {/* <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
                 <h4 style={{ margin: '0px' }}>Category 2</h4>
                 <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
                   {Category2s.map((category, index) => (
@@ -389,7 +394,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               <div className={ styles.summary }>
                 <div>
