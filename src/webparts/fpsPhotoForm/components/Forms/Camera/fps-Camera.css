@@ -29,6 +29,7 @@
   align-items: flex-start; /* Align buttons to the left */
   gap: 2em; /* Gap between buttons */
   width: 100%; /* Full width */
+  flex-wrap: wrap;
 }
 
 /* Individual action button styling */

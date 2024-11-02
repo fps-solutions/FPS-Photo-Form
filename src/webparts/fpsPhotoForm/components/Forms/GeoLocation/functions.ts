@@ -1,45 +1,52 @@
-// /**
-//  * 2024-10-31 GeoLocation code originally migrated from PhotoForm Webpart sample
-//  *    Happy Halloween 2024!
-//  */
+/**
+ * 2024-10-31 GeoLocation code originally migrated from PhotoForm Webpart sample
+ *    Happy Halloween 2024!
+ */
 
-// import { IFpsGeolocationCoordinates, IFpsGeolocationPosition } from "./interfaces";
+import { IFpsGeolocationCoordinates, IFpsGeolocationPosition } from "./interfaces";
 
-// export const UnknownGeoLocation: IFpsGeolocationPosition = {
-//   timestamp: new Date().getTime(),
-//   localTime: new Date().toLocaleString(),
-//   coords: {} as IFpsGeolocationCoordinates,
-//   status: 'Unknown',
-//   message: '',
-//   error: null,
-// };
+export const UnknownGeoLocation: IFpsGeolocationPosition = {
+  timestamp: new Date().getTime(),
+  localTime: new Date().toLocaleString(),
+  coords: {} as IFpsGeolocationCoordinates,
+  status: 'Unknown',
+  message: '',
+  error: null,
+};
 
-// export function getGeoLocation(): Promise<IFpsGeolocationPosition> {
-//   return new Promise((resolve, reject) => {
-//     let result: IFpsGeolocationPosition = JSON.parse(JSON.stringify(UnknownGeoLocation));
-
-//     if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition(
-//         (position) => {
-//           result = JSON.parse(JSON.stringify(position));
-//           result.status = 'Success';
-//           result.localTime = new Date( result.timestamp ).toLocaleString();
-//           result.message = `@${result.localTime}`;
-//           resolve(result); // Resolve the promise with the result
-//         },
-//         (error) => {
-//           console.error('Error obtaining location:', error);
-//           result.status = 'Error';
-//           result.error = error;
-//           result.message = error.message;
-//           reject(result); // Reject the promise with the error result
-//         },
-//         { enableHighAccuracy: true } // Add this line
-//       );
-//     } else {
-//       result.status = 'Error';
-//       result.message = 'Geolocation is not supported by this browser.';
-//       reject(result); // Reject the promise
-//     }
-//   });
-// }
+export function getGeoLocation( debugMode: boolean ): Promise<IFpsGeolocationPosition> {
+  return new Promise((resolve, reject) => {
+    if ( debugMode ) alert(`debugMode getGeoLocation ~ 19`);
+    let result: IFpsGeolocationPosition = JSON.parse(JSON.stringify(UnknownGeoLocation));
+    if ( debugMode ) alert(`debugMode getGeoLocation ~ 21`);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          if ( debugMode ) alert(`debugMode getGeoLocation ~ 25`);
+          result = JSON.parse(JSON.stringify(position));
+          if ( debugMode ) alert(`debugMode getGeoLocation ~ 27`);
+          result.status = 'Success';
+          result.localTime = new Date( result.timestamp ).toLocaleString();
+          result.message = `${result.localTime}`;
+          if ( debugMode ) alert(`debugMode getGeoLocation ~ 31`);
+          resolve(result); // Resolve the promise with the result
+        },
+        (error) => {
+          if ( debugMode ) alert(`debugMode getGeoLocation ~ 35`);
+          console.error('Error obtaining location:', error);
+          if ( debugMode ) alert(`debugMode getGeoLocation ~ 37: ${error.message}`);
+          result.status = 'Error';
+          result.error = error;
+          result.message = error.message;
+          reject(result); // Reject the promise with the error result
+        },
+        { enableHighAccuracy: true } // Add this line
+      );
+    } else {
+      result.status = 'Error';
+      result.message = 'Geolocation is not supported by this browser.';
+      if ( debugMode ) alert(`debugMode getGeoLocation ~ 48: ${result.message}`);
+      reject(result); // Reject the promise
+    }
+  });
+}

@@ -15,6 +15,8 @@ export interface IViewTabsProps {
 
   photoButtonStyles: IPhotoButtonStyle[];
 
+  ImagesSource: ISourceProps;
+
   FPSItem: IFPSItem;
   eleExtras: IFPSTileElementExtras;
   eleProps: IFPSTileElementProps;

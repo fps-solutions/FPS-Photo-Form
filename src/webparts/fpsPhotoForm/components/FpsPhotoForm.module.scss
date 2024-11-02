@@ -120,6 +120,56 @@
 .fpsPhotoFormGrid > * {
   align-self: start;
 }
+
+.title {
+  grid-area: title;
+}
+
+.comments {
+  grid-area: comments;
+}
+
+.coordinates {
+  display: flex;
+  grid-area: coordinates;
+}
+
+.category1 {
+  grid-area: category1;
+  display: flex;
+  gap: 1em;
+}
+
+.category2 {
+  grid-area: category2;
+  display: grid;
+}
+
+.category3 {
+  grid-area: category3;
+  display: grid;
+}
+
+.category2 .categoryButtons, .category3 .categoryButtons {
+  display: inline-block;
+}
+
+.submit {
+  grid-area: submit;
+}
+
+.imagePreview {
+  grid-area: imagePreview;
+}
+
+.summary {
+  grid-area: summary;
+}
+
+.spacer {
+  grid-area: spacer;
+}
+
 @media (min-width: 685px) {
   .fpsPhotoFormGrid {
     grid-template-columns: 1fr 125px 125px;
@@ -138,11 +188,14 @@
   .spacer {
     height: 1000px;
   }
+  .category2 .categoryButtons, .category3 .categoryButtons {
+    display: grid;
+  }
 }
 
 @media (min-width: 1000px) {
   .fpsPhotoFormGrid {
-    grid-template-columns: 1fr 1fr 175px 175px;
+    grid-template-columns: 1fr 1fr 200px 200px;
     grid-template-areas:
       "category1 category1 category2 category3"
       "title title category2 category3"
@@ -159,43 +212,11 @@
   }
 }
 
-.title {
-  grid-area: title;
-}
-
-.comments {
-  grid-area: comments;
-}
-
-.coordinates {
-  display: flex;
-  grid-area: coordinates;
-}
-
-.category1 {
-  grid-area: category1;
-}
-
-.category2 {
-  grid-area: category2;
-}
-
-.category3 {
-  grid-area: category3;
-}
-
-.submit {
-  grid-area: submit;
-}
-
-.imagePreview {
-  grid-area: imagePreview;
-}
-
-.summary {
-  grid-area: summary;
-}
-
-.spacer {
-  grid-area: spacer;
+@media (min-width: 1300px) {
+  .fpsPhotoFormGrid {
+    grid-template-columns: 1fr 1fr 275px 275px;
+    .category2 .categoryButtons, .category3 .categoryButtons {
+      display: inline-block;
+    }
+  }
 }

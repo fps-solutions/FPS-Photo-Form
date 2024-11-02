@@ -8,6 +8,8 @@ import styles from '../FpsPhotoForm.module.scss';
 import { getButtonStyles } from './getButtonStyles';
 import FPSToggle from '../Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
+import { uploadBase64ImageToLibrary } from './functions/ImageSave';
+import { categoryButtons } from './PasteFormPieces';
 
 export interface IPhotoFormForm  {
 
@@ -152,49 +154,49 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
       }
     };
 
-    // Convert base64 image to a Blob
-    const base64ToBlob = (base64: string): Blob => {
-        const binary = atob(base64.split(',')[1]);
-        const array = [];
-        for (let i = 0; i < binary.length; i++) {
-            array.push(binary.charCodeAt(i));
-        }
-        return new Blob([new Uint8Array(array)], { type: 'image/png' });
-    };
+    // // Convert base64 image to a Blob
+    // const base64ToBlob = (base64: string): Blob => {
+    //     const binary = atob(base64.split(',')[1]);
+    //     const array = [];
+    //     for (let i = 0; i < binary.length; i++) {
+    //         array.push(binary.charCodeAt(i));
+    //     }
+    //     return new Blob([new Uint8Array(array)], { type: 'image/png' });
+    // };
 
-    // Upload image to SiteAssets library
-    const uploadImageToLibrary = async (blob: Blob, fileName: string): Promise<string | null> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl);
-        return new Promise((resolve, reject) => {
-            const fileReader = new FileReader();
-            fileReader.onloadend = async () => {
-                const buffer = fileReader.result as ArrayBuffer;
-                const folderRelativeUrl = imageSubfolder2 ? `${ImagesSource.listTitle}/${imageSubfolder2}` : ImagesSource.listTitle;
-                try {
-                    const response = await fetch(`${ImagesSource.absoluteWebUrl}/_api/web/GetFolderByServerRelativeUrl('${folderRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
-                        method: 'POST',
-                        headers: {
-                            'Accept': 'application/json; odata=verbose',
-                            'X-RequestDigest': requestDigest,
-                            'Content-Length': buffer.byteLength.toString()
-                        },
-                        body: buffer
-                    });
+    // // Upload image to SiteAssets library
+    // const uploadImageToLibrary = async (blob: Blob, fileName: string): Promise<string | null> => {
+    //     const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl);
+    //     return new Promise((resolve, reject) => {
+    //         const fileReader = new FileReader();
+    //         fileReader.onloadend = async () => {
+    //             const buffer = fileReader.result as ArrayBuffer;
+    //             const folderRelativeUrl = imageSubfolder2 ? `${ImagesSource.listTitle}/${imageSubfolder2}` : ImagesSource.listTitle;
+    //             try {
+    //                 const response = await fetch(`${ImagesSource.absoluteWebUrl}/_api/web/GetFolderByServerRelativeUrl('${folderRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
+    //                     method: 'POST',
+    //                     headers: {
+    //                         'Accept': 'application/json; odata=verbose',
+    //                         'X-RequestDigest': requestDigest,
+    //                         'Content-Length': buffer.byteLength.toString()
+    //                     },
+    //                     body: buffer
+    //                 });
 
-                    if (response.ok) {
-                        const data = await response.json();
-                        const imageUrl = data.d.ServerRelativeUrl;
-                        resolve(imageUrl);
-                    } else {
-                        reject(new Error('File upload failed'));
-                    }
-                } catch (error) {
-                    reject(error);
-                }
-            };
-            fileReader.readAsArrayBuffer(blob);
-        });
-    };
+    //                 if (response.ok) {
+    //                     const data = await response.json();
+    //                     const imageUrl = data.d.ServerRelativeUrl;
+    //                     resolve(imageUrl);
+    //                 } else {
+    //                     reject(new Error('File upload failed'));
+    //                 }
+    //             } catch (error) {
+    //                 reject(error);
+    //             }
+    //         };
+    //         fileReader.readAsArrayBuffer(blob);
+    //     });
+    // };
 
     // Update list item with image URL
     const updateListItemWithImage = async (itemId: number, imageUrl: string):Promise<void> => {
@@ -241,9 +243,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
 
         // remove special characters from the filename:  https://github.com/fps-solutions/FPS-Photo-Form/issues/9
         shortFileName = shortFileName.replace(/[\\/:*?"<>|#&]/g, '' );
-        const blob = base64ToBlob(imageData);
 
-        const imageUrl = await uploadImageToLibrary( blob, shortFileName );
+        // const blob = base64ToBlob(imageData);
+
+        const imageUrl = await uploadBase64ImageToLibrary( ImagesSource, imageData, shortFileName );
 
         if (imageUrl) {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
@@ -255,51 +258,38 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
         }
     };
 
-
-    const handleCategory2Click = (index: number): void => {
+    const handleCategory23Click = (cat: number ,index: number, ): void => {
       setFormData(prevFormData => {
-        const indexInArray = prevFormData.category2.indexOf(index);
-        let newCategory2;
+        const prevCategoryX = cat === 2 ? prevFormData.category2 : prevFormData.category3;
 
+        const indexInArray = prevCategoryX.indexOf(index);
+        let newCategoryX
         if (indexInArray > -1) {
           // Remove the index if it's already in the array
-          newCategory2 = prevFormData.category2.filter(i => i !== index);
+          newCategoryX = prevCategoryX.filter(i => i !== index);
         } else {
           // Add the index if it's not in the array
-          newCategory2 = [...prevFormData.category2, index];
+          newCategoryX = [...prevCategoryX, index];
         }
 
+        const CategoryXs = cat === 2 ? Category2s : Category3s;
         // https://github.com/fps-solutions/FPS-Photo-Form/issues/6
-        const clickedActual = PlaceHolderCategories.indexOf( Category2s[index] ) < 0 ? true : false;
-        newCategory2 = newCategory2.filter(function(index) {
-          return clickedActual ? PlaceHolderCategories.indexOf(Category2s[index]) === -1 : PlaceHolderCategories.indexOf(Category2s[index]) > -1;
+        const clickedActual = PlaceHolderCategories.indexOf( CategoryXs[index] ) < 0 ? true : false;
+        newCategoryX = newCategoryX.filter(function(idx) {
+          return clickedActual ? PlaceHolderCategories.indexOf(CategoryXs[idx]) === -1 : PlaceHolderCategories.indexOf(CategoryXs[idx]) > -1;
         });
-
-        return { ...prevFormData, category2: newCategory2 };
+        const mashup = cat === 2 ? { category2: newCategoryX } : { category3: newCategoryX };
+        return { ...prevFormData, ...mashup };
       });
     };
 
-    const handleCategory3Click = (index: number): void => {
-      setFormData(prevFormData => {
-        const indexInArray = prevFormData.category3.indexOf(index);
-        let newCategory3;
-        if (indexInArray > -1) {
-          // Remove the index if it's already in the array
-          newCategory3 = prevFormData.category3.filter(i => i !== index);
-        } else {
-          // Add the index if it's not in the array
-          newCategory3 = [...prevFormData.category3, index];
-        }
-
-        // https://github.com/fps-solutions/FPS-Photo-Form/issues/6
-        const clickedActual = PlaceHolderCategories.indexOf( Category3s[index] ) < 0 ? true : false;
-        newCategory3 = newCategory3.filter(function(index) {
-          return clickedActual ? PlaceHolderCategories.indexOf(Category3s[index]) === -1 : PlaceHolderCategories.indexOf(Category3s[index]) > -1;
-        });
-
-        return { ...prevFormData, category3: newCategory3 };
-      });
-    };
+    const handleCategoryXClick = (cat: number ,index: number, ): void => {
+      if ( cat === 1 ) {
+        setFormData({ ...formData, category1: index })
+      } else {
+        handleCategory23Click( cat, index );
+      }
+    }
 
     const { title, x, y, z, category1, category2, category3 } = formData;
     const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
@@ -311,7 +301,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           onSubmit={handleSubmit} onPaste={handlePaste as any}>
 
-            <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
+            { categoryButtons( 1, [ formData.category1 ], props, handleCategoryXClick ) }
+            {/* <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
               <div style={{ }}>
               <h4 style={{ margin: '0px' }}>Category 1</h4>
                 <div className={ styles.categoryButtons }>
@@ -321,7 +312,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                       key={index}
                       title={ category }
                       type="button"
-                      onClick={() => setFormData({ ...formData, category1: index })}
+                      // onClick={() => setFormData({ ...formData, category1: index })}
+                      onClick={() => handleCategoryXClick( 1, index ) }
                       style={ {...{ }, ...getButtonStyles( Category1s[ index ], photoButtonStyles ) } }
                     >
                       {category}
@@ -329,7 +321,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             <div className={ styles.title }style={{  }}>
                 <label>Title</label>
@@ -365,7 +357,10 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                     style={{ paddingLeft: '.5em', marginLeft: '1em', width: 'calc(100% - 2em)', height: '100px' }} />
             </div>
 
-              <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
+            { categoryButtons( 2, formData.category2, props, handleCategoryXClick ) }
+            { categoryButtons( 3, formData.category3, props, handleCategoryXClick ) }
+
+              {/* <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
                 <h4 style={{ margin: '0px' }}>Category 2</h4>
                 <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
                   {Category2s.map((category, index) => (
@@ -374,7 +369,7 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                       key={index}
                       title={ category }
                       type="button"
-                      onClick={() => handleCategory2Click(index)}
+                      onClick={() => handleCategoryXClick( 2, index)}
                       style={ {...{  }, ...getButtonStyles( Category2s[ index ], photoButtonStyles ) } }
                     >
                       {category}
@@ -392,14 +387,14 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
                       key={index}
                       title={ category }
                       type="button"
-                      onClick={() => handleCategory3Click(index)}
+                      onClick={() => handleCategoryXClick( 3, index)}
                       style={ {...{  }, ...getButtonStyles( Category3s[ index ], photoButtonStyles ) } }
                     >
                       {category}
                     </button>
                   ))}
                 </div>
-              </div>
+              </div> */}
 
               <div className={ styles.summary }>
                 <div>
