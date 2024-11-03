@@ -1,94 +1,14 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-// require('@mikezimm/fps-styles/dist/fps-Camera.css'); // Uncomment if using external styles
 require('./fps-Camera.css'); // Import your local CSS file
-import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component'; // Import custom toggle component
 import { uploadBase64ImageToLibrary } from '../functions/ImageSave';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { ActionButtons, ImageDisplay } from './pieces';
 
-// // Component to display the video feed from the camera
-// const TurnCameraOnElement: JSX.Element =
-//   <div className="placeholder" style={{ position: 'absolute' }}>
-//     <h3>Live Feed is Disabled</h3>
-//     <div>Press button to turn camera on</div>
-//     <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
-//   </div>;
-
-// // Component to display the video feed from the camera
-// const VideoFeed: React.FC<{ videoRef: React.RefObject<HTMLVideoElement> }> = ({ videoRef }) => {
-//   return (
-//     <div>
-//       <h3>Live Camera:</h3>
-//       { TurnCameraOnElement }
-//       <video ref={videoRef} className="video-feed" autoPlay playsInline />
-//     </div>
-//   );
-// };
-
-// // Component for action buttons: Capture, Clear, and Toggle Camera
-// const ActionButtons: React.FC<{
-//   onCapture: () => void;
-//   onClear: () => void;
-//   isCameraOn: boolean;
-//   onToggleCamera: (useFrontCamera: boolean) => void;
-//   imprintTimestamp: boolean;
-//   toggleImprint: () => void;
-//   useFrontCamera: boolean;
-//   toggleFront:() => void;
-// }> = ({ onCapture, onClear, isCameraOn, onToggleCamera, imprintTimestamp, toggleImprint, useFrontCamera, toggleFront }) => {
-//   return (
-//     <div className="action-buttons">
-//       <FPSToggle
-//         containerStyle={{ minWidth: '0px' }}
-//         // label={ useFrontCamera ? '🤳' : '📸' }
-//         label={ '' }
-//         onText="Front"
-//         offText="User"
-//         onChange={toggleFront}
-//         forceChecked={useFrontCamera}
-//       />
-//       <button onClick={ () => onToggleCamera( useFrontCamera )} className="action-button">
-//         {isCameraOn ? 'Turn Camera Off' : 'Turn Camera On'}
-//       </button>
-//       <button onClick={onCapture} disabled={!isCameraOn} className={`action-button ${!isCameraOn ? 'disabled' : ''}`}>
-//         Capture Image
-//       </button>
-//       <button onClick={onClear} className="action-button">
-//         Clear
-//       </button>
-//       {/* Custom toggle for imprinting timestamp */}
-//       <FPSToggle
-//         containerStyle={{ marginLeft: 'auto', minWidth: '0px' }}
-//         label="Include Timestamp"
-//         onText=""
-//         offText=""
-//         onChange={toggleImprint}
-//         forceChecked={imprintTimestamp}
-//       />
-//     </div>
-//   );
-// };
-
-// // Component to display the captured image
-// const ImageDisplay: React.FC<{ image: string | null }> = ({ image }) => {
-//   return (
-//     <div className="image-display">
-//       {image ? (
-//         <>
-//           <h3>Captured Image:</h3>
-//           <img src={image} alt="Captured" />
-//         </>
-//       ) : (
-//         <h3>Press the "Capture Image" button to take a picture.</h3>
-//       )}
-//     </div>
-//   );
-// };
-
 export interface ICameraFormInput {
   ImagesSource: ISourceProps;
 }
+
 // Main Camera Capture component
 const CameraCapture: React.FC<ICameraFormInput> = (props) => {
 
@@ -106,7 +26,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const [stream, setStream] = useState<MediaStream | null>(null); // State to hold media stream
 
   // Function to initialize the camera
-  const initCamera = async (useFrontCamera: boolean = false) => {
+  const initCamera = async (useFrontCamera: boolean = false): Promise<void> => {
     try {
       const constraints = {
         video: {
@@ -166,7 +86,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   }, [stream]);
 
   // Function to capture the image from the video feed
-  const captureImage = () => {
+  const captureImage = ():void => {
     if (canvasRef.current && videoRef.current) {
       const context = canvasRef.current.getContext('2d');
       if (context) {
@@ -192,7 +112,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   };
 
   // Function to clear the captured image
-  const clearImage = () => {
+  const clearImage = ():void => {
     setImage(null);
     setError(null);  // Added to remove error and try again.  https://github.com/fps-solutions/FPS-Photo-Form/issues/65
     if (canvasRef.current) {
@@ -204,16 +124,16 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   };
 
   // Toggle imprint timestamp
-  const toggleFrontCamera = () => {
+  const toggleFrontCamera = ():void => {
     setUseFrontCamera(prev => !prev);
   };
 
   // Toggle imprint timestamp
-  const toggleImprint = () => {
+  const toggleImprint = ():void => {
     setImprintTimestamp(prev => !prev);
   };
 
-  const saveImage = async () => {
+  const saveImage = async ():Promise<void> => {
     const fileName = `${ `Camera_${ useFrontCamera ? 'User' : 'Back' }` }_${new Date().toISOString().replace(/[:.]/g, '-')}_${ `Camera` }.png`;
     await uploadBase64ImageToLibrary( ImagesSource, image ,fileName );
   }
