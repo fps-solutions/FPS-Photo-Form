@@ -4,15 +4,16 @@
   border-width: thick;
   width: 100px;
   height: 100px;
-  border: 2px solid lightgray;
+  border: 3px solid lightgray;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  /* transition: all .5s; Smooth transitions */
   border-radius: 8px; /* Rounded corners */
   background-color: #f9f9f9; /* Light background */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 4px 9px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow */
 }
 
 .image-paste-box.focused {
