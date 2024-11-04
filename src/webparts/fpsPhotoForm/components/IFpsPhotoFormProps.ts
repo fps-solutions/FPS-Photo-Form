@@ -6,7 +6,7 @@ import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 
 import { ILoadPerformance } from '../fpsReferences';
-import { IPhotoFormForm } from './Forms/PasteCoMash';
+import { IPhotoFormForm } from './Forms/PasteFormForm';
 import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';

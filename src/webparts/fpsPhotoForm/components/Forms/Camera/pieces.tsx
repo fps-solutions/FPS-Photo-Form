@@ -41,8 +41,9 @@ export const ActionButtons: React.FC<{
         containerStyle={{ minWidth: '125px' }}
         // label={ useFrontCamera ? '🤳' : '📸' }
         label={ '' }
-        onText="Front"
+        onText="Back"
         offText="User"
+        disabled={ isCameraOn }
         onChange={toggleFront}
         forceChecked={useFrontCamera}
       />
@@ -72,7 +73,7 @@ export const ActionButtons: React.FC<{
 };
 
 // Component to display the captured image
-export const ImageDisplay: React.FC<{ image: string | null }> = ({ image }) => {
+export const ImageDisplay: React.FC<{ image: string | undefined }> = ({ image }) => {
   return (
     <div className="image-display">
       {image ? (
@@ -81,7 +82,7 @@ export const ImageDisplay: React.FC<{ image: string | null }> = ({ image }) => {
           <img src={image} alt="Captured" />
         </>
       ) : (
-        <h3>Press the "Capture Image" button to take a picture.</h3>
+        <h3>Press the &quot;Capture Image&quot; button to take a picture.</h3>
       )}
     </div>
   );

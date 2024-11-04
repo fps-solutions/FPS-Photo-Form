@@ -5,11 +5,11 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 
 import styles from '../FpsPhotoForm.module.scss';
-import { getButtonStyles } from './getButtonStyles';
 import FPSToggle from '../Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
 import { uploadBase64ImageToLibrary } from './functions/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
+import { handleImagePaste } from './functions/handlePasteImage';
 
 export interface IPhotoFormForm  {
 
@@ -50,17 +50,12 @@ const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
 const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
-  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, imageSubfolder2, photoButtonStyles } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
-  // const ActualCat2s =Category2s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
-  // const ActualCat3s = Category3s.filter(item => PlaceHolderCategories.indexOf( item ) < 0 );
-// export default function ScreenshotFormMash({ SiteUrl }: { SiteUrl: string }) {
+  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
+
     const [imageData, setImageData] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
     const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
-    // const [cats2Comments, setCats2Comments ] = useState<boolean>(true);
-    // const [cats2Title, setCats2Title ] = useState<boolean>(false);
-
 
     // Update wasSubmitted to false whenever formData changes
     useEffect(() => {
@@ -71,23 +66,8 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
       setAutoClear(checked); // Update the state when toggle changes
     };
 
-    // Handle pasting the image from the clipboard
-    const handlePaste = (e: ClipboardEvent): void => {
-        const clipboardItems = e.clipboardData?.items;
-        for (let i = 0; i < clipboardItems?.length; i++) {
-            if (clipboardItems[i].type.indexOf('image') !== -1) {
-                const file = clipboardItems[i].getAsFile();
-                const reader = new FileReader();
-                reader.onloadend = function () {
-                    setImageData(reader.result as string); // Store the base64 image data
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-    };
-
     useEffect(() => {
-      const handleClipboard = (e: ClipboardEvent): void => handlePaste(e);
+      const handleClipboard = (e: ClipboardEvent): void => handleImagePaste(e, setImageData );
       document.addEventListener('paste', handleClipboard);
       return () => {
           document.removeEventListener('paste', handleClipboard);
@@ -153,50 +133,6 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
           throw error;
       }
     };
-
-    // // Convert base64 image to a Blob
-    // const base64ToBlob = (base64: string): Blob => {
-    //     const binary = atob(base64.split(',')[1]);
-    //     const array = [];
-    //     for (let i = 0; i < binary.length; i++) {
-    //         array.push(binary.charCodeAt(i));
-    //     }
-    //     return new Blob([new Uint8Array(array)], { type: 'image/png' });
-    // };
-
-    // // Upload image to SiteAssets library
-    // const uploadImageToLibrary = async (blob: Blob, fileName: string): Promise<string | null> => {
-    //     const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl);
-    //     return new Promise((resolve, reject) => {
-    //         const fileReader = new FileReader();
-    //         fileReader.onloadend = async () => {
-    //             const buffer = fileReader.result as ArrayBuffer;
-    //             const folderRelativeUrl = imageSubfolder2 ? `${ImagesSource.listTitle}/${imageSubfolder2}` : ImagesSource.listTitle;
-    //             try {
-    //                 const response = await fetch(`${ImagesSource.absoluteWebUrl}/_api/web/GetFolderByServerRelativeUrl('${folderRelativeUrl}')/Files/add(url='${fileName}', overwrite=true)`, {
-    //                     method: 'POST',
-    //                     headers: {
-    //                         'Accept': 'application/json; odata=verbose',
-    //                         'X-RequestDigest': requestDigest,
-    //                         'Content-Length': buffer.byteLength.toString()
-    //                     },
-    //                     body: buffer
-    //                 });
-
-    //                 if (response.ok) {
-    //                     const data = await response.json();
-    //                     const imageUrl = data.d.ServerRelativeUrl;
-    //                     resolve(imageUrl);
-    //                 } else {
-    //                     reject(new Error('File upload failed'));
-    //                 }
-    //             } catch (error) {
-    //                 reject(error);
-    //             }
-    //         };
-    //         fileReader.readAsArrayBuffer(blob);
-    //     });
-    // };
 
     // Update list item with image URL
     const updateListItemWithImage = async (itemId: number, imageUrl: string):Promise<void> => {
@@ -299,29 +235,9 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
     return (
         <form className={ styles.fpsPhotoFormGrid }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          onSubmit={handleSubmit} onPaste={handlePaste as any}>
+          onSubmit={handleSubmit} onPaste={handleImagePaste as any}>
 
             { categoryButtons( 1, [ formData.category1 ], props, handleCategoryXClick ) }
-            {/* <div className={ styles.category1 } style={{ display: 'flex', gap: '1em' }}>
-              <div style={{ }}>
-              <h4 style={{ margin: '0px' }}>Category 1</h4>
-                <div className={ styles.categoryButtons }>
-                  {Category1s.map((category, index) => (
-                    <button
-                      className={ formData.category1 === index ? [ styles.button, styles.selected ].join(' ') : styles.button }
-                      key={index}
-                      title={ category }
-                      type="button"
-                      // onClick={() => setFormData({ ...formData, category1: index })}
-                      onClick={() => handleCategoryXClick( 1, index ) }
-                      style={ {...{ }, ...getButtonStyles( Category1s[ index ], photoButtonStyles ) } }
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div> */}
 
             <div className={ styles.title }style={{  }}>
                 <label>Title</label>
@@ -360,74 +276,38 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
             { categoryButtons( 2, formData.category2, props, handleCategoryXClick ) }
             { categoryButtons( 3, formData.category3, props, handleCategoryXClick ) }
 
-              {/* <div style={{ marginLeft: '1em' }} className={ styles.category2 }>
-                <h4 style={{ margin: '0px' }}>Category 2</h4>
-                <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
-                  {Category2s.map((category, index) => (
-                    <button
-                      className={formData.category2.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
-                      key={index}
-                      title={ category }
-                      type="button"
-                      onClick={() => handleCategoryXClick( 2, index)}
-                      style={ {...{  }, ...getButtonStyles( Category2s[ index ], photoButtonStyles ) } }
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
+            <div className={ styles.summary }>
+              <div>
+                <h4 style={{ margin: '0px 0px 5px 0px'}}>Category 2s:</h4>
+                { formData.category2.map( idx => Category2s[ idx ]).join(' | ') }
               </div>
-
-              <div style={{ marginLeft: '1em' }} className={ styles.category3 }>
-                <h4 style={{ margin: '0px' }}>Category 3</h4>
-                <div className={ styles.categoryButtons } style={{ display: 'grid' }}>
-                  {Category3s.map((category, index) => (
-                    <button
-                      className={formData.category3.indexOf(index) > -1 ?  [ styles.button, styles.selected ].join(' ') : styles.button }
-                      key={index}
-                      title={ category }
-                      type="button"
-                      onClick={() => handleCategoryXClick( 3, index)}
-                      style={ {...{  }, ...getButtonStyles( Category3s[ index ], photoButtonStyles ) } }
-                    >
-                      {category}
-                    </button>
-                  ))}
-                </div>
-              </div> */}
-
-              <div className={ styles.summary }>
-                <div>
-                  <h4 style={{ margin: '0px 0px 5px 0px'}}>Category 2s:</h4>
-                  { formData.category2.map( idx => Category2s[ idx ]).join(' | ') }
-                </div>
-                <div>
-                <h4 style={{ margin: '10px 0px 5px 0px'}}>Category 3s:</h4>
-                  { formData.category3.map( idx => Category3s[ idx ]).join(' | ') }
-                </div>
+              <div>
+              <h4 style={{ margin: '10px 0px 5px 0px'}}>Category 3s:</h4>
+                { formData.category3.map( idx => Category3s[ idx ]).join(' | ') }
               </div>
+            </div>
 
-              <div className={ styles.submit } style={{ margin: '1em 1em 1em 0em' }}>
-                <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
-                {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
-                <button className={ styles.clearButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button>
+            <div className={ styles.submit } style={{ margin: '1em 1em 1em 0em' }}>
+              <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
+              {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
+              <button className={ styles.clearButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button>
 
-                <FPSToggle
-                  label="Reset on Create"
-                  onText="Auto"
-                  offText="Manual"
-                  onChange={ handleToggleChange }
-                />
-                <div>Current Toggle State: { `${autoClear}` }</div>
+              <FPSToggle
+                label="Reset on Create"
+                onText="Auto"
+                offText="Manual"
+                onChange={ handleToggleChange }
+              />
+              <div>Current Toggle State: { `${autoClear}` }</div>
 
+            </div>
+            {imageData && (
+              <div className={ styles.imagePreview }>
+                  <h3>Pasted Image Preview:</h3>
+                  <img src={imageData} alt="Pasted Image" style={{ maxWidth: '300px' }} />
               </div>
-              {imageData && (
-                <div className={ styles.imagePreview }>
-                    <h3>Pasted Image Preview:</h3>
-                    <img src={imageData} alt="Pasted Image" style={{ maxWidth: '300px' }} />
-                </div>
-              )}
-           <div className={ styles.spacer }/>
+            )}
+            <div className={ styles.spacer }/>
 
         </form>
     );

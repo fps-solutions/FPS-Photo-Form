@@ -18,7 +18,7 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
-import ScreenshotFormMash from './Forms/PasteCoMash';
+import ScreenshotFormMash from './Forms/PasteFormForm';
 import ViewTabs from './ViewTabs/ViewTabs';
 
 //Use this to add more console.logs for this component

@@ -142,7 +142,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const TurnCameraOnElement: JSX.Element =
   <div className="placeholder" style={{  }}>
     <h3>Live Feed is Disabled</h3>
-    <div style={{ fontSize: 'larger' }}>Use toggle to <b>pick Front or User Camera</b></div>
+    <div style={{ fontSize: 'larger' }}>Use toggle to <b>pick Back or User Camera</b></div>
     <div style={{ fontSize: 'larger' }}>Press button to activate <b style={{ fontSize: 'x-large', color: useFrontCamera ? 'blue' : 'purple' }}>{ useFrontCamera ? 'User' : 'Back' }</b> camera</div>
     <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
   </div>;

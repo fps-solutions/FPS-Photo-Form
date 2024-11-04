@@ -22,6 +22,7 @@ import { getHistoryPresetItems } from '../Forms/ScatterLogic';
 // import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
 import FpsGpsLocationForm from '../Forms/GeoLocation/GeoLocation';
 import CameraCapture from '../Forms/Camera/component';
+import ParentForm from '../Forms/Camera/ClipboardImage/MultiImageParent';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -176,6 +177,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
         />
         { this.props.tab === 'List' ? <FpsGpsLocationForm heading=''/> : undefined }
         { this.props.tab === 'List' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
+        { this.props.tab === 'List' ? <ParentForm /> : undefined }
 
       </div>
 

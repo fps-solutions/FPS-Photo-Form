@@ -26,9 +26,16 @@ export function getGeoLocation( debugMode: boolean ): Promise<IFpsGeolocationPos
           result = JSON.parse(JSON.stringify(position));
           if ( debugMode ) alert(`debugMode getGeoLocation ~ 27`);
           result.status = 'Success';
+
           result.localTime = new Date( result.timestamp ).toLocaleString();
+          // https://github.com/fps-solutions/FPS-Photo-Form/issues/68
+          if ( result.localTime.indexOf('Invalid') > -1 ) {
+            result.status = 'Error';
+            result.error = { code: 2, message: 'Invalid Time'};
+          }
+
           result.message = `${result.localTime}`;
-          if ( debugMode ) alert(`debugMode getGeoLocation ~ 31`);
+          if ( debugMode ) alert(`debugMode getGeoLocation ~ 31: ${JSON.stringify( result )}`);
           resolve(result); // Resolve the promise with the result
         },
         (error) => {

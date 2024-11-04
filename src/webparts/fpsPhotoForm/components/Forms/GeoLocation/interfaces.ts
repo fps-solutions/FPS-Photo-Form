@@ -21,17 +21,17 @@ export interface IFpsGeolocationPosition {
   coords: IFpsGeolocationCoordinates;
   status: string;
   message: string;
-  error: IFpsGeolocationPositionError | null;
+  error: IFpsGeolocationPositionError | undefined;
 }
 
 export interface IFpsGeolocationCoordinates {
   accuracy: number; // in meters
   latitude: number; // in degrees
   longitude: number; // in degrees
-  altitude: number | null; // in meters, or null if not available
-  altitudeAccuracy: number | null; // in meters, or null if not available
-  heading: number | null; // in degrees, or null if not available
-  speed: number | null; // in meters per second, or null if not available
+  altitude: number | undefined; // in meters, or null if not available
+  altitudeAccuracy: number | undefined; // in meters, or null if not available
+  heading: number | undefined; // in degrees, or null if not available
+  speed: number | undefined; // in meters per second, or null if not available
 }
 
 export interface IFpsGeolocationPositionError {
