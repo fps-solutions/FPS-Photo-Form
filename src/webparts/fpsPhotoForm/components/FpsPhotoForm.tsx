@@ -18,7 +18,7 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
-import ScreenshotFormMash from './Forms/PasteCoMash';
+import ScreenshotFormMash from './Forms/PasteFormForm';
 import ViewTabs from './ViewTabs/ViewTabs';
 
 //Use this to add more console.logs for this component
@@ -65,7 +65,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
     super(props);
 
     if ( this._performance === null ) { this._performance = this.props.performance;  }
-    const defaultTab: IDefaultFormTab = this.props.tab === 'List' || this.props.tab === 'Map' ? this.props.tab : 'Input';
+    const defaultTab: IDefaultFormTab = [ 'Input', 'Map', 'List', 'Geo', 'Camera', 'Multi-Paste' ].indexOf(this.props.tab) > -1 ? this.props.tab : 'Input';
 
     this.state = {
       pinState: this.props.bannerProps.fpsPinMenu.defPinState ? this.props.bannerProps.fpsPinMenu.defPinState : 'normal',
@@ -76,6 +76,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       debugMode: false,
       showSpinner: false,
       tab: defaultTab,
+      view: [ 'Input', 'Map', 'List' ].indexOf(defaultTab) > -1 ? 'Normal' : 'Experimental',
     };
   }
 
@@ -198,8 +199,12 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
   public render(): React.ReactElement<IFpsPhotoFormProps> {
     const {
       hasTeamsContext,
-      bannerProps
+      bannerProps,
+      ListSource,
+      ImagesSource,
     } = this.props;
+
+    const { bannerCmdReactCSS } = bannerProps;
 
     const devHeader = this.state.showDevHeader === true ? <div><b>Props: </b> { `this.props.lastPropChange , this.props.lastPropDetailChange` } - <b>State: lastStateChange: </b> { this.state.lastStateChange  } </div> : null ;
 
@@ -222,18 +227,33 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     //Setting showTricks to false here ( skipping this line does not have any impact on bug #90 )
     if ( this.props.bannerProps.beAUser === false ) {
+      const NewToggleMode = this.state.view === 'Normal' ? 'Experimental' : 'Normal';
       farBannerElementsArray.push( ...[
+        <Icon key='View' iconName='View' title={ `Press to see ${NewToggleMode} tabs`} onClick={ ( event ) => this.setState({ view: NewToggleMode }) } style={ bannerCmdReactCSS }/>,
+        <div key='Gap' style={{ cursor: 'pointer', marginRight: '.5em', }} onClick={ ( event ) => this.setState({ view: NewToggleMode }) } >Tabs:</div>,
+      ]);
 
-        <div key='Gap' style={{ cursor: 'default', marginRight: '.5em' }}>Tabs:</div>,
-        <Icon key='Input' iconName='Questionnaire' title='Form Input View' onClick={ ( event ) => this.handleStateClick( 'Input' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
-        <Icon key='List' iconName='BulletedList' title='List View' onClick={ ( event ) => this.handleStateClick( 'List' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
-        <Icon key='Map' iconName='Globe2' title='Coordinates View' onClick={ ( event ) => this.handleStateClick( 'Map' ) } style={ { ...this.props.bannerProps.bannerCmdReactCSS, ...{ marginRight: '2em' } } }/>,
+      if ( this.state.view === 'Normal' ) {
+        farBannerElementsArray.push( ...[
+          <Icon key='Input' iconName='Questionnaire' title='Form Input View' onClick={ ( event ) => this.handleStateClick( 'Input' ) } style={ bannerCmdReactCSS }/>,
+          <Icon key='List' iconName='BulletedList' title='List View' onClick={ ( event ) => this.handleStateClick( 'List' ) } style={ bannerCmdReactCSS }/>,
+          <Icon key='Map' iconName='ScatterChart' title='Coordinates View' onClick={ ( event ) => this.handleStateClick( 'Map' ) } style={ { ...bannerCmdReactCSS, } }/>,
+        ]);
+      } else {
+        farBannerElementsArray.push( ...[
+          <Icon key='Camera' iconName='Camera' title='Camera Input' onClick={ ( event ) => this.handleStateClick( 'Camera' ) } style={ bannerCmdReactCSS }/>,
+          <Icon key='Geo' iconName='World' title='Geo Locations' onClick={ ( event ) => this.handleStateClick( 'Geo' ) } style={ bannerCmdReactCSS }/>,
+          <Icon key='Multi-Paste' iconName='GridViewSmall' title='Multi-Paste View' onClick={ ( event ) => this.handleStateClick( 'Multi-Paste' ) } style={ bannerCmdReactCSS }/>,
+        ]);
+      }
 
+      farBannerElementsArray.push( ...[
         <div key='Links' style={{ marginLeft: '3em', cursor: 'default', marginRight: '.5em' }}>Links:</div>,
-        <Icon key='Questionnaire' iconName='BulletedListText' title='Open List' onClick={ ( ) => window.open( `${this.props.ListSource.webUrl}${this.props.ListSource.webRelativeLink}`, '_blank' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
-        <Icon key='Photo2' iconName='Photo2' title='Open Images Folder' onClick={ ( ) => window.open( `${this.props.ImagesSource.webUrl}${this.props.ImagesSource.webRelativeLink}/${this.props.ImagesSource.subFolder}`, '_blank' ) } style={ this.props.bannerProps.bannerCmdReactCSS }/>,
+        <Icon key='Questionnaire' iconName='BulletedListText' title='Open List' onClick={ ( ) => window.open( `${ListSource.webUrl}${ListSource.webRelativeLink}`, '_blank' ) } style={ bannerCmdReactCSS }/>,
+        <Icon key='Photo2' iconName='Photo2' title='Open Images Folder' onClick={ ( ) => window.open( `${ImagesSource.webUrl}${ImagesSource.webRelativeLink}/${ImagesSource.subFolder}`, '_blank' ) } style={ bannerCmdReactCSS }/>,
 
       ]);
+
     }
 
     // const FPSUser : IFPSUser = this.props.bannerProps.FPSUser;
@@ -275,8 +295,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
           <ScreenshotFormMash
             display={ this.state.tab === 'Input' ? 'block' : 'none' }
-            ListSource = { this.props.ListSource }
-            ImagesSource = { this.props.ImagesSource }
+            ListSource = { ListSource }
+            ImagesSource = { ImagesSource }
             ListSiteUrl={ this.props.ListSiteUrl }
             ListTitle={ this.props.ListTitle }
             LibrarySiteUrl={ this.props.LibrarySiteUrl }
@@ -293,7 +313,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
           <ViewTabs
             tab={ this.state.tab  }
-            ListSource={ this.props.ListSource  }
+            ListSource={ ListSource  }
             axisMap={ this.props.axisMap  }
             chartDisplay={ this.props.chartDisplay  }
             bannerProps={ bannerProps  }
@@ -304,7 +324,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             eleExtras={ this.props.eleExtras }
             eleProps={ this.props.eleProps }
 
-            ImagesSource={ this.props.ImagesSource }
+            ImagesSource={ ImagesSource }
 
             // WORKS!
             // diameter={ 12000 }  // Example total height of the chart

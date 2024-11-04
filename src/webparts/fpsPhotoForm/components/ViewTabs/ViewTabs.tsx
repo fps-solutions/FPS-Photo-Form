@@ -22,6 +22,7 @@ import { getHistoryPresetItems } from '../Forms/ScatterLogic';
 // import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
 import FpsGpsLocationForm from '../Forms/GeoLocation/GeoLocation';
 import CameraCapture from '../Forms/Camera/component';
+import ParentForm from '../Forms/Camera/ClipboardImage/MultiImageParent';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -174,8 +175,19 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           eleProps={ this.props.eleProps }
 
         />
-        { this.props.tab === 'List' ? <FpsGpsLocationForm heading=''/> : undefined }
-        { this.props.tab === 'List' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
+
+        { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
+        { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
+        { this.props.tab === 'Multi-Paste' ? <ParentForm imageCount={ 1 } elementCSS = {{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr)' }} imageBoxCSS= {{ height: '125px', width: '200px'} }
+          preloadImages={
+            [ null,
+            null,
+            `https://fuzzypawstech.sharepoint.com/sites/PhotoFormWebpart/MapImages/888Mashup/screenshot_2024-10-18T05-55-20-479Z_Nether_X34324_Y43234_Z23110_Desert_Jungle_Snow_Ocean_Trials_Nether%20Portal_Wreck_asdas.png`, // Assign the sample URL to the third index
+            null,
+            `https://fuzzypawstech.sharepoint.com/sites/PhotoFormWebpart/MapImages/888Mashup/screenXXXXshot_2024-10-18T05-55-20-479Z_Nether_X34324_Y43234_Z23110_Desert_Jungle_Snow_Ocean_Trials_Nether%20Portal_Wreck_asdas.png`,
+            null]
+          }
+        /> : undefined }
 
       </div>
 

@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styles from '../FpsPhotoForm.module.scss';
 import { getButtonStyles } from './getButtonStyles';
-import { IPhotoFormInput } from './PasteCoMash';
+import { IPhotoFormInput } from './PasteFormForm';
 
 export function categoryButtons( CatNum: number, categoryX: number[], formProps: IPhotoFormInput, handleCategoryXClick: (cat: number ,index: number, ) => void  ): JSX.Element {
   const CategoryXs: string[] = formProps[ `Category${CatNum}s` as 'Category1s' ] ; // CatNum ? formProps.Category2s : formProps.Category3s;

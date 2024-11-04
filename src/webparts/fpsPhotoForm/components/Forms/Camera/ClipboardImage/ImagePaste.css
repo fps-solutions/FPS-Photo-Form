@@ -1,0 +1,42 @@
+
+.image-paste-box {
+  box-sizing: border-box;
+  border-width: thick;
+  width: 100px;
+  height: 100px;
+  border: 3px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transitions */
+  /* transition: all .5s; Smooth transitions */
+  border-radius: 8px; /* Rounded corners */
+  background-color: #f9f9f9; /* Light background */
+  box-shadow: 4px 9px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+}
+
+.image-paste-box.focused {
+  border-color: blue; /* Thicker border on focus */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly more shadow on focus */
+}
+
+.image-preview {
+  width: 100%;
+  /* height: 100%; */
+  object-fit: cover; /* Cover the box without distortion */
+  border-radius: 8px; /* Match border radius */
+}
+
+.placeholder-text {
+  color: #888; /* Slightly darker gray for placeholder text */
+  text-align: center; /* Center the text */
+}
+
+/* Add hover effect */
+.image-paste-box:hover {
+  border-color: #007bff; /* Change border color on hover */
+  /* border-color: #0000ff91; */
+  border-width: thick;
+
+}

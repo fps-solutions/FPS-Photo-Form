@@ -6,12 +6,12 @@ import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 
 import { ILoadPerformance } from '../fpsReferences';
-import { IPhotoFormForm } from './Forms/PasteCoMash';
+import { IPhotoFormForm } from './Forms/PasteFormForm';
 import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
-export type IDefaultFormTab = 'Input' | 'List' | 'Map';
+export type IDefaultFormTab = 'Input' | 'List' | 'Geo' | 'Camera' | 'Multi-Paste' | 'Map';
 
 export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhotoFormForm {
   description: string;
@@ -37,5 +37,6 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
  * Extends IFPSCorePinMeReactComponentState with all basics required for FPS Banner
  */
  export interface IFpsPhotoFormState extends IFPSCorePinMeReactComponentState {
+  view: 'Normal' | 'Experimental';
   tab: IDefaultFormTab;
 }

@@ -54,7 +54,10 @@ const GpsLocationForm: React.FC<IFpsGpsLocationFormProps> = (props) => {
 
   if ( debugMode && position.status !== 'Success' ) alert(`debugMode GpsLocationForm ~ 55: ${JSON.stringify( position )}`);
 
-  const { latitude='', longitude='', altitude='' } = position.coords;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const coords = position.coords ? position.coords : {} as any;
+  const { latitude='', longitude='', altitude='' } = coords;
+
   const buttonClassName: string = `action-button ${ buttonClass ? buttonClass : ''}`;
   return (
     <div className={ `gps-form ${ showAltitude ? 'fps-altitude' : ''} ${ className ? className : ''}`} style={ style }>
@@ -68,14 +71,14 @@ const GpsLocationForm: React.FC<IFpsGpsLocationFormProps> = (props) => {
             onText=""
             offText=""
             onChange={ handleDetailsChange }
-          />}
-          <FPSToggle
+          /> }
+          { !enableDetails ? undefined : <FPSToggle
             containerStyle={ { marginLeft: 'auto', minWidth: '0px' }}
             label="Debug"
             onText=""
             offText=""
             onChange={ handleDebugChange }
-          />
+          /> }
       </div>
 
       <form onSubmit={handleSubmit} className={ `form ${ showAltitude ? 'fps-altitude' : ''}` }>
