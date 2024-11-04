@@ -176,9 +176,9 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         />
 
-        { this.props.tab === 'List' ? <FpsGpsLocationForm heading=''/> : undefined }
-        { this.props.tab === 'List' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
-        { this.props.tab === 'List' ? <ParentForm imageCount={ 1 } elementCSS = {{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr)' }} imageBoxCSS= {{ height: '125px', width: '200px'} }
+        { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
+        { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
+        { this.props.tab === 'Multi-Paste' ? <ParentForm imageCount={ 1 } elementCSS = {{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr)' }} imageBoxCSS= {{ height: '125px', width: '200px'} }
           preloadImages={
             [ null,
             null,

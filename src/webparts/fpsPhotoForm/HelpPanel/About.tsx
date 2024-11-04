@@ -33,7 +33,11 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
      * WARNING:  DO NOT add any CDNs to Global Warn or Approve unless you want it to apply to JS as well.
      */
 
-    table.rows.push( createAboutRow('2024-11-02',"0.0.9",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    // table.rows.push( createAboutRow('2024-11-XX',"0.0.12",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    // table.rows.push( createAboutRow('2024-11-XX',"0.0.11",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    // table.rows.push( createAboutRow('2024-11-XX',"0.0.10",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+
+    table.rows.push( createAboutRow('2024-11-04',"0.0.9",`#68, #69, #70, #72`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-11-01',"0.0.8",`#64, #65, #66`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-10-31',"0.0.7",`#60, #61, #62 Halloween Update! 🎃`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('V',         "V",    "#27, #51, #53, #54, #56, #57, ", bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );

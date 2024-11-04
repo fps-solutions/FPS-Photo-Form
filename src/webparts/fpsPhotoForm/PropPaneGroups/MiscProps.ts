@@ -23,7 +23,7 @@ export function buildMiscPropsGroup( thisWPClass: IThisFPSWebPartClass ): IPrope
     ...[
       PropertyPaneTextField('defaultTab', {
         label: 'Default Tab',
-        description: 'Input | List | Map',
+        description: 'Input | List | Map | Geo | Camera',
       }),
     ]
   );

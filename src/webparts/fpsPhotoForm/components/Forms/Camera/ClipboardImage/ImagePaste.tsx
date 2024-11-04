@@ -5,15 +5,15 @@ import { handleImagePaste } from '../../functions/handlePasteImage';
 
 import './ImagePaste.css'; // Import the CSS file
 
-
 interface ImagePasteProps {
   // eslint-disable-next-line @rushstack/no-new-null
   setParentImageData: (data: string | null) => void; // Callback to parent
   imageUrl?: string; // Optional image URL to check
   imageBoxCSS?: React.CSSProperties;
+  imageCSS?: React.CSSProperties; // like: { objectFilt: '[ cover | contain ]' }
 }
 
-const ImagePaste: React.FC<ImagePasteProps> = ({ setParentImageData, imageUrl, imageBoxCSS = {} }) => {
+const ImagePaste: React.FC<ImagePasteProps> = ({ setParentImageData, imageUrl, imageBoxCSS = {}, imageCSS={ objectFit: 'contain', width: '100%', height: '100%'} }) => {
   const [imageData, setImageData] = useState<string | null>(null);
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -70,13 +70,13 @@ const ImagePaste: React.FC<ImagePasteProps> = ({ setParentImageData, imageUrl, i
       onFocus={handleFocus}
       onBlur={handleBlur}
       className={`image-paste-box ${isFocused ? 'focused' : ''}`}
-      style={ imageBoxCSS ? imageBoxCSS : {}}
+      style={ imageBoxCSS }
       title={ title }
     >
       {loading ? (
         <span>Loading...</span> // Show loading message while checking URL
       ) : imageData ? (
-        <img src={imageData} alt="Pasted" className="image-preview" />
+        <img src={imageData} alt="Pasted" className="image-preview" style={ imageCSS } />
       ) : (
         <div style={{ display: 'block' }}>
           <div className="placeholder-text">Paste image here</div>

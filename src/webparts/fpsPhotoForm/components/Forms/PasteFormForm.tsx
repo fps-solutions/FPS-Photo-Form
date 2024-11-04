@@ -10,6 +10,7 @@ import { IPhotoButtonStyle } from './IScatterChartProps';
 import { uploadBase64ImageToLibrary } from './functions/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from './functions/handlePasteImage';
+import ImagePaste from './Camera/ClipboardImage/ImagePaste';
 
 export interface IPhotoFormForm  {
 
@@ -66,13 +67,13 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
       setAutoClear(checked); // Update the state when toggle changes
     };
 
-    useEffect(() => {
-      const handleClipboard = (e: ClipboardEvent): void => handleImagePaste(e, setImageData );
-      document.addEventListener('paste', handleClipboard);
-      return () => {
-          document.removeEventListener('paste', handleClipboard);
-      };
-    }, []);
+    // useEffect(() => {
+    //   const handleClipboard = (e: ClipboardEvent): void => handleImagePaste(e, setImageData );
+    //   document.addEventListener('paste', handleClipboard);
+    //   return () => {
+    //       document.removeEventListener('paste', handleClipboard);
+    //   };
+    // }, []);
 
     // Conditionally return null or undefined if shouldRender is false
     if ( display === 'none' ) {
@@ -301,12 +302,15 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
               <div>Current Toggle State: { `${autoClear}` }</div>
 
             </div>
-            {imageData && (
+            {/* {imageData && (
               <div className={ styles.imagePreview }>
                   <h3>Pasted Image Preview:</h3>
                   <img src={imageData} alt="Pasted Image" style={{ maxWidth: '300px' }} />
               </div>
-            )}
+            )} */}
+
+            <ImagePaste setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} />
+
             <div className={ styles.spacer }/>
 
         </form>
