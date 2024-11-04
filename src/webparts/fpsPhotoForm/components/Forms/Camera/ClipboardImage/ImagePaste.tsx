@@ -39,10 +39,10 @@ const ImagePaste: React.FC<ImagePasteProps> = ({ setParentImageData, imageUrl })
   }, [imageUrl]);
 
   useEffect(() => {
-    if (imageData !== null && imageData !== imageUrl) {
-      setParentImageData(imageData); // Update parent only if imageData is not from imageUrl
+    if (imageData !== null && imageData !== imageUrl ) {
+      setParentImageData(imageData); // Update parent only if imageData is not null
     }
-  }, [imageData, setParentImageData, imageUrl]);
+  }, [imageData, setParentImageData]);
 
   const handleFocus = (): void => setIsFocused(true);
   const handleBlur = (): void => setIsFocused(false);
@@ -50,7 +50,6 @@ const ImagePaste: React.FC<ImagePasteProps> = ({ setParentImageData, imageUrl })
   return (
     <div
       tabIndex={0}
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       onPaste={handleClipboard as any}
       onFocus={handleFocus}
       onBlur={handleBlur}
