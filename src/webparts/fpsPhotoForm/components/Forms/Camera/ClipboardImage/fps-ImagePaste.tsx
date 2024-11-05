@@ -56,6 +56,7 @@
 //   const handleBlur = (): void => setIsFocused(false);
 
 //   let title = ``;
+//   let showFetched: boolean = false;
 //   if ( loading ) {
 //     title=`Attempting to load image ${imageUrl}`;
 //   } else if ( !loading && !imageUrl && !imageData) {
@@ -64,9 +65,12 @@
 //     if ( !imageData && imageUrl ) { title =  `Double check url: ${imageUrl}`; }
 //     else if ( imageData && imageData !== imageUrl ) { title = 'Pasted image'; }
 //     else if ( imageData === imageUrl ) {
-//       title = imageData.indexOf('data') === 0 ? 'Image pasted' : 'Image fetched';
+//       showFetched = imageData.indexOf('data') === 0 ? false : true;
+//       title = showFetched === true ? 'Image fetched' : 'Image pasted';
 //     }
 //   }
+
+//   const showFetchedCSS: React.CSSProperties = showFetched ? { borderStyle: 'dashed' } : {};
 
 //   return (
 //     <div
@@ -76,17 +80,17 @@
 //       onFocus={handleFocus}
 //       onBlur={handleBlur}
 //       className={`image-paste-box ${isFocused ? 'focused' : ''} ${ imageBoxClassName }`}
-//       style={ imageBoxCSS }
+//       style={ { ...imageBoxCSS, ...showFetchedCSS } }
 //       title={ title }
 //     >
 //       {loading ? (
 //         <span>Loading...</span> // Show loading message while checking URL
 //       ) : imageData ? (
-//         <img src={imageData} alt="Pasted" className="image-preview" style={ imageCSS } />
+//         <img src={imageData} alt='Pasted' className={ `image-preview`} style={ imageCSS } />
 //       ) : (
 //         <div style={{ display: 'block' }}>
-//           <div className="placeholder-text">Paste image here</div>
-//           { imageUrl ? <div className="placeholder-text">Nothing found at Url</div> : undefined }
+//           <div className='placeholder-text'>Paste image here</div>
+//           { imageUrl ? <div className='placeholder-text'>Nothing found at Url</div> : undefined }
 //         </div>
 //       )}
 //     </div>

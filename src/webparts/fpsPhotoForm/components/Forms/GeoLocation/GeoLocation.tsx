@@ -19,7 +19,7 @@
 // import FPSToggle from '../../Toggle/component';
 
 // // https://github.com/fps-solutions/FPS-Photo-Form/issues/61
-// const GpsLocationForm: React.FC<IFpsGpsLocationFormProps> = (props) => {
+// const FpsGpsLocationForm: React.FC<IFpsGpsLocationFormProps> = (props) => {
 //   const { style = {}, className, buttonClass, onGetLocation, onSubmit, enableDetails = true, allowEditing = false, showAltitude = true, heading = 'GPS Location Form' } = props;
 
 //   const [ showDetails, setShowDetails ] = useState<boolean>( false );
@@ -135,4 +135,4 @@
 //   );
 // };
 
-// export default GpsLocationForm;
+// export default FpsGpsLocationForm;

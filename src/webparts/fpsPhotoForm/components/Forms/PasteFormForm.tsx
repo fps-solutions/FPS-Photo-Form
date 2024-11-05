@@ -5,12 +5,12 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 
 import styles from '../FpsPhotoForm.module.scss';
-import FPSToggle from '../Toggle/component';
+import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
-import { uploadBase64ImageToLibrary } from './functions/ImageSave';
+import { uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
-import { handleImagePaste } from './functions/handlePasteImage';
-import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
+import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
+import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 
 export interface IPhotoFormForm  {
 
