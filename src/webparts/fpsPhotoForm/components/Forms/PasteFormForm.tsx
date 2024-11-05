@@ -10,7 +10,7 @@ import { IPhotoButtonStyle } from './IScatterChartProps';
 import { uploadBase64ImageToLibrary } from './functions/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from './functions/handlePasteImage';
-import ImagePaste from './Camera/ClipboardImage/ImagePaste';
+import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
 
 export interface IPhotoFormForm  {
 
