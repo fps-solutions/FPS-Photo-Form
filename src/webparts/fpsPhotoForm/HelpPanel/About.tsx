@@ -35,7 +35,7 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
 
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.12",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.11",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
-    table.rows.push( createAboutRow('2024-11-XX',"0.0.10",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    table.rows.push( createAboutRow('2024-11-XX',"0.0.10",`#73, #75`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
     table.rows.push( createAboutRow('2024-11-04',"0.0.9",`#68, #69, #70, #72`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-11-01',"0.0.8",`#64, #65, #66`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
