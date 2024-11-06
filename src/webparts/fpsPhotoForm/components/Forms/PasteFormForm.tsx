@@ -50,7 +50,7 @@ export interface IPhotoFormFormInterface {
 const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
-const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
+const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
   const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
 
     const [imageData, setImageData] = useState<string | null>(null);
@@ -317,4 +317,4 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
     );
 }
 
-export default ScreenshotFormMash;
+export default PhotoFormInput;

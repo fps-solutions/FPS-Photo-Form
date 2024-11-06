@@ -54,3 +54,23 @@ export function transformCoordinates(
     });
     return favorites;
   }
+
+  export function buildStateMetaX( items: IScatterSourceItem[], prop: string ) :string[] {
+
+    const MetaX: string[] = [];
+
+    items.map( item => {
+      const value = item[ prop as keyof IScatterSourceItem ];
+      if ( value ) {
+        if ( typeof value === 'string' ) {
+          if ( MetaX.indexOf( value ) < 0 ) MetaX.push( value );
+        } else if ( Array.isArray(value) === true ) {
+          value.map( ( something: string ) => { if ( MetaX.indexOf( something ) < 0 ) MetaX.push( something ) })
+        } else {
+          // Unsure what this would be
+        }
+      }
+    });
+
+    return MetaX;
+  }
