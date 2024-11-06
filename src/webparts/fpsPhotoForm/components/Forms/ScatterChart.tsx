@@ -13,7 +13,7 @@ import { IMinReactMouseEvent } from '@mikezimm/fps-core-v7/lib/types/react/IReac
 import { IAnySourceItem, makeid } from '../../fpsReferences';
 
 import './ScatterChart.module.css';
-import FPSToggle from '../Toggle/component';
+import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
 import { Icon } from '@fluentui/react/lib/Icon';
 
 const gridGaps: number[] = [ 10, 50, 100, 250, 500, 1000, 2000 ];

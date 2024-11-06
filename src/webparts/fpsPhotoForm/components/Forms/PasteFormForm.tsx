@@ -5,12 +5,12 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 
 import styles from '../FpsPhotoForm.module.scss';
-import FPSToggle from '../Toggle/component';
+import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
-import { uploadBase64ImageToLibrary } from './functions/ImageSave';
+import { uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
-import { handleImagePaste } from './functions/handlePasteImage';
-import ImagePaste from './Camera/ClipboardImage/ImagePaste';
+import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
+import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 
 export interface IPhotoFormForm  {
 
@@ -50,7 +50,7 @@ export interface IPhotoFormFormInterface {
 const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
-const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
+const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
   const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
 
     const [imageData, setImageData] = useState<string | null>(null);
@@ -317,4 +317,4 @@ const ScreenshotFormMash: React.FC<IPhotoFormInput> = ( props ) => {
     );
 }
 
-export default ScreenshotFormMash;
+export default PhotoFormInput;

@@ -18,7 +18,7 @@ import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../fpsReferences";
 
-import ScreenshotFormMash from './Forms/PasteFormForm';
+import PhotoFormInput from './Forms/PasteFormForm';
 import ViewTabs from './ViewTabs/ViewTabs';
 
 //Use this to add more console.logs for this component
@@ -293,7 +293,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
         { checkCert( bannerProps ) === true ? <div>
 
-          <ScreenshotFormMash
+          <PhotoFormInput
             display={ this.state.tab === 'Input' ? 'block' : 'none' }
             ListSource = { ListSource }
             ImagesSource = { ImagesSource }

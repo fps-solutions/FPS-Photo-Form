@@ -16,13 +16,14 @@ import ScatterChart from '../Forms/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
 import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
-import { transformCoordinates, updateFavorites } from './transformCoordinates';
+import { buildStateMetaX, transformCoordinates, updateFavorites } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { getHistoryPresetItems } from '../Forms/ScatterLogic';
 // import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
-import FpsGpsLocationForm from '../Forms/GeoLocation/GeoLocation';
+import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
 import CameraCapture from '../Forms/Camera/component';
-import ParentForm from '../Forms/Camera/ClipboardImage/MultiImageParent';
+import ParentForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-MultiImageParent';
+import ListHook from '../ListHook/ListHook';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -128,6 +129,9 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null) as IScatterSourceItem[];
     FetchedSource.itemsY = transformCoordinates( FetchedSource.itemsY, this.props.axisMap );
+    FetchedSource.meta0 = buildStateMetaX( FetchedSource.itemsY, this.props.axisMap.Category1 );
+    FetchedSource.meta1 = buildStateMetaX( FetchedSource.itemsY, this.props.axisMap.Category2 );
+    FetchedSource.meta2 = buildStateMetaX( FetchedSource.itemsY, this.props.axisMap.Category3 );
 
     const FPSItemCopy: IFPSItem = JSON.parse(JSON.stringify(this.props.FPSItem));
 
@@ -175,6 +179,16 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           eleProps={ this.props.eleProps }
 
         />
+
+        { this.props.tab === 'List' ? <ListHook
+          ListHookSourceProps={ this.props.ListSource }
+          stateSource={ this.state.stateSource }
+          refreshId={ this.state.stateSource.refreshId }
+          context={ this.props.bannerProps.context as any }
+          expandedState={ this.props.tab === 'List' ? true : false }
+          axisMap={ this.props.axisMap }
+        /> : undefined }
+
 
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }

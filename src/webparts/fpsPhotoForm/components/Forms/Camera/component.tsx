@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 require('./fps-Camera.css'); // Import your local CSS file
-import { uploadBase64ImageToLibrary } from '../functions/ImageSave';
+import { uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { ActionButtons, ImageDisplay } from './pieces';
 
@@ -140,11 +140,11 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
 
     // Component to display the video feed from the camera
   const TurnCameraOnElement: JSX.Element =
-  <div className="placeholder" style={{  }}>
+  <div className='placeholder' style={{  }}>
     <h3>Live Feed is Disabled</h3>
     <div style={{ fontSize: 'larger' }}>Use toggle to <b>pick Back or User Camera</b></div>
     <div style={{ fontSize: 'larger' }}>Press button to activate <b style={{ fontSize: 'x-large', color: useFrontCamera ? 'blue' : 'purple' }}>{ useFrontCamera ? 'User' : 'Back' }</b> camera</div>
-    <span className="camera-icon">🚫📷</span> {/* Use any icon you prefer */}
+    <span className='camera-icon'>🚫📷</span> {/* Use any icon you prefer */}
   </div>;
 
   /**
@@ -156,15 +156,15 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
     <div>
       <h3>Live Camera:</h3>
       { isCameraOn === true ? undefined : TurnCameraOnElement }
-      <video ref={videoRef} className="video-feed" autoPlay playsInline />
+      <video ref={videoRef} className='video-feed' autoPlay playsInline />
 
       {/* This does NOT work at all */}
-      {/* { isCameraOn === true ? <video ref={videoRef} className="video-feed" autoPlay playsInline /> : TurnCameraOnElement } */}
+      {/* { isCameraOn === true ? <video ref={videoRef} className='video-feed' autoPlay playsInline /> : TurnCameraOnElement } */}
 
     </div>;
 
   return (
-    <div className="camera-capture-container">
+    <div className='camera-capture-container'>
       <h2>Camera Capture - Does NOT save</h2>
       {/* Action buttons for capturing, clearing, and toggling the camera */}
       <ActionButtons
@@ -182,7 +182,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
       {error ? (
         <p>{error}</p> // Display error message if any
       ) : (
-        <div className="grid-container">
+        <div className='grid-container'>
           { VideoFeed } {/* Pass videoRef to VideoFeed */}
           <ImageDisplay image={image} /> {/* Display the captured image */}
         </div>
