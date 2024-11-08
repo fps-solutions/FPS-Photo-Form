@@ -187,6 +187,8 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           context={ this.props.bannerProps.context as any }
           expandedState={ this.props.tab === 'List' ? true : false }
           axisMap={ this.props.axisMap }
+          // https://github.com/fps-solutions/FPS-Photo-Form/issues/83
+          refreshData={ this.fetchItems.bind( this )}
         /> : undefined }
 
 

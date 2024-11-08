@@ -38,7 +38,7 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.13",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.12",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
-    table.rows.push( createAboutRow('2024-11-XX',"0.0.11",`#80, #81, `, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    table.rows.push( createAboutRow('2024-11-XX',"0.0.11",`#80, #81, #82, #83`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-11-06',"0.0.10",`#19, #73, #75, #78`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
     table.rows.push( createAboutRow('2024-11-04',"0.0.9",`#68, #69, #70, #72`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );

@@ -70,6 +70,7 @@ export interface IListHookProps {
   stateSource: IStateSource;
   ListHookSourceProps: ISourceProps;
   axisMap: IAxisMap;
+  refreshData: () => Promise<void>; // Type the method as a function that returns a Promise<void>  https://github.com/fps-solutions/FPS-Photo-Form/issues/83
 }
 
 
@@ -87,7 +88,7 @@ export interface IListHookProps {
 const ListHook: React.FC<IListHookProps> = ( props ) => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { context, expandedState, stateSource, ListHookSourceProps, axisMap } = props;
+  const { context, expandedState, stateSource, ListHookSourceProps, axisMap, refreshData } = props;
 
   const CatButtons = [];
   CatButtons.push( axisMap.Category1 );
@@ -99,6 +100,11 @@ const ListHook: React.FC<IListHookProps> = ( props ) => {
 
   const [ topSearch, setTopSearch ] = useState<number | null>( 0 );
 
+  const handleFetch = async () => {
+    await refreshData();
+    console.log('Items fetched!');
+  }
+
   const multiSelectButtonRowProps: ISourceButtonRowProps = {
     title: '', // left Title string
     // heading?: JSX.Element; // Heading above row of buttons
@@ -108,7 +114,7 @@ const ListHook: React.FC<IListHookProps> = ( props ) => {
     // infoEle: INJSONIcons, // Floats to right of buttons
     // rowClass: null,
     selectedClass: styles.isSelected, // pass in background and color theme from SPFx
-    rowCSS: { display: 'inline-flex', gap: '1em', paddingTop: '0px' },
+    rowCSS: { display: 'inline-flex', paddingTop: '0px' },
     // buttonCSS: null,
     // disabled: null, // Disabled button indexes or Labels, use 'all' to disable all buttons
     // descEle: null, // Added as block element below buttons.  strings are made to smaller font-size.
@@ -195,8 +201,10 @@ const ListHook: React.FC<IListHookProps> = ( props ) => {
    *
    */
 
-  const AccordionContent: JSX.Element = <div className={ 'yourClassName' }style={{ cursor: 'default', padding: '5px 0px 5px 0px' }}>
+  const AccordionContent: JSX.Element = <div className={ 'yourClassName' }style={{ cursor: 'default', padding: '5px 0px 5px 0px', display: 'flex', alignItems: 'center' }}>
     { MultiSelectEle }
+    <button onClick={ handleFetch } className={ `button ${styles.enabled}` } style={{ marginLeft: '4em', marginRight: '2em' }}>Refresh</button>
+    <div>Data refreshed as of { stateSource.unifiedPerformanceOps.fetch.startStr }</div>
   </div>;
 
   const accordionHeight: number = 85;
