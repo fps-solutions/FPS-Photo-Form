@@ -10,7 +10,7 @@ import { IHelpTable, } from '@mikezimm/fps-core-v7/lib/banner/components/SingleH
 import { createAboutRow } from '@mikezimm/fps-library-v2/lib/banner/components/Panel/createAboutRow';
 import { IWebpartBannerProps } from '@mikezimm/fps-core-v7/lib/banner/mainReact/IWebpartBannerProps';
 
-export const panelVersionNumber = '2024-11-06 - 0.0.10 PF'; //Added to show in panel
+export const panelVersionNumber = '2024-11-06 - 0.0.11 PF'; //Added to show in panel
 
 export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTable } {
 
@@ -33,8 +33,12 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
      * WARNING:  DO NOT add any CDNs to Global Warn or Approve unless you want it to apply to JS as well.
      */
 
+    // table.rows.push( createAboutRow('2024-11-XX',"0.0.15",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    // table.rows.push( createAboutRow('2024-11-XX',"0.0.14",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    // table.rows.push( createAboutRow('2024-11-XX',"0.0.13",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.12",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
-    // table.rows.push( createAboutRow('2024-11-XX',"0.0.11",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+
+    table.rows.push( createAboutRow('2024-11-XX',"0.0.11",`#80, #81, #82, #83`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-11-06',"0.0.10",`#19, #73, #75, #78`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
     table.rows.push( createAboutRow('2024-11-04',"0.0.9",`#68, #69, #70, #72`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );

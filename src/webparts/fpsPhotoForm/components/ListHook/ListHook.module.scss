@@ -12,8 +12,20 @@ div.isSelected {
   color: "[theme:white, default:#e3afb2]" !important;
 }
 
+button {
+  transition: all 0.5s ease;
+  font-weight: 600;
+  padding: 5px 10px;
+  margin: .5em;
+}
 
 button.isSelected {
+  background: "[theme:themePrimary, default:#0078d7]" !important;
+  color: "[theme:white, default:#e3afb2]" !important;
+}
+
+button:hover {
+  cursor: pointer;
   background: "[theme:themePrimary, default:#0078d7]" !important;
   color: "[theme:white, default:#e3afb2]" !important;
 }
