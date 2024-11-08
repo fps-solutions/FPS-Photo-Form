@@ -11,6 +11,7 @@ import { uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
+import { makeid } from '../../fpsReferences';
 
 export interface IPhotoFormForm  {
 
@@ -54,6 +55,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
   const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
 
     const [imageData, setImageData] = useState<string | null>(null);
+    const [imageRefresh, setImageRefresh] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
     const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
@@ -66,6 +68,11 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const handleToggleChange = (checked: boolean): void => {
       setAutoClear(checked); // Update the state when toggle changes
     };
+
+    const resetForm = (): void => {
+      setFormData( EmptyFormData );
+      setImageRefresh( makeid(5));
+    }
 
     // useEffect(() => {
     //   const handleClipboard = (e: ClipboardEvent): void => handleImagePaste(e, setImageData );
@@ -178,8 +185,9 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
         const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}_${ fileDesc.join('_') }.png`;
         let shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
 
-        // remove special characters from the filename:  https://github.com/fps-solutions/FPS-Photo-Form/issues/9
-        shortFileName = shortFileName.replace(/[\\/:*?"<>|#&]/g, '' );
+        // remove special characters from the filename:  https://github.com/fps-solutions/FPS-Photo-Form/issues/9, https://github.com/fps-solutions/FPS-Photo-Form/issues/81
+        // eslint-disable-next-line no-useless-escape
+        shortFileName = shortFileName.replace(/[\\/:*?\'"<>|#&]/g, '' );
 
         // const blob = base64ToBlob(imageData);
 
@@ -189,6 +197,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
             await updateListItemWithImage(listItemResponse.Id, imageUrl);
             setWasSubmitted( true );
             if ( autoClear === true ) setFormData( EmptyFormData );
+            if ( autoClear === true ) setImageRefresh( makeid(5));
             alert('Item created and image uploaded successfully!');
         } else {
             alert('Failed to upload the image.');
@@ -291,7 +300,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
             <div className={ styles.submit } style={{ margin: '1em 1em 1em 0em' }}>
               <button disabled={ disableSubmit } className={ styles.submitButton }type="submit">Submit</button>
               {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
-              <button className={ styles.clearButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button>
+              <button className={ styles.clearButton }type="reset" onClick={ () => resetForm( )}>Reset</button>
 
               <FPSToggle
                 label="Reset on Create"
@@ -309,7 +318,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               </div>
             )} */}
 
-            <ImagePaste setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} />
+            <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} />
 
             <div className={ styles.spacer }/>
 
