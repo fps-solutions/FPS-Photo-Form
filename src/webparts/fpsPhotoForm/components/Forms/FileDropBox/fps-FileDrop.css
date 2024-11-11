@@ -48,3 +48,19 @@
   font-size: 14px;
   color: #d9534f;
 }
+
+/*
+Key Changes in the CSS:
+dragging Class:
+
+When files are dragged over the drop zone, the .dragging class is applied, which changes the background color to a light blue (rgba(0, 123, 255, 0.1)) and the border color to a stronger blue (#007bff).
+This provides a more noticeable visual cue that the drop zone is active.
+Transition Effects:
+
+The transition property is applied to smooth the change in background color and border color, making the highlight effect more user-friendly.
+Summary of Changes:
+Drag Over Effect: The drop zone now highlights with a blue background and border when files are dragged over it. This gives the user a clear visual cue that the drop area is active.
+Improved User Feedback: We've added a smoother, clearer indication of the drop zone's interactivity.
+Now, when you drag files over the drop area, it will immediately highlight, indicating to the user that they can drop the files there.
+
+Let me know if there are any additional changes you'd like or if you need further assistance! */
