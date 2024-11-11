@@ -1,46 +1,39 @@
-// fps-FileDropContainer.tsx
-
 import * as React from 'react';
-import { useState } from 'react';
-import FileDropBox from './fps-FileDropBox';
+import FileDropBox from './fps-FileDropBox';  // Import the FileDropBox component
 
-// FileDropContainer Component Props Interface
+// Define the props interface for the container
 export interface IFileDropContainerProps {
   fileTypes?: string;  // Optional prop to restrict accepted file types (e.g., 'image/png, image/jpeg')
   onFileUpdate: (files: File[]) => void;  // Callback to send the updated list of files to the parent component
   style?: React.CSSProperties;  // Optional custom styles for the container
 }
 
-// FileDropContainer Component
-const FileDropContainer: React.FC<IFileDropContainerProps> = ({ fileTypes, onFileUpdate, style }) => {
-  const [files, setFiles] = useState<File[]>([]);  // State to manage the list of files
+const FileUploadContainer: React.FC<IFileDropContainerProps> = ({ fileTypes, onFileUpdate, style }) => {
+  const [files, setFiles] = React.useState<File[]>([]);
 
-  // Callback to handle file updates from the FileDropBox
-  const handleFileUpdates = (newFiles: File[]) => {
-    setFiles(newFiles);  // Update the file list state
-    onFileUpdate(newFiles);  // Pass the updated files to the parent via the callback
+  // Callback to handle the file data received from FileDropBox
+  const handleFileUpdate = (newFiles: File[]) => {
+    setFiles((prevFiles) => [...prevFiles, ...newFiles]);
+    onFileUpdate([...files, ...newFiles]);  // Pass the updated list to the parent component
   };
 
   return (
-    <div className="file-drop-container" style={style}>
+    <div style={style}>
+      <h2>Upload Files</h2>
       <FileDropBox
-        fileTypes={fileTypes}  // Pass file types restriction to the child component
-        setParentFilesData={handleFileUpdates}  // Pass the callback to handle file updates
+        fileTypes={fileTypes}  // Pass accepted file types to FileDropBox
+        setParentFilesData={handleFileUpdate}  // Pass the handler to FileDropBox
       />
-      <div className="file-list">
+      <div>
         <h3>Uploaded Files:</h3>
-        {files.length > 0 ? (
-          <ul>
-            {files.map((file, index) => (
-              <li key={index}>{file.name}</li>  // Display the uploaded file names
-            ))}
-          </ul>
-        ) : (
-          <p>No files uploaded yet.</p>
-        )}
+        <ul>
+          {files.map((file, index) => (
+            <li key={index}>{file.name}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
 };
 
-export default FileDropContainer;
+export default FileUploadContainer;
