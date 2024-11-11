@@ -10,6 +10,7 @@ interface IFileDropBoxProps {
 const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style }) => {
   const [dragging, setDragging] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [invalidFiles, setInvalidFiles] = useState<File[]>([]);  // Track invalid files
 
   // Handle the files when dropped
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -46,9 +47,10 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     }
 
     if (invalidFiles.length > 0) {
+      setInvalidFiles(invalidFiles);  // Track invalid files for feedback
       setErrorMessage('Some files are of invalid type.');
     } else {
-      setErrorMessage(null);
+      setErrorMessage(null);  // Clear error if all files are valid
     }
   };
 
@@ -73,7 +75,18 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     >
       <div>
         <p>Drag and drop files here</p>
+        {fileTypes && <p><strong>Accepted file types: </strong>{fileTypes}</p>}
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+        {invalidFiles.length > 0 && (
+          <div style={{ color: 'red' }}>
+            <strong>Rejected Files:</strong>
+            <ul>
+              {invalidFiles.map((file, index) => (
+                <li key={index}>{file.name} - {file.type}</li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       <input

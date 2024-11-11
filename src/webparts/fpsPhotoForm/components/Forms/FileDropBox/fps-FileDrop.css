@@ -38,3 +38,13 @@
   color: red;
   margin-top: 10px;
 }
+
+.file-drop-box ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.file-drop-box li {
+  font-size: 14px;
+  color: #d9534f;
+}

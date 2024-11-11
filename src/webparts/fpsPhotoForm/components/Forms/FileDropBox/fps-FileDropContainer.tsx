@@ -1,7 +1,6 @@
 import * as React from 'react';
 import FileDropBox from './fps-FileDropBox';  // Import the FileDropBox component
 
-// Define the props interface for the container
 export interface IFileDropContainerProps {
   fileTypes?: string;  // Optional prop to restrict accepted file types (e.g., 'image/png, image/jpeg')
   onFileUpdate: (files: File[]) => void;  // Callback to send the updated list of files to the parent component
