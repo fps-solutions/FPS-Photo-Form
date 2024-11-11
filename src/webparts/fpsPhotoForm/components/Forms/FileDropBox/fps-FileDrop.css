@@ -1,0 +1,45 @@
+/* fps-FileDropBox.css */
+
+/* Container for the file drop box */
+.file-drop-box {
+  border: 2px dashed #0078d4;  /* Dashed border */
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  min-height: 150px;
+  background-color: #f7f7f7;
+  transition: background-color 0.3s ease;
+}
+
+/* Styling for the file drop box when hovering */
+.file-drop-box:hover {
+  background-color: #e1e1e1;
+}
+
+/* Styling for the file list */
+.file-list {
+  margin-top: 20px;
+  list-style: none;
+  padding: 0;
+}
+
+/* Individual file item in the file list */
+.file-list div {
+  margin: 5px 0;
+  font-size: 14px;
+}
+
+/* Container for file drop box */
+.file-drop-container {
+  margin: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* File input box styles */
+input[type="file"] {
+  display: none;
+}
