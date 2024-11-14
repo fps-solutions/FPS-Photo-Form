@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { IMIMEType_Valid } from './fps-FileDropTypes';
 
 interface IFileDropBoxProps {
-  fileTypes?: string;  // Accepted MIME types (optional)
+  fileTypes?: IMIMEType_Valid[];  // Accepted MIME types (optional)
   setParentFilesData: (files: File[]) => void;  // Callback to update parent with files
   style?: React.CSSProperties;  // Optional: Custom styling for the component
 }
@@ -13,7 +14,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   const [invalidFiles, setInvalidFiles] = useState<File[]>([]);  // Track invalid files
 
   // Handle the files when dropped
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();
     setDragging(false);  // Reset dragging state
 
@@ -24,17 +25,15 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   };
 
   // Handle files dropped or selected
-  const handleFiles = (files: FileList) => {
+  const handleFiles = (files: FileList): void => {
     const validFiles: File[] = [];
     const invalidFiles: File[] = [];
 
     // Validate the file types if a fileTypes prop is passed
     if (fileTypes) {
-      const acceptedTypes = fileTypes.split(',');
-
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (acceptedTypes.indexOf(file.type) === -1) {  // Use indexOf instead of includes
+        if (fileTypes.indexOf(file.type as IMIMEType_Valid) === -1) {  // Use indexOf instead of includes
           invalidFiles.push(file);
         } else {
           validFiles.push(file);
@@ -55,13 +54,13 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   };
 
   // Handle the drag over event to allow drop and set the dragging state
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>): void => {
     e.preventDefault();  // Prevent the default handling of the event
     setDragging(true);   // Set dragging state to true when files are over the drop zone
   };
 
   // Handle when drag leaves the area
-  const handleDragLeave = () => {
+  const handleDragLeave = (): void => {
     setDragging(false);  // Reset dragging state when drag leaves the drop zone
   };
 

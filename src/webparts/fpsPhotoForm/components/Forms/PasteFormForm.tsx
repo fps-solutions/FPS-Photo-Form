@@ -7,12 +7,13 @@ import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/sou
 import styles from '../FpsPhotoForm.module.scss';
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
-import { uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
+import { base64ToBlob, uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
 // import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 import { makeid } from '../../fpsReferences';
 import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
+import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 
 export interface IPhotoFormForm  {
 
@@ -190,12 +191,13 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
         // eslint-disable-next-line no-useless-escape
         shortFileName = shortFileName.replace(/[\\/:*?\'"<>|#&]/g, '' );
 
-        // const blob = base64ToBlob(imageData);
+        const blob = base64ToBlob(imageData);
 
-        const imageUrl = await uploadBase64ImageToLibrary( ImagesSource, imageData, shortFileName );
+        const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
+        const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, shortFileName, true, true );
 
-        if (imageUrl) {
-            await updateListItemWithImage(listItemResponse.Id, imageUrl);
+        if (fileReturn.itemUrl ) {
+            await updateListItemWithImage(listItemResponse.Id, fileReturn.itemUrl);
             setWasSubmitted( true );
             if ( autoClear === true ) setFormData( EmptyFormData );
             if ( autoClear === true ) setImageRefresh( makeid(5));

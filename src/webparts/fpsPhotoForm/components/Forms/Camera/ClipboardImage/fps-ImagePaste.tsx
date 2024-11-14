@@ -13,14 +13,17 @@ require('@mikezimm/fps-styles/dist/fps-ImagePaste.css');
 export interface IImagePasteProps {
   // eslint-disable-next-line @rushstack/no-new-null
   setParentImageData: (data: string | null) => void; // Callback to parent
-  clearId?: string;    // Added to fix clearing the image https://github.com/fps-solutions/FPS-Photo-Form/issues/80
+  clearId?: string;  // Added to fix clearing the image https://github.com/fps-solutions/FPS-Photo-Form/issues/80
+  viewOnly?:  boolean;
   imageUrl?: string; // Optional image URL to check
   imageBoxCSS?: React.CSSProperties;
   imageBoxClassName?: string;
   imageCSS?: React.CSSProperties; // Best location to set the component size and like: { height: '100px', width: '100px', objectFilt: '[ cover | contain ]' }
 }
 
-const ImagePaste: React.FC<IImagePasteProps> = ({ setParentImageData, clearId, imageUrl, imageBoxCSS = {}, imageBoxClassName='', imageCSS={ objectFit: 'contain', width: '100%', height: '100%'} }) => {
+const defaultImageCSS: React.CSSProperties = { objectFit: 'contain', width: '100%', height: '100%'};
+
+const ImagePaste: React.FC<IImagePasteProps> = ({ setParentImageData, clearId, imageUrl, imageBoxCSS = {}, imageBoxClassName='', imageCSS={}, viewOnly = false }) => {
   const [imageData, setImageData] = useState<string | null>(null);
   const [existed, setExisted] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(false);
@@ -112,7 +115,7 @@ const ImagePaste: React.FC<IImagePasteProps> = ({ setParentImageData, clearId, i
         <span>Loading...</span> // Show loading message while checking URL
       ) : imageData ? (
         <div style={{ position: 'relative' }}>
-          <img src={imageData} alt="Pasted" className="image-preview" style={ imageCSS } />
+          <img src={imageData} alt="Pasted" className="image-preview" style={{ ...defaultImageCSS, ...imageCSS }} />
           {/* Clear Button */}
           { existed ? null : <button
             onClick={ existed ? null : handleClearImage }
@@ -130,13 +133,14 @@ const ImagePaste: React.FC<IImagePasteProps> = ({ setParentImageData, clearId, i
               color: '#333',
               cursor: existed ? null : 'pointer',
               zIndex: 10,
+              padding: '0px', // Added this when using trash icon
             }}
             title={ existed === true ? 'Unable to paste over image' : "Clear Image" }
-          >X</button> }
+          >🗑️</button> }
         </div>
       ) : (
         <div style={{ display: 'block' }}>
-          <div className="placeholder-text">Paste image here</div>
+          { viewOnly ? undefined : <div className="placeholder-text">Paste image here</div> }
           { imageUrl ? <div className="placeholder-text">Nothing found at Url</div> : undefined }
         </div>
       )}

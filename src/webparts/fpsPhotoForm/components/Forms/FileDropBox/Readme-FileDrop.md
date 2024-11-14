@@ -73,7 +73,7 @@ import FileDropContainer from './fps-FileDropContainer';
 
 // Inside your parent component:
 <FileDropContainer
-  fileTypes="image/png, image/jpeg"  // Optional: Accept only specific file types
+  fileTypes={ [ "image/png, image/jpeg" ] }  // Optional: Accept only specific file types
   onFileUpdate={handleFileUpdate}    // Callback to update parent with the file list
   style={{ padding: '20px', border: '1px solid #ccc' }}  // Optional custom styles
 />
@@ -93,13 +93,13 @@ const handleFileUpdate = (files: File[]) => {
 ## Component API
 
 ### **FileDropBox Props**
-- **fileTypes** (optional): A comma-separated string of accepted file MIME types (e.g., `"image/png, image/jpeg"`). This restricts the types of files the user can drop or select.
+- **fileTypes** (optional): An array of IMIMEType_Valid types (e.g., `"image/png, image/jpeg"`). This restricts the types of files the user can drop or select.
 - **setParentFilesData**: A function that will be called with the array of selected/dropped files. This should be used to update the parent component with the selected files.
 - **inputName** (optional): The name attribute for the file input element.
 - **style** (optional): Custom CSS styles for the drop box container.
 
 ### **FileDropContainer Props**
-- **fileTypes** (optional): A comma-separated string of accepted file MIME types, which is passed down to `FileDropBox`.
+- **fileTypes** (optional): An array of IMIMEType_Valid MIME types, which is passed down to `FileDropBox`.
 - **onFileUpdate**: A callback function to receive the updated list of files from `FileDropBox`.
 - **style** (optional): Custom CSS styles for the container.
 

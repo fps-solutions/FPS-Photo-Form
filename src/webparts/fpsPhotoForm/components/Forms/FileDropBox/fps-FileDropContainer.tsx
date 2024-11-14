@@ -1,8 +1,9 @@
 import * as React from 'react';
 import FileDropBox from './fps-FileDropBox';  // Import the FileDropBox component
+import { IMIMEType_Valid } from './fps-FileDropTypes';
 
 export interface IFileDropContainerProps {
-  fileTypes?: string;  // Optional prop to restrict accepted file types (e.g., 'image/png, image/jpeg')
+  fileTypes?: IMIMEType_Valid[];  // Only accepts the specified valid MIME typesOptional prop to restrict accepted file types (e.g., 'image/png, image/jpeg')
   onFileUpdate: (files: File[]) => void;  // Callback to send the updated list of files to the parent component
   style?: React.CSSProperties;  // Optional custom styles for the container
 }
@@ -11,7 +12,7 @@ const FileUploadContainer: React.FC<IFileDropContainerProps> = ({ fileTypes, onF
   const [files, setFiles] = React.useState<File[]>([]);
 
   // Callback to handle the file data received from FileDropBox
-  const handleFileUpdate = (newFiles: File[]) => {
+  const handleFileUpdate = (newFiles: File[]): void => {
     setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     onFileUpdate([...files, ...newFiles]);  // Pass the updated list to the parent component
   };
