@@ -7,7 +7,9 @@ import FileDropContainer from './fps-FileDropContainer';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { IPhotoButtonStyle } from '../IScatterChartProps';
 // import { uploadImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
-import { postSourceFilesAPI } from './functions/postSourceFilesAPI';
+import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
+// import { postSourceFilesAPI } from './functions/postSourceFilesAPI';
+
 import { makeid } from '../../../fpsReferences';
 import { Specific_MIME_TYPES } from './fps-FileDropTypes';
 

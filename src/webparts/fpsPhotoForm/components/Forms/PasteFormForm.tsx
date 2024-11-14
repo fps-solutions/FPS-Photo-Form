@@ -7,13 +7,16 @@ import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/sou
 import styles from '../FpsPhotoForm.module.scss';
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
 import { IPhotoButtonStyle } from './IScatterChartProps';
-import { base64ToBlob, uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
+import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
-// import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 import { makeid } from '../../fpsReferences';
-import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
-import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
+
+// import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
+import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
+
+// import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
+import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 
 export interface IPhotoFormForm  {
 

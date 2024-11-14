@@ -1,13 +1,15 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 require('./fps-Camera.css'); // Import your local CSS file
-import { base64ToBlob, uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
+import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { ActionButtons, ImageDisplay } from './pieces';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
-import { postSourceFilesAPI } from '../FileDropBox/functions/postSourceFilesAPI';
+// import { postSourceFilesAPI } from '../FileDropBox/functions/postSourceFilesAPI';
+import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 import { EmptyStateSource, IStateSource, makeid } from '../../../fpsReferences';
-import ImagePaste from './ClipboardImage/fps-ImagePaste';
+// import ImagePaste from './ClipboardImage/fps-ImagePaste';
+import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 
 export interface ICameraFormInput {
   ImagesSource: ISourceProps;
