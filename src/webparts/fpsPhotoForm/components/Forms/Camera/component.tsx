@@ -1,9 +1,15 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
 require('./fps-Camera.css'); // Import your local CSS file
-import { uploadBase64ImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
+import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { ActionButtons, ImageDisplay } from './pieces';
+import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
+// import { postSourceFilesAPI } from '../FileDropBox/functions/postSourceFilesAPI';
+import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
+import { EmptyStateSource, IStateSource, makeid } from '../../../fpsReferences';
+// import ImagePaste from './ClipboardImage/fps-ImagePaste';
+import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 
 export interface ICameraFormInput {
   ImagesSource: ISourceProps;
@@ -15,6 +21,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const { ImagesSource } = props;
 
   const [image, setImage] = useState<string | null>(null); // State to hold captured image
+  const [imageRefresh, setImageRefresh] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null); // State to hold error messages
   const [debugMode, setDebugMode] = useState<boolean>(false);
   const [showTurnOnCam, setShowTurnOnCam] = useState<boolean>(true); // State to track camera status
@@ -24,6 +31,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const videoRef = useRef<HTMLVideoElement | null>(null); // Reference to video element
   const canvasRef = useRef<HTMLCanvasElement | null>(null); // Reference to canvas element
   const [stream, setStream] = useState<MediaStream | null>(null); // State to hold media stream
+  const [ stateSource, setStateSource ] = useState<IStateSource>( EmptyStateSource );
 
   // Function to initialize the camera
   const initCamera = async (useFrontCamera: boolean = false): Promise<void> => {
@@ -115,6 +123,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const clearImage = ():void => {
     setImage(null);
     setError(null);  // Added to remove error and try again.  https://github.com/fps-solutions/FPS-Photo-Form/issues/65
+    setImageRefresh( makeid(5));
     if (canvasRef.current) {
       const context = canvasRef.current.getContext('2d');
       if (context) {
@@ -135,7 +144,11 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
 
   const saveImage = async ():Promise<void> => {
     const fileName = `${ `Camera_${ useFrontCamera ? 'User' : 'Back' }` }_${new Date().toISOString().replace(/[:.]/g, '-')}_${ `Camera` }.png`;
-    await uploadBase64ImageToLibrary( ImagesSource, image ,fileName );
+    const blob = base64ToBlob(image);
+    const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
+    const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, fileName, true, true ) as IStateSource;
+    setStateSource( fileReturn );
+    // await uploadBase64ImageToLibrary( ImagesSource, image ,fileName );
   }
 
     // Component to display the video feed from the camera
@@ -184,6 +197,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
       ) : (
         <div className='grid-container'>
           { VideoFeed } {/* Pass videoRef to VideoFeed */}
+          { image ? <ImagePaste clearId={ imageRefresh } setParentImageData={ clearImage } imageUrl={ image } viewOnly={ true }/> : undefined }
           <ImageDisplay image={image} /> {/* Display the captured image */}
         </div>
       )}

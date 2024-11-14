@@ -65,7 +65,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
     super(props);
 
     if ( this._performance === null ) { this._performance = this.props.performance;  }
-    const defaultTab: IDefaultFormTab = [ 'Input', 'Map', 'List', 'Geo', 'Camera', 'Multi-Paste' ].indexOf(this.props.tab) > -1 ? this.props.tab : 'Input';
+    const defaultTab: IDefaultFormTab = [ 'Input', 'Map', 'List', 'Geo', 'Camera', 'Multi-Paste', 'Files' ].indexOf(this.props.tab) > -1 ? this.props.tab : 'Input';
 
     this.state = {
       pinState: this.props.bannerProps.fpsPinMenu.defPinState ? this.props.bannerProps.fpsPinMenu.defPinState : 'normal',
@@ -244,6 +244,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
           <Icon key='Camera' iconName='Camera' title='Camera Input' onClick={ ( event ) => this.handleStateClick( 'Camera' ) } style={ bannerCmdReactCSS }/>,
           <Icon key='Geo' iconName='World' title='Geo Locations' onClick={ ( event ) => this.handleStateClick( 'Geo' ) } style={ bannerCmdReactCSS }/>,
           <Icon key='Multi-Paste' iconName='GridViewSmall' title='Multi-Paste View' onClick={ ( event ) => this.handleStateClick( 'Multi-Paste' ) } style={ bannerCmdReactCSS }/>,
+          <Icon key='Files' iconName='BulkUpload' title='Files View' onClick={ ( event ) => this.handleStateClick( 'Files' ) } style={ bannerCmdReactCSS }/>,
         ]);
       }
 
