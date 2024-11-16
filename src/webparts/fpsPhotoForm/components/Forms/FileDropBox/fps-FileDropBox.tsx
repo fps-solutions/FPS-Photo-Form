@@ -1,14 +1,24 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { IMIMEType_Valid } from './fps-FileDropTypes';
+import { getMIMEObjectPropFromType, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject } from './fps-FileDropTypes';
 
-interface IFileDropBoxProps {
-  fileTypes?: IMIMEType_Valid[];  // Accepted MIME types (optional)
+// https://github.com/fps-solutions/FPS-Photo-Form/issues/89
+// require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
+require('./fps-FileDrop.css');
+
+export interface IFileDropBoxProps {
+  maxCount?: number; // Default 10
+  KBmax?: number; // Max file size in kb
+  KBwarn?: number; // Warn file size in kb
+  fileTypes?: IMIMETypesObject[];  // Accepted MIME types (optional)
+  // fileTypes?: IMIMEType_Valid[];  // Accepted MIME types (optional)
   setParentFilesData: (files: File[]) => void;  // Callback to update parent with files
   style?: React.CSSProperties;  // Optional: Custom styling for the component
 }
 
-const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style }) => {
+const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxCount, KBmax =100000, }) => {
+  const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> (getMIMETypesFromObjects( fileTypes ) );
+  const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [invalidFiles, setInvalidFiles] = useState<File[]>([]);  // Track invalid files
@@ -24,17 +34,27 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     handleFiles(files);
   };
 
+  const handleClear = (): void => {
+    setInvalidFiles([]);  // Track invalid files for feedback
+    setErrorMessage(null);
+    setParentFilesData(null);  // Pass valid files to the parent component
+  }
+
   // Handle files dropped or selected
   const handleFiles = (files: FileList): void => {
     const validFiles: File[] = [];
-    const invalidFiles: File[] = [];
+
+    // https://github.com/fps-solutions/FPS-Photo-Form/issues/88 - retain invalidFiles in history
+    const currentInvalidFiles: File[] = invalidFiles;
+    const invalidNames: string[] = invalidFiles.map( file => { return file.name } );
 
     // Validate the file types if a fileTypes prop is passed
-    if (fileTypes) {
+    if (fileMIMETypes) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (fileTypes.indexOf(file.type as IMIMEType_Valid) === -1) {  // Use indexOf instead of includes
-          invalidFiles.push(file);
+        if (fileMIMETypes.indexOf(file.type as IMIMEType_Valid) === -1 || file.size > KBmax * 1000 ) {  // Use indexOf instead of includes
+          // https://github.com/fps-solutions/FPS-Photo-Form/issues/88 - retain invalidFiles in history
+          if ( invalidNames.indexOf( file.name ) < 0 ) { currentInvalidFiles.push(file); invalidNames.push(file.name);  }
         } else {
           validFiles.push(file);
         }
@@ -45,8 +65,8 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       setParentFilesData(validFiles);  // Pass valid files to the parent component
     }
 
-    if (invalidFiles.length > 0) {
-      setInvalidFiles(invalidFiles);  // Track invalid files for feedback
+    if (currentInvalidFiles.length > 0) {
+      setInvalidFiles(currentInvalidFiles);  // Track invalid files for feedback
       setErrorMessage('Some files are of invalid type.');
     } else {
       setErrorMessage(null);  // Clear error if all files are valid
@@ -72,16 +92,16 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       onDragLeave={handleDragLeave}
       style={style}
     >
-      <div>
-        <p>Drag and drop files here</p>
-        {fileTypes && <p><strong>Accepted file types: </strong>{fileTypes}</p>}
+      <div className={ `file-drop-box-area` } style={{}}>
+        <p>Drag and drop files here { KBmax ? `< ${ KBmax }k each` : '' }</p>
+        {fileMIMELabels && <p><strong>Accepted file types: </strong>{fileMIMELabels.join(' | ')}</p>}
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
         {invalidFiles.length > 0 && (
           <div style={{ color: 'red' }}>
-            <strong>Rejected Files:</strong>
+            <strong>Rejected Files: ( {invalidFiles.length} )</strong>
             <ul>
               {invalidFiles.map((file, index) => (
-                <li key={index}>{file.name} - {file.type}</li>
+                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > KBmax * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ `${file.size/1000} KB` }</span> : '' }</li>
               ))}
             </ul>
           </div>
@@ -90,15 +110,12 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
 
       <input
         type="file"
-        multiple
+        multiple={ maxCount === 1 ? false : true }
         onChange={(e) => e.target.files && handleFiles(e.target.files)}
         style={{ display: 'none' }}
       />
-      <button
-        onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement)?.click()}
-      >
-        Choose files
-      </button>
+      <button onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement)?.click()}>Choose files</button>
+      <button onClick={ handleClear } className='reset' style={{ marginLeft: '2em' }}>Clear files</button>
     </div>
   );
 };

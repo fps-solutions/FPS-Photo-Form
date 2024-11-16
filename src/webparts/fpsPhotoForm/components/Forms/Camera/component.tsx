@@ -64,7 +64,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   // To use the front camera, you would call initCamera(true).
 
   // Function to turn the camera off
-  const turnCameraOff = () => {
+  const turnCameraOff = (): void => {
     if (stream) {
       stream.getTracks().forEach(track => track.stop()); // Stop all tracks
       if (videoRef.current) {

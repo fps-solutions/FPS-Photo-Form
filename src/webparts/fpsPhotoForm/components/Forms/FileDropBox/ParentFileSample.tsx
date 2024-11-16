@@ -11,7 +11,7 @@ import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/fil
 // import { postSourceFilesAPI } from './functions/postSourceFilesAPI';
 
 import { makeid } from '../../../fpsReferences';
-import { Specific_MIME_TYPES } from './fps-FileDropTypes';
+import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_Specific, Specific_MIME_Objects, Specific_MIME_TYPES } from './fps-FileDropTypes';
 
 // Import the uploadImageToLibrary function
 // import { uploadImageToLibrary } from './path_to_upload_function'; // Adjust the import path as needed
@@ -34,7 +34,8 @@ const ParentComponent: React.FC<IFileDropContainerParent> = ( props ) => {
   const [uploadStatus, setUploadStatus ] = useState( null );
 
   const handleFileUpdate = (updatedFiles: File[]): void => {
-    setFiles(updatedFiles);
+    const doReset = updatedFiles === null ? true : false;
+    setFiles( doReset ? [] : updatedFiles );
     setUploadStatus( updatedFiles && updatedFiles.length > 0 ? `Success: ${makeid(5)}` : null );
   };
 
@@ -73,15 +74,15 @@ const handleUploadFiles = async (): Promise<void> => {
         Save to SharePoint
       </button> : undefined }
       <FileDropContainer
-        fileTypes={ Specific_MIME_TYPES }  // Accept only PNG and JPEG files
-        onFileUpdate={handleFileUpdate}  // Callback to receive file updates
+        fileTypes={ Common_MIME_Objects }  // Accept only PNG and JPEG files
+        setParentFilesData={handleFileUpdate}  // Callback to receive file updates
       />
       <div>
-        <h3>Uploaded Files:</h3>
+        <h3>PARENT File Memory: ( { files.length } )</h3>
         {files.length > 0 ? (
           <ul>
             {files.map((file, index) => (
-              <li key={index}>{file.name}</li>
+              <li key={index}>{file.name}  - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } </li>
             ))}
           </ul>
         ) : (
