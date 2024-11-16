@@ -1,6 +1,7 @@
 import * as React from 'react';
 import FileDropBox, { IFileDropBoxProps } from './fps-FileDropBox';  // Import the FileDropBox component
 import { getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTypes';
+import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 
 // export interface IFileDropContainerProps {
 //   maxCount?: number; // Default 10
@@ -11,8 +12,9 @@ import { getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTy
 //   style?: React.CSSProperties;  // Optional custom styles for the container
 // }
 
-const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, KBwarn = 50000, }) => {
+const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, KBwarn = 10000, }) => {
   const [files, setFiles] = React.useState<File[]>([]);
+  const totalSize: number = files.reduce((total, file) => total + file.size, 0);
 
   // Callback to handle the file data received from FileDropBox
   const handleFileUpdate = (newFiles: File[]): void => {
@@ -31,7 +33,7 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
     // setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     // onFileUpdate([...files, ...newFiles]);  // Pass the updated list to the parent component
   };
-
+  console.log( `UploadStatus:  FileDropContainer ~ 36` );
   return (
     <div style={style}>
       <h2>Upload Files</h2>
@@ -40,12 +42,12 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
         setParentFilesData={handleFileUpdate}  // Pass the handler to FileDropBox
       />
       <div>
-        <h3>Uploaded Files: ( { files.length } )</h3>
-        <ul>
+        <h3>Uploaded Files: ( { files.length } @ { getSizeLabel( totalSize )})</h3>
+        <ol>
           {files.map((file, index) => (
-            <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > KBwarn * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ `${file.size/1000} KB` }</span> : '' }</li>
+            <li key={index}>{file.name} &nbsp;&nbsp;&nbsp; [ { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > KBwarn * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' } ]</li>
           ))}
-        </ul>
+        </ol>
       </div>
     </div>
   );

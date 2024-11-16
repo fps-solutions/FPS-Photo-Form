@@ -12,6 +12,8 @@ import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/fil
 
 import { makeid } from '../../../fpsReferences';
 import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_Specific, Specific_MIME_Objects, Specific_MIME_TYPES } from './fps-FileDropTypes';
+import { getSizeLabel } from '@mikezimm/fps-core-v7/lib/logic/Math/labels';
+import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/CheckItemsResults';
 
 // Import the uploadImageToLibrary function
 // import { uploadImageToLibrary } from './path_to_upload_function'; // Adjust the import path as needed
@@ -32,38 +34,64 @@ export interface IFileDropContainerParent  {
 const ParentComponent: React.FC<IFileDropContainerParent> = ( props ) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadStatus, setUploadStatus ] = useState( null );
+  const [uploadStates, setUploadStates ] = useState<IFpsItemsReturn[]>( [] );
+
+
+  const totalSize: number = files.reduce((total, file) => total + file.size, 0);
 
   const handleFileUpdate = (updatedFiles: File[]): void => {
     const doReset = updatedFiles === null ? true : false;
+    setUploadStates( [] );
     setFiles( doReset ? [] : updatedFiles );
     setUploadStatus( updatedFiles && updatedFiles.length > 0 ? `Success: ${makeid(5)}` : null );
   };
 
 
 // Define the setParentFilesData function
-const saveFilesToLibrary = async (uploadFiles: File[], FileSource: ISourceProps): Promise<void> => {
+const saveFilesToLibrary = async (uploadFiles: File[], FileSource: ISourceProps, asBatch: boolean): Promise<void> => {
   // Iterate over each file and upload it to SharePoint
-  for (const file of uploadFiles) {
-    try {
-      // Call the uploadImageToLibrary function using each file as a Blob
-      const fileUrl = await postSourceFilesAPI(FileSource, true, file, file.name, true, true );
+  if ( asBatch === true ) {
+    const allReturns = await Promise.all(
+      uploadFiles.map( ( file: File, idx: number ) => { return postSourceFilesAPI(FileSource, true, file, file.name, true, true ); } )
+    );
 
-      if (fileUrl) {
-        console.log(`File uploaded successfully: ${fileUrl}`);
-        setUploadStatus( `Success: ${makeid(5)}` );
-        // You can add additional logic here if needed, e.g., update UI or store image URLs
+    setUploadStates( allReturns );
+  } else {
+
+    setUploadStates( [] );
+    const liveStats = [];
+    let idx = -1;
+    for (const file of uploadFiles) {
+      try {
+        idx ++;
+        // Call the uploadImageToLibrary function using each file as a Blob
+        const fileUrl = await postSourceFilesAPI(FileSource, true, file, file.name, true, true );
+        fileUrl.statusText = `${idx}: ${fileUrl.statusText}`;
+        if (fileUrl) {
+          console.log(`File uploaded successfully: ${fileUrl}`);
+          setUploadStatus( `Success: ${makeid(5)}` );
+          liveStats.push( fileUrl );
+          setUploadStates( liveStats );
+          if ( idx === uploadFiles.length -1 ) setUploadStatus( 'completed!' );
+          // You can add additional logic here if needed, e.g., update UI or store image URLs
+        }
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setUploadStatus( 'error' );
       }
-    } catch (error) {
-      console.error('Error uploading file:', error);
-      setUploadStatus( 'error' );
     }
   }
+
 };
 
+const handleUploadFileBatch = async (): Promise<void> => {
+  await saveFilesToLibrary( files, props.FilesSource, true );
+};
 const handleUploadFiles = async (): Promise<void> => {
-  await saveFilesToLibrary( files, props.FilesSource );
+  await saveFilesToLibrary( files, props.FilesSource, false );
 };
 
+console.log( `UploadStatus:  ParentFileSample ~ 94` );
   return (
     <div>
       <h2>File Upload Demo</h2>
@@ -73,12 +101,33 @@ const handleUploadFiles = async (): Promise<void> => {
       >
         Save to SharePoint
       </button> : undefined }
+      { files && files.length > 0 && uploadStatus && uploadStatus.indexOf( 'Success' ) === 0 ?
+      <button
+        onClick={ handleUploadFileBatch }
+      >
+        Batch Save to SharePoint
+      </button> : undefined }
+
+
+      { uploadStates && uploadStates.length > 0 ? <div>
+        <h3>Upload States</h3>
+        {uploadStates.length > 0 ? (
+          <ol>
+            {uploadStates.map((upload, index) => (
+              <li key={index}>{upload.status} {upload.statusText} {upload.unifiedPerformanceOps.save.startStr } @ {upload.unifiedPerformanceOps.save.ms }: { files[ index ].name } - { getSizeLabel( files[ index ].size ) } </li>
+            ))}
+          </ol>
+        ) : (
+          <p>No files uploaded yet.</p>
+        )}
+      </div> : undefined }
+
       <FileDropContainer
         fileTypes={ Common_MIME_Objects }  // Accept only PNG and JPEG files
         setParentFilesData={handleFileUpdate}  // Callback to receive file updates
       />
       <div>
-        <h3>PARENT File Memory: ( { files.length } )</h3>
+        <h3>PARENT File Memory: ( { files.length } @ { getSizeLabel( totalSize )} )</h3>
         {files.length > 0 ? (
           <ul>
             {files.map((file, index) => (

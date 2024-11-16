@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { getMIMEObjectPropFromType, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject } from './fps-FileDropTypes';
+import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 
 // https://github.com/fps-solutions/FPS-Photo-Form/issues/89
 // require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
@@ -84,6 +85,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     setDragging(false);  // Reset dragging state when drag leaves the drop zone
   };
 
+  console.log( `UploadStatus:  FileDropBox ~ 88` );
   return (
     <div
       className={`file-drop-box ${dragging ? 'dragging' : ''}`}  // Add 'dragging' class if files are over the box
@@ -93,7 +95,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       style={style}
     >
       <div className={ `file-drop-box-area` } style={{}}>
-        <p>Drag and drop files here { KBmax ? `< ${ KBmax }k each` : '' }</p>
+        <p>Drag and drop files here { KBmax ? `< ${ getSizeLabel( KBmax * 1000 ) } each` : '' }</p>
         {fileMIMELabels && <p><strong>Accepted file types: </strong>{fileMIMELabels.join(' | ')}</p>}
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
         {invalidFiles.length > 0 && (
@@ -101,7 +103,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
             <strong>Rejected Files: ( {invalidFiles.length} )</strong>
             <ul>
               {invalidFiles.map((file, index) => (
-                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > KBmax * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ `${file.size/1000} KB` }</span> : '' }</li>
+                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > KBmax * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
               ))}
             </ul>
           </div>
