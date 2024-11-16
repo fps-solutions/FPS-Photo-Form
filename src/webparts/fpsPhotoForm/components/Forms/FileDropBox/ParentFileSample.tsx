@@ -5,30 +5,17 @@ import * as React from 'react';
 import { useState } from 'react';
 import FileDropContainer from './fps-FileDropContainer';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
-import { IPhotoButtonStyle } from '../IScatterChartProps';
-// import { uploadImageToLibrary } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 // import { postSourceFilesAPI } from './functions/postSourceFilesAPI';
 
 import { makeid } from '../../../fpsReferences';
-import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_Specific, Specific_MIME_Objects, Specific_MIME_TYPES } from './fps-FileDropTypes';
+import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTypes';
 import { getSizeLabel } from '@mikezimm/fps-core-v7/lib/logic/Math/labels';
 import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/CheckItemsResults';
 
-// Import the uploadImageToLibrary function
-// import { uploadImageToLibrary } from './path_to_upload_function'; // Adjust the import path as needed
-
 
 export interface IFileDropContainerParent  {
-
-  // Category1s: string[];
-  // Category2s: string[];
-  // Category3s: string[];
-
-  // ListSource: ISourceProps;
   FilesSource: ISourceProps;
-  // photoButtonStyles: IPhotoButtonStyle[];
-
 }
 
 const ParentComponent: React.FC<IFileDropContainerParent> = ( props ) => {
@@ -125,6 +112,9 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
       <FileDropContainer
         fileTypes={ Common_MIME_Objects }  // Accept only PNG and JPEG files
         setParentFilesData={handleFileUpdate}  // Callback to receive file updates
+        maxCount={null}
+        KBmax={ 50000 }
+        KBwarn={ 10000 }
       />
       <div>
         <h3>PARENT File Memory: ( { files.length } @ { getSizeLabel( totalSize )} )</h3>
