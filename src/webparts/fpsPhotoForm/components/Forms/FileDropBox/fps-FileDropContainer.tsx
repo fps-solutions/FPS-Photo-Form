@@ -3,7 +3,7 @@ import FileDropBox, { IFileDropBoxProps } from './fps-FileDropBox';  // Import t
 import { getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 
-const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, KBwarn = 10000, maxCount, KBmax }) => {
+const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, KBwarn = 10000, maxUploadCount, KBmax }) => {
   const [files, setFiles] = React.useState<File[]>([]);
   const totalSize: number = files.reduce((total, file) => total + file.size, 0);
 
@@ -44,7 +44,7 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
       <FileDropBox
         fileTypes={fileTypes}  // Pass accepted file types to FileDropBox
         setParentFilesData={handleFileUpdate}  // Pass the handler to FileDropBox
-        maxCount={ maxCount }
+        maxUploadCount={ maxUploadCount }
         KBmax={ KBmax }
         KBwarn={ KBwarn }
       />

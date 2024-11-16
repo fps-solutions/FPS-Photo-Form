@@ -194,6 +194,16 @@ export const Other_MIME_Objects: IMIMETypesObject[] = [
 
 export const Specific_MIME_Objects: IMIMETypesObject[] = [ ...Common_MIME_Objects, ...Other_MIME_Objects ];
 
+export interface IFPSPropertyPaneDropdownOption { key: string; text: string }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getDropDownOptionArray( objects: any[], keyProp: any, textProp: any = keyProp ): IFPSPropertyPaneDropdownOption[] {
+  const results:IFPSPropertyPaneDropdownOption[] = [];
+  objects.map( obj => { results.push( {key: obj[keyProp] , text: obj[textProp]  })})
+  return results;
+}
+export const Specific_MIME_DropdownOptions: IFPSPropertyPaneDropdownOption[] = getDropDownOptionArray( Specific_MIME_Objects, 'name', );
+
 export function getMIMETypesFromObjects( objects: IMIMETypesObject[] ): IMIMEType_Specific[] {
   const results: IMIMEType_Specific[] = [];
   objects.map( obj => { results.push( ...obj.types )});

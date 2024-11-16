@@ -10,10 +10,11 @@ import {
   IPropertyPaneField,
   // PropertyPaneTextField,
 } from '@microsoft/sp-property-pane';
+import { PropertyPaneMultiSelectDropdown } from '../components/Dropdown/fps-PropPaneMultiSelectDropdown';
+import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
+import { Specific_MIME_DropdownOptions } from '../components/Forms/FileDropBox/fps-FileDropTypes';
 
-import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IThisFPSWebPartClass1152';
-
-export function buildMiscPropsGroup( thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
+export function buildMiscPropsGroup( wpProps: IFpsPhotoFormWebPartProps, thisWP: any ): IPropertyPaneGroup {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupFields: IPropertyPaneField<any>[] = [];
@@ -28,7 +29,22 @@ export function buildMiscPropsGroup( thisWPClass: IThisFPSWebPartClass ): IPrope
     ]
   );
 
-  groupFields.push();
+
+
+  groupFields.push(
+
+    PropertyPaneMultiSelectDropdown({
+      key: 'fileTypes',
+      label: 'Choose Options',
+      options: Specific_MIME_DropdownOptions,
+      selectedKeys: wpProps.fileTypes || [],
+      onChange: (newKeys: string[]) => {
+        wpProps.fileTypes = newKeys;
+        thisWP.render(); // Re-render web part to reflect changes
+      },
+    }),
+
+  );
 
   const ExportThisGroup: IPropertyPaneGroup = {
     groupName: `Misc Photo Form`,

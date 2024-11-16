@@ -112,7 +112,7 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
       <FileDropContainer
         fileTypes={ Common_MIME_Objects }  // Accept only PNG and JPEG files
         setParentFilesData={handleFileUpdate}  // Callback to receive file updates
-        maxCount={null}
+        maxUploadCount={null}
         KBmax={ 50000 }
         KBwarn={ 10000 }
       />

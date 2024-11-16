@@ -450,7 +450,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       groups.push( buildListColumnsGroup( thisAsAny ));
       groups.push( buildChartDisplayGroup( thisAsAny ));
       groups.push( buildChartFeatureGroup( thisAsAny ));
-      groups.push( buildMiscPropsGroup( thisAsAny ));
+      groups.push( buildMiscPropsGroup( this.properties, thisAsAny ));
 
       if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
 

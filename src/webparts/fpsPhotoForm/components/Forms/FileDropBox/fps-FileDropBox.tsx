@@ -7,8 +7,15 @@ import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 // require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
 require('./fps-FileDrop.css');
 
+export interface IFileDropBoxWPProps {
+  maxUploadCount?: number; // Default 10
+  KBmax?: number; // Max file size in kb
+  KBwarn?: number; // Warn file size in kb
+  fileTypes?: string[];  // Accepted MIME types (optional)
+}
+
 export interface IFileDropBoxProps {
-  maxCount?: number; // Default 10
+  maxUploadCount?: number; // Default 10
   KBmax?: number; // Max file size in kb
   KBwarn?: number; // Warn file size in kb
   fileTypes?: IMIMETypesObject[];  // Accepted MIME types (optional)
@@ -17,7 +24,7 @@ export interface IFileDropBoxProps {
   style?: React.CSSProperties;  // Optional: Custom styling for the component
 }
 
-const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxCount, KBmax =100000, }) => {
+const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, KBmax =100000, }) => {
   const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> (getMIMETypesFromObjects( fileTypes ) );
   const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
@@ -112,7 +119,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
 
       <input
         type="file"
-        multiple={ maxCount === 1 ? false : true }
+        multiple={ maxUploadCount === 1 ? false : true }
         onChange={(e) => e.target.files && handleFiles(e.target.files)}
         style={{ display: 'none' }}
       />
