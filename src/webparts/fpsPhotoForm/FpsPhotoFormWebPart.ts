@@ -123,6 +123,7 @@ import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
+import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/fps-FileDropBox';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -252,6 +253,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     ImagesSource.subFolder = this.properties.imageSubfolder2;
 
     const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
+    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties );
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
       FpsPhotoForm,
@@ -270,7 +272,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         tab: upperFirstLetter( this.properties.defaultTab, true ) as IDefaultFormTab,
         ListSource: ListSource,
         ImagesSource: ImagesSource,
-
+        fileDropBoxProps:  fileDropBoxProps,
         ListSiteUrl: this.properties.webUrlPickerValue,
         ListTitle: this.properties.listPickerValue,
         LibrarySiteUrl: this.properties.webUrlPickerValue2,

@@ -1,17 +1,25 @@
 import * as React from 'react';
 
-interface MultiSelectDropdownProps {
+export interface IMultiSelectDropdownProps {
+  key: string;
+  label: string;
+  description?: string | JSX.Element;
   multiple?: boolean;
+  maxVsibleRows?: number;
   options: { key: string; text: string }[];
   selectedKeys: string[];
   onChange: (selectedKeys: string[]) => void;
+  styles?: React.CSSProperties;
+  labelStyles?: React.CSSProperties;
 }
 
-const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
+const MultiSelectDropdown: React.FC<IMultiSelectDropdownProps> = ({
+  key, label, description, maxVsibleRows = 5,
   multiple = false,
   options,
   selectedKeys,
   onChange,
+  styles = {}, labelStyles ={}
 }) => {
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>): void => {
     const selectedValues = Array.from(event.target.selectedOptions, (option) => option.value);
@@ -19,14 +27,14 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '200px' }}>
-      <label style={{ marginBottom: '4px', fontWeight: 'bold' }}>Select Options:</label>
+    <div style={{ ...{ display: 'flex', flexDirection: 'column', maxWidth: '200px' }, ...styles } }>
+      <label style={{...{marginBottom: '4px', fontWeight: 'bold'}, ...labelStyles }}>{ `${label} [ ${selectedKeys.length } of ${options.length }]` }</label>
       <select
         multiple={ multiple }
         value={selectedKeys}
         onChange={handleChange}
         style={{
-          height: '100px',
+          height: multiple === true ? `${ Math.min( options.length, maxVsibleRows ) * 2 }em` : '2em',
           overflowY: 'auto',
         }}
       >
@@ -36,6 +44,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           </option>
         ))}
       </select>
+      { description ? <div style={{ fontSize: 'smaller' }}>{ description }</div> : undefined }
     </div>
   );
 };

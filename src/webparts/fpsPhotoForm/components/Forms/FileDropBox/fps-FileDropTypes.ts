@@ -70,6 +70,9 @@ export const MIMETypes_PDF: IMIMETypesObject = {
     types: [ 'application/pdf' ],
 };
 
+export type IOffice365SpecificMIMENames = 'Word' | 'Excel' | 'PowerPoint';
+export const Office365MIMENAMES: IOffice365SpecificMIMENames[] = [ 'Word', 'Excel', 'PowerPoint' ];
+
 export const MIMETypes_MSFTWord: IMIMETypesObject = {
     name: 'Word',
     type: 'Office',
@@ -98,8 +101,11 @@ export const MIMETypes_EMAIL: IMIMETypesObject = {
     types: [ 'text/calendar' ],
 };
 
+
+export const Office365MIMENAME = 'Office 365';
+
 export const MIMETypes_MSFTOffice: IMIMETypesObject = {
-  name: 'All Office',
+  name: Office365MIMENAME,
   type: 'Office',
   usage: 'Common',
   types: [ ...MIMETypes_MSFTWord.types, ...MIMETypes_MSFTExcel.types, ...MIMETypes_MSFTPPT.types ],
@@ -176,6 +182,7 @@ export const Common_MIME_Objects: IMIMETypesObject[] = [
   MIMETypes_MSFTWord,
   MIMETypes_MSFTExcel,
   MIMETypes_MSFTPPT,
+  MIMETypes_MSFTOffice,
   MIMETypes_Text,
   MIMETypes_RichTextCommon,
   MIMETypes_Open,
@@ -203,6 +210,14 @@ function getDropDownOptionArray( objects: any[], keyProp: any, textProp: any = k
   return results;
 }
 export const Specific_MIME_DropdownOptions: IFPSPropertyPaneDropdownOption[] = getDropDownOptionArray( Specific_MIME_Objects, 'name', );
+
+
+export function getMIMEObjectsFromSelectedTypes( objects: IMIMETypesObject[], names: string[] ): IMIMETypesObject[] {
+  const results: IMIMETypesObject[] = [];
+  objects.map( obj => { if ( names.indexOf( obj.name ) > -1 ) results.push( obj ) });
+  return results;
+}
+
 
 export function getMIMETypesFromObjects( objects: IMIMETypesObject[] ): IMIMEType_Specific[] {
   const results: IMIMEType_Specific[] = [];

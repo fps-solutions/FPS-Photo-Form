@@ -124,8 +124,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
 
     if ( check4Gulp() === true )  console.log( `${consolePrefix} ~ componentDidUpdate` );
 
-    const refresh = this.props.bannerProps.displayMode !== prevProps.bannerProps.displayMode ? true : false;
-
+    let refresh = this.props.bannerProps.displayMode !== prevProps.bannerProps.displayMode ? true : false;
+    if ( refresh === false && JSON.stringify( this.props.fileDropBoxProps ) !== JSON.stringify( prevProps.fileDropBoxProps ) ) refresh = true;
     //refresh these privates when the prop changes warrent it
     if ( refresh === true ) {
       this._contentPages = getBannerPages( this.props.bannerProps );
@@ -298,6 +298,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             display={ this.state.tab === 'Input' ? 'block' : 'none' }
             ListSource = { ListSource }
             ImagesSource = { ImagesSource }
+            fileDropBoxProps={ this.props.fileDropBoxProps }
             ListSiteUrl={ this.props.ListSiteUrl }
             ListTitle={ this.props.ListTitle }
             LibrarySiteUrl={ this.props.LibrarySiteUrl }
@@ -326,6 +327,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             eleProps={ this.props.eleProps }
 
             ImagesSource={ ImagesSource }
+            fileDropBoxProps={ this.props.fileDropBoxProps }
 
             // WORKS!
             // diameter={ 12000 }  // Example total height of the chart

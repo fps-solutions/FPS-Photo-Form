@@ -17,6 +17,7 @@ import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Cli
 
 // import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
+import { IFileDropBoxProps } from './FileDropBox/fps-FileDropBox';
 
 export interface IPhotoFormForm  {
 
@@ -31,7 +32,7 @@ export interface IPhotoFormForm  {
   Category1s: string[];
   Category2s: string[];
   Category3s: string[];
-
+  fileDropBoxProps: IFileDropBoxProps;
   ListSource: ISourceProps;
   ImagesSource: ISourceProps;
   photoButtonStyles: IPhotoButtonStyle[];

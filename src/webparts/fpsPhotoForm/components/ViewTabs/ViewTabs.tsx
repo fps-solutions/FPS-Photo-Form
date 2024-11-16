@@ -118,6 +118,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     if ( refresh === false && this.state.stateSource.ok !== true && this.state.stateSource.status === 'Unknown' ) refresh = true;
     if ( refresh === false && JSON.stringify( this.props.ListSource ) !== JSON.stringify( prevProps.ListSource ) ) refresh = true;
+    if ( refresh === false && JSON.stringify( this.props.fileDropBoxProps ) !== JSON.stringify( prevProps.fileDropBoxProps ) ) refresh = true;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     if ( refresh === true ) this.fetchItems();
@@ -193,7 +194,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
         /> : undefined }
 
 
-        { this.props.tab === 'Files' ? <ParentComponent FilesSource={ this.props.ImagesSource }/> : undefined }
+        { this.props.tab === 'Files' ? <ParentComponent fileDropBoxProps={ this.props.fileDropBoxProps } FilesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Multi-Paste' ? <ParentForm imageCount={ 1 } elementCSS = {{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr)' }} imageBoxCSS= {{ height: '125px', width: '200px'} }

@@ -3,7 +3,7 @@ import FileDropBox, { IFileDropBoxProps } from './fps-FileDropBox';  // Import t
 import { getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 
-const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, KBwarn = 10000, maxUploadCount, KBmax }) => {
+const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, fileWarnSize = 10000, maxUploadCount, fileMaxSize, refreshId }) => {
   const [files, setFiles] = React.useState<File[]>([]);
   const totalSize: number = files.reduce((total, file) => total + file.size, 0);
 
@@ -45,8 +45,9 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
         fileTypes={fileTypes}  // Pass accepted file types to FileDropBox
         setParentFilesData={handleFileUpdate}  // Pass the handler to FileDropBox
         maxUploadCount={ maxUploadCount }
-        KBmax={ KBmax }
-        KBwarn={ KBwarn }
+        fileMaxSize={ fileMaxSize }
+        fileWarnSize={ fileWarnSize }
+        refreshId={ refreshId }
       />
       <div>
         <h3>Uploaded Files: ( { files.length } @ { getSizeLabel( totalSize )})</h3>
@@ -74,7 +75,7 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
                 }}
                 title={ `CLEAR ${ file.name }` }
               >🗑️</button>
-              {file.name} &nbsp;&nbsp;&nbsp; [ { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > KBwarn * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' } ]</li>
+              {file.name} &nbsp;&nbsp;&nbsp; [ { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > fileWarnSize * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' } ]</li>
           ))}
         </ol>
       </div>

@@ -8,6 +8,7 @@ import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-libra
 import { ILoadPerformance } from '../fpsReferences';
 import { IPhotoFormForm } from './Forms/PasteFormForm';
 import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
+import { IFileDropBoxProps } from './Forms/FileDropBox/fps-FileDropBox';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
@@ -25,6 +26,7 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   axisMap: IAxisMap;
   chartDisplay: IChartTabProps;
 
+  fileDropBoxProps: IFileDropBoxProps;
   photoButtonStyles: IPhotoButtonStyle[];
 
   FPSItem: IFPSItem;

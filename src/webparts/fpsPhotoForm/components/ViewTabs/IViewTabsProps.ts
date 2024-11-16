@@ -4,6 +4,7 @@ import { IDefaultFormTab } from "../IFpsPhotoFormProps";
 import { IAxisMap, IChartFavorites, IChartTabProps, IPhotoButtonStyle, IScatterSourceItem, IStateSourceScatter } from "../Forms/IScatterChartProps";
 import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
+import { IFileDropBoxProps } from "../Forms/FileDropBox/fps-FileDropBox";
 
 export interface IViewTabsProps {
   ListSource: ISourceProps;
@@ -16,6 +17,7 @@ export interface IViewTabsProps {
   photoButtonStyles: IPhotoButtonStyle[];
 
   ImagesSource: ISourceProps;
+  fileDropBoxProps: IFileDropBoxProps;
 
   FPSItem: IFPSItem;
   eleExtras: IFPSTileElementExtras;

@@ -1,35 +1,83 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { getMIMEObjectPropFromType, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject } from './fps-FileDropTypes';
+import { useState, useEffect } from 'react';
+import { getMIMEObjectPropFromType, getMIMEObjectsFromSelectedTypes, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject, Specific_MIME_DropdownOptions, Specific_MIME_Objects } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
+import { makeid } from '../../../fpsReferences';
 
 // https://github.com/fps-solutions/FPS-Photo-Form/issues/89
 // require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
 require('./fps-FileDrop.css');
 
 export interface IFileDropBoxWPProps {
-  maxUploadCount?: number; // Default 10
-  KBmax?: number; // Max file size in kb
-  KBwarn?: number; // Warn file size in kb
+  maxUploadCount?: string; // Default 10
+  fileMaxSize?: string; // Max file size in kb
+  fileWarnSize?: string; // Warn file size in kb
   fileTypes?: string[];  // Accepted MIME types (optional)
+}
+
+export function convertFileSizeStringToNum(fileSize: string): number {
+  const scale: string[] = ['KB', 'MB', 'GB', 'TB'];
+
+  // Extract the numeric part and the unit part (KB, MB, GB, TB, etc.)
+  const regex = /^(\d+(\.\d+)?)\s*(KB|MB|GB|TB)$/i;
+  const match = fileSize.trim().match(regex);
+
+  if (!match) {
+    throw new Error("Invalid file size string");
+  }
+
+  const numValue = parseFloat(match[1]);
+  const unit = match[3].toUpperCase();
+
+  // Find the index of the scale unit
+  const index = scale.indexOf(unit);
+
+  if (index === -1) {
+    throw new Error("Unsupported unit");
+  }
+
+  // Return the number converted to bytes
+  return numValue * Math.pow(1024, index + 1);
+}
+
+export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropBoxWPProps ): IFileDropBoxProps {
+  const result: IFileDropBoxProps = {
+    setParentFilesData: null,
+    fileTypes: [],
+    refreshId: makeid(5),
+  };
+  const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes } = properties;
+  if ( maxUploadCount ) result.maxUploadCount = parseInt( maxUploadCount );
+  if ( fileMaxSize ) result.fileMaxSize = convertFileSizeStringToNum( fileMaxSize );
+  if ( fileWarnSize ) result.fileWarnSize = convertFileSizeStringToNum( fileWarnSize );
+  if ( fileTypes && fileTypes.length > 0 ) {
+    result.fileTypes = getMIMEObjectsFromSelectedTypes( Specific_MIME_Objects, properties.fileTypes );
+  }
+  return result;
 }
 
 export interface IFileDropBoxProps {
   maxUploadCount?: number; // Default 10
-  KBmax?: number; // Max file size in kb
-  KBwarn?: number; // Warn file size in kb
+  fileMaxSize?: number; // Max file size in kb
+  fileWarnSize?: number; // Warn file size in kb
   fileTypes?: IMIMETypesObject[];  // Accepted MIME types (optional)
   // fileTypes?: IMIMEType_Valid[];  // Accepted MIME types (optional)
   setParentFilesData: (files: File[]) => void;  // Callback to update parent with files
   style?: React.CSSProperties;  // Optional: Custom styling for the component
+  refreshId?: string;
 }
 
-const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, KBmax =100000, }) => {
-  const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> (getMIMETypesFromObjects( fileTypes ) );
+const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId }) => {
+  const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> ( getMIMETypesFromObjects( fileTypes ) );
   const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [invalidFiles, setInvalidFiles] = useState<File[]>([]);  // Track invalid files
+
+  useEffect(() => {
+    setFileMIMETypes( getMIMETypesFromObjects( fileTypes ) );
+    setFileMIMELabels( getMIMETypesProp( fileTypes, 'name' ) );
+  }, [fileTypes]);
 
   // Handle the files when dropped
   const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -60,7 +108,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     if (fileMIMETypes) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (fileMIMETypes.indexOf(file.type as IMIMEType_Valid) === -1 || file.size > KBmax * 1000 ) {  // Use indexOf instead of includes
+        if (fileMIMETypes.indexOf(file.type as IMIMEType_Valid) === -1 || file.size > fileMaxSize * 1000 ) {  // Use indexOf instead of includes
           // https://github.com/fps-solutions/FPS-Photo-Form/issues/88 - retain invalidFiles in history
           if ( invalidNames.indexOf( file.name ) < 0 ) { currentInvalidFiles.push(file); invalidNames.push(file.name);  }
         } else {
@@ -102,7 +150,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       style={style}
     >
       <div className={ `file-drop-box-area` } style={{}}>
-        <p>Drag and drop files here { KBmax ? `< ${ getSizeLabel( KBmax * 1000 ) } each` : '' }</p>
+        <p>Drag and drop files here { fileMaxSize ? `< ${ getSizeLabel( fileMaxSize * 1000 ) } each` : '' }</p>
         {fileMIMELabels && <p><strong>Accepted file types: </strong>{fileMIMELabels.join(' | ')}</p>}
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
         {invalidFiles.length > 0 && (
@@ -110,7 +158,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
             <strong>Rejected Files: ( {invalidFiles.length} )</strong>
             <ul>
               {invalidFiles.map((file, index) => (
-                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > KBmax * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
+                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > fileMaxSize * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
               ))}
             </ul>
           </div>
