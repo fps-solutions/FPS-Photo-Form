@@ -51,6 +51,7 @@ const ParentComponent: React.FC<IFileDropContainerParent> = ( props ) => {
 const saveFilesToLibrary = async (uploadFiles: File[], FileSource: ISourceProps, asBatch: boolean): Promise<void> => {
   // Iterate over each file and upload it to SharePoint
   if ( asBatch === true ) {
+
     const allReturns = await Promise.all(
       uploadFiles.map( ( file: File, idx: number ) => { return postSourceFilesAPI(FileSource, true, file, file.name, true, true ); } )
     );
@@ -107,7 +108,6 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
       >
         Batch Save to SharePoint
       </button> : undefined }
-
 
       { uploadStates && uploadStates.length > 0 ? <div>
         <h3>Upload States</h3>
