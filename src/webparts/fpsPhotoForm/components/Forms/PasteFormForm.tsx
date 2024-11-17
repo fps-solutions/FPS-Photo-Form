@@ -345,16 +345,15 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               </div>
             )} */}
 
-            { fileMode === 'Paste' ? <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} /> :
-              <FileDropContainer
-                fileTypes={ props.fileDropBoxProps.fileTypes }  // Accept only PNG and JPEG files
-                setParentFilesData={handleDropBoxFile}  // Callback to receive file updates
-                maxUploadCount={props.fileDropBoxProps.maxUploadCount}
-                fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
-                fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
-                refreshId={ props.fileDropBoxProps.refreshId }
-              />
-            }
+            { fileMode === 'Paste' ? <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} /> : undefined }
+            <FileDropContainer
+              fileTypes={ props.fileDropBoxProps.fileTypes }  // Accept only PNG and JPEG files
+              setParentFilesData={handleDropBoxFile}  // Callback to receive file updates
+              maxUploadCount={props.fileDropBoxProps.maxUploadCount}
+              fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
+              fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
+              refreshId={ props.fileDropBoxProps.refreshId }
+            />
 
             <div className={ styles.spacer }/>
 

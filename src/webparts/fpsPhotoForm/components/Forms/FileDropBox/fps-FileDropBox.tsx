@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { getMIMEObjectPropFromType, getMIMEObjectsFromSelectedTypes, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject, Specific_MIME_DropdownOptions, Specific_MIME_Objects } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 import { makeid } from '../../../fpsReferences';
@@ -72,12 +72,34 @@ export interface IFileDropBoxProps {
 }
 
 const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId, useDropBox }) => {
+
+    // Early return when useDropBox is false
+    if (useDropBox === false) {
+      return <div style={{ color: 'gray', textAlign: 'center', padding: '1em' }}>File dropbox is disabled.</div>;
+    }
+
+
   const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> ( getMIMETypesFromObjects( fileTypes ) );
   const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [invalidFiles, setInvalidFiles] = useState<File[]>([]);  // Track invalid files
 
+  // Use a ref for the file input
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    // Debug: Check the ref value after rendering
+    console.log('fileInputRef:', fileInputRef.current);
+  }, [fileInputRef]);
+
+  const triggerFileInputClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    } else {
+      console.warn('File input ref is not ready.');
+    }
+  };
   // useEffect(() => {
   //   // Intentionally left empty
   // }, [maxUploadCount, fileMaxSize, errorMessage]);
@@ -86,8 +108,6 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     setFileMIMETypes( getMIMETypesFromObjects( fileTypes ) );
     setFileMIMELabels( getMIMETypesProp( fileTypes, 'name' ) );
   }, [fileTypes]);
-
-  if ( useDropBox === false ) return undefined;
 
   // Handle the files when dropped
   const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -178,12 +198,14 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       </div>
 
       <input
+        ref={fileInputRef} // Attach the ref here
         type="file"
         multiple={ maxUploadCount === 1 ? false : true }
         onChange={(e) => e.target.files ? handleFiles(e.target.files) : null}
         style={{ display: 'none' }}
       />
-      <button onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement)?.click()}>Choose files</button>
+      {/* <button onClick={() => fileInputRef.current?.click()}>Choose files</button> */}
+      <button onClick={triggerFileInputClick}>Choose files</button>
       <button onClick={ handleClear } className='reset' style={{ marginLeft: '2em' }}>Clear files</button>
     </div>
   );
