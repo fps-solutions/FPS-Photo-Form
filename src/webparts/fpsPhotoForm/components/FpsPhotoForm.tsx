@@ -307,7 +307,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             Category2s={ this.props.Category2s }
             Category3s={ this.props.Category3s }
             imageSubfolder2={ this.props.imageSubfolder2 }
-            photoButtonStyles={ this.props.photoButtonStyles }
+            miscFormProps={ this.props.miscFormProps }
+
             // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
             // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }
             // Category3s={ [ 'Village', 'Mineshaft', 'Monument', 'Wreck', 'Nether Portal', 'Trials', 'End Portal', 'Buzz Base', 'Cat Base', 'Geode', 'Ancient City', 'End City', 'Other' ] }
@@ -320,7 +321,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             chartDisplay={ this.props.chartDisplay  }
             bannerProps={ bannerProps  }
             performance={ this._performance  }
-            photoButtonStyles={ this.props.photoButtonStyles }
+            photoButtonStyles={ this.props.miscFormProps.photoButtonStyles }
 
             FPSItem={ this.props.FPSItem }
             eleExtras={ this.props.eleExtras }

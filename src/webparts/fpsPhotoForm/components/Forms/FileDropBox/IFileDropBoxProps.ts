@@ -14,6 +14,9 @@ export interface IFileDropBoxProps {
   refreshId?: string;
 }
 
+// NOTE: changesFileDropBox must match the keys of IFileDropBoxWPProps
+export const changesFileDropBox: (keyof IFileDropBoxWPProps)[] = [ 'defaultPasteMode', 'maxUploadCount', 'fileMaxSize', 'fileWarnSize', 'fileTypes' ]
+
 export interface IFileDropBoxWPProps {
   defaultPasteMode?: boolean;
   maxUploadCount?: string; // Default 10

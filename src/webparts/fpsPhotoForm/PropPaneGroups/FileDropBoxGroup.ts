@@ -18,7 +18,6 @@ import { IOffice365SpecificMIMENames, Office365MIMENAME, Office365MIMENAMES, Spe
 import { IFileDropBoxWPProps } from '../components/Forms/FileDropBox/IFileDropBoxProps';
 import { FileSizeScaleOptions, FileSizeScaleRegex } from '../components/Forms/FileDropBox/convertFileSizeStringToNum';
 
-
 export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
 
   function validateFileSize(input: string): string {

@@ -16,12 +16,14 @@ import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fp
 import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 import { changesAxis, changesChartFeature, changesChartGrid, IAxisMapWPProps, IChartTabWPProps } from './components/Scatter/IScatterChartProps';
 import { changesFpsTileComp, IFpsTileComponentWPProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
-import { IDefaultFormTab } from './components/IFpsPhotoFormProps';
-import { IFileDropBoxWPProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { IDefaultFormTab, IPrefabFormTemplates } from './components/IFpsPhotoFormProps';
+import { changesFileDropBox, IFileDropBoxWPProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { changesInputForm, IMiscFormWPProps } from './components/Forms/PasteFormForm';
+
 
 export const changePropertyGroupX : string[] = [ 'showSomeProps', 'showCustomProps' , ];
 
-export const changePhoto: string[] = [ 'photoButtonStyles' ];
+
 
  /**
   For props to export to panel but NOT save in analytics
@@ -31,8 +33,10 @@ export const WebPartAnalyticsChanges : any = {
   listPicker: changeListItemPickers,
   libraryPicker:  [ ...changeListItemPickers2, 'imageSubfolder2' ],
   axisMap: changesAxis,
+  inputForm: changesInputForm,
   chartGrid: changesChartGrid,
   chartFeatures: changesChartFeature,
+  fileDrop: changesFileDropBox,
   fpsTile: changesFpsTileComp,
   groupX: changePropertyGroupX,
 }
@@ -63,14 +67,8 @@ export const importBlockPropsWP : string[] = [ 'showSomeProps' ];
    * Extend with portions of FPS Props that are needed
    *
    */
-export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListItemPickerWPProps2, IAxisMapWPProps, IChartTabWPProps, IFpsTileComponentWPProps, IFileDropBoxWPProps {
+export interface IFpsPhotoFormWebPartProps extends IMinWPBannerProps, IFPSListItemPickerWPProps2, IAxisMapWPProps, IChartTabWPProps, IFpsTileComponentWPProps, IFileDropBoxWPProps, IMiscFormWPProps {
 
   description: string;
-
-  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
-  imageSubfolder2: string;
-  photoButtonStyles: string;
-
-  defaultTab: IDefaultFormTab;
   expandListPickerGroups: boolean;
 }

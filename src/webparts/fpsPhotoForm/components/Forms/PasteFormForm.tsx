@@ -19,6 +19,57 @@ import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Cli
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
 import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
+import { IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
+
+export interface IMiscFormWPProps {
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+  imageSubfolder2: string;
+  prefabForm: IPrefabFormTemplates;
+  enableExperimental: boolean;
+  forceFormTemplate: boolean;
+  photoButtonStyles: string;
+
+  defaultTab: IDefaultFormTab;
+}
+
+export function buildMiscFormFromWPProps( wpProps: IMiscFormWPProps ): IMiscFormProps {
+
+  const { imageSubfolder2, prefabForm, enableExperimental, forceFormTemplate, photoButtonStyles, defaultTab } = wpProps;
+  let photoButtonStylesObj: IPhotoButtonStyle[] = [];
+  try {
+    photoButtonStylesObj = JSON.parse( wpProps.photoButtonStyles );
+
+  } catch(e) {
+    console.log( `Unable to parse buttonStyles `);
+
+  }
+
+  const MiscProps: IMiscFormProps = {
+    imageSubfolder2: imageSubfolder2,
+    prefabForm: prefabForm,
+    enableExperimental: enableExperimental,
+    forceFormTemplate: forceFormTemplate,
+    photoButtonStyles: photoButtonStylesObj,
+
+    defaultTab: defaultTab,
+  }
+
+  return MiscProps;
+
+}
+
+export const changesInputForm: ( keyof IMiscFormWPProps )[] = [ 'photoButtonStyles', 'defaultTab', 'imageSubfolder2', 'prefabForm', 'enableExperimental', 'forceFormTemplate' ];
+
+export interface IMiscFormProps {
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
+  imageSubfolder2: string;
+  prefabForm: IPrefabFormTemplates;
+  enableExperimental: boolean;
+  forceFormTemplate: boolean;
+  photoButtonStyles: IPhotoButtonStyle[];
+
+  defaultTab: IDefaultFormTab;
+}
 
 export interface IPhotoFormForm  {
 
@@ -36,7 +87,9 @@ export interface IPhotoFormForm  {
   fileDropBoxProps: IFileDropBoxProps;
   ListSource: ISourceProps;
   ImagesSource: ISourceProps;
-  photoButtonStyles: IPhotoButtonStyle[];
+
+  miscFormProps: IMiscFormProps;
+
 
 }
 
