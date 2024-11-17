@@ -18,7 +18,9 @@ import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Cli
 
 // import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
-import { IFileDropBoxProps } from './FileDropBox/fps-FileDropBox';
+import FileDropBox, { IFileDropBoxProps } from './FileDropBox/fps-FileDropBox';
+import ParentComponent from './FileDropBox/ParentFileSample';
+import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
 
 export interface IPhotoFormForm  {
 
@@ -187,8 +189,8 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     // Handle form submission
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
-        if (!formData.title || !imageData) {
-            alert('Please provide a title and paste an image');
+        if (!formData.title || ( fileMode === 'Paste' && !imageData ) || ( fileMode === 'DropBox' && !imageBlob )) {
+            alert('Please provide a title and paste/upload an image');
             return;
         }
 
@@ -206,7 +208,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
         // eslint-disable-next-line no-useless-escape
         shortFileName = shortFileName.replace(/[\\/:*?\'"<>|#&]/g, '' );
 
-        const blob = base64ToBlob(imageData);
+        const blob = fileMode === 'DropBox' ? imageBlob : base64ToBlob(imageData);
 
         const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
         const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, shortFileName, true, true );
@@ -346,16 +348,21 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
             )} */}
 
             { fileMode === 'Paste' ? <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} /> : undefined }
-            <FileDropContainer
+            {/* <ParentComponent
+              FilesSource={ props.ImagesSource }
+              fileDropBoxProps={ props. fileDropBoxProps }
+            /> */}
+            <FileUploadContainer
+              useDropBox={ fileMode === 'Paste' ? false : true }
               fileTypes={ props.fileDropBoxProps.fileTypes }  // Accept only PNG and JPEG files
               setParentFilesData={handleDropBoxFile}  // Callback to receive file updates
-              maxUploadCount={props.fileDropBoxProps.maxUploadCount}
+              maxUploadCount={ 1 }
               fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
               fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
               refreshId={ props.fileDropBoxProps.refreshId }
             />
 
-            <div className={ styles.spacer }/>
+            <div className={ styles.spacer } style={{ height: fileMode === 'DropBox' ? '0px' : null }} />
 
         </form>
     );

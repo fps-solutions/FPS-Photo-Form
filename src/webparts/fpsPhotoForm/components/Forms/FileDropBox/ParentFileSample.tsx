@@ -9,7 +9,6 @@ import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/fil
 // import { postSourceFilesAPI } from './functions/postSourceFilesAPI';
 
 import { makeid } from '../../../fpsReferences';
-import {  getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTypes';
 import { getSizeLabel } from '@mikezimm/fps-core-v7/lib/logic/Math/labels';
 import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/CheckItemsResults';
 import { IFileDropBoxProps } from './fps-FileDropBox';
@@ -113,6 +112,7 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
       </div> : undefined }
 
       <FileDropContainer
+        useDropBox={ true }
         fileTypes={ props.fileDropBoxProps.fileTypes }  // Accept only PNG and JPEG files
         setParentFilesData={handleFileUpdate}  // Callback to receive file updates
         maxUploadCount={props.fileDropBoxProps.maxUploadCount}

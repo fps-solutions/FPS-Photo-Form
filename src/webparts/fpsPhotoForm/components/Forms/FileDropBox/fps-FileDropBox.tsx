@@ -72,13 +72,6 @@ export interface IFileDropBoxProps {
 }
 
 const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId, useDropBox }) => {
-
-    // Early return when useDropBox is false
-    if (useDropBox === false) {
-      return <div style={{ color: 'gray', textAlign: 'center', padding: '1em' }}>File dropbox is disabled.</div>;
-    }
-
-
   const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> ( getMIMETypesFromObjects( fileTypes ) );
   const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
@@ -88,18 +81,6 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   // Use a ref for the file input
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  useEffect(() => {
-    // Debug: Check the ref value after rendering
-    console.log('fileInputRef:', fileInputRef.current);
-  }, [fileInputRef]);
-
-  const triggerFileInputClick = () => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    } else {
-      console.warn('File input ref is not ready.');
-    }
-  };
   // useEffect(() => {
   //   // Intentionally left empty
   // }, [maxUploadCount, fileMaxSize, errorMessage]);
@@ -108,6 +89,8 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     setFileMIMETypes( getMIMETypesFromObjects( fileTypes ) );
     setFileMIMELabels( getMIMETypesProp( fileTypes, 'name' ) );
   }, [fileTypes]);
+
+  // if ( useDropBox === false ) return undefined;
 
   // Handle the files when dropped
   const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -176,6 +159,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     setDragging(false);  // Reset dragging state when drag leaves the drop zone
   };
 
+
   console.log( `UploadStatus:  FileDropBox ~ 88` );
   return (
     <div
@@ -183,7 +167,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       onDragLeave={handleDragLeave}
-      style={style}
+      style={{ ...style, ...{ display: useDropBox !== true ? 'none' : 'block' }}}
     >
       <div className={ `file-drop-box-area` } style={{}}>
         <p>Drag and drop files here { fileMaxSize ? `< ${ getSizeLabel( fileMaxSize ) } each` : '' }</p>
@@ -204,9 +188,9 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
         onChange={(e) => e.target.files ? handleFiles(e.target.files) : null}
         style={{ display: 'none' }}
       />
-      {/* <button onClick={() => fileInputRef.current?.click()}>Choose files</button> */}
-      <button onClick={triggerFileInputClick}>Choose files</button>
-      <button onClick={ handleClear } className='reset' style={{ marginLeft: '2em' }}>Clear files</button>
+      {/* NOTE:  NEED TO ADD the type='button' on these to prevent any parent component form.onSubmit actions */}
+      <button type='button' onClick={() => fileInputRef.current?.click()}>Choose files</button>
+      <button type='button' onClick={ handleClear } className='reset' style={{ marginLeft: '2em' }}>Clear files</button>
     </div>
   );
 };
