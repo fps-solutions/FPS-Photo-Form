@@ -6,27 +6,46 @@ import { useState } from 'react';
 import FileDropContainer from './fps-FileDropContainer';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
-// import { postSourceFilesAPI } from './functions/postSourceFilesAPI';
 
 import { makeid } from '../../../fpsReferences';
 import { getSizeLabel } from '@mikezimm/fps-core-v7/lib/logic/Math/labels';
 import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/CheckItemsResults';
-import { IFileDropBoxProps } from './fps-FileDropBox';
+import { IFileDropBoxProps } from './IFileDropBoxProps';
 import { createFileElementList } from './fps-FileDropBoxElements';
-
 
 export interface IFileDropContainerParent  {
   FilesSource: ISourceProps;
   fileDropBoxProps: IFileDropBoxProps;
 }
 
+/***
+ *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
+ *    88'  YP `~~88~~' d8' `8b 88  `8D `~~88~~'      88   88 .8P  Y8. .8P  Y8. 88 ,8P'
+ *    `8bo.      88    88ooo88 88oobY'    88         88ooo88 88    88 88    88 88,8P
+ *      `Y8b.    88    88~~~88 88`8b      88         88~~~88 88    88 88    88 88`8b
+ *    db   8D    88    88   88 88 `88.    88         88   88 `8b  d8' `8b  d8' 88 `88.
+ *    `8888Y'    YP    YP   YP 88   YD    YP         YP   YP  `Y88P'   `Y88P'  YP   YD
+ *
+ *
+ */
+
 const ParentComponent: React.FC<IFileDropContainerParent> = ( props ) => {
   const [files, setFiles] = useState<File[]>([]);
   const [uploadStatus, setUploadStatus ] = useState( null );
   const [uploadStates, setUploadStates ] = useState<IFpsItemsReturn[]>( [] );
 
-
   const totalSize: number = files.reduce((total, file) => total + file.size, 0);
+
+/***
+ *    db   db  .d8b.  d8b   db d8888b. db      d88888b       .o88b. db      d888888b  .o88b. db   dD .d8888.
+ *    88   88 d8' `8b 888o  88 88  `8D 88      88'          d8P  Y8 88        `88'   d8P  Y8 88 ,8P' 88'  YP
+ *    88ooo88 88ooo88 88V8o 88 88   88 88      88ooooo      8P      88         88    8P      88,8P   `8bo.
+ *    88~~~88 88~~~88 88 V8o88 88   88 88      88~~~~~      8b      88         88    8b      88`8b     `Y8b.
+ *    88   88 88   88 88  V888 88  .8D 88booo. 88.          Y8b  d8 88booo.   .88.   Y8b  d8 88 `88. db   8D
+ *    YP   YP YP   YP VP   V8P Y8888D' Y88888P Y88888P       `Y88P' Y88888P Y888888P  `Y88P' YP   YD `8888Y'
+ *
+ *
+ */
 
   const handleFileUpdate = (updatedFiles: File[]): void => {
     const doReset = updatedFiles === null ? true : false;
@@ -80,6 +99,17 @@ const handleUploadFileBatch = async (): Promise<void> => {
 const handleUploadFiles = async (): Promise<void> => {
   await saveFilesToLibrary( files, props.FilesSource, false );
 };
+
+/***
+ *    d88888b d888888b d8b   db  .d8b.  db           d88888b db      d88888b .88b  d88. d88888b d8b   db d888888b
+ *    88'       `88'   888o  88 d8' `8b 88           88'     88      88'     88'YbdP`88 88'     888o  88 `~~88~~'
+ *    88ooo      88    88V8o 88 88ooo88 88           88ooooo 88      88ooooo 88  88  88 88ooooo 88V8o 88    88
+ *    88~~~      88    88 V8o88 88~~~88 88           88~~~~~ 88      88~~~~~ 88  88  88 88~~~~~ 88 V8o88    88
+ *    88        .88.   88  V888 88   88 88booo.      88.     88booo. 88.     88  88  88 88.     88  V888    88
+ *    YP      Y888888P VP   V8P YP   YP Y88888P      Y88888P Y88888P Y88888P YP  YP  YP Y88888P VP   V8P    YP
+ *
+ *
+ */
 
 console.log( `UploadStatus:  ParentFileSample ~ 94` );
   return (

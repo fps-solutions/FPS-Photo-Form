@@ -111,7 +111,7 @@ import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonSty
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
-import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
+import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Scatter/IScatterChartProps';
 import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
 import { buildListColumnsGroup } from './PropPaneGroups/ListColumns';
 import { buildChartDisplayGroup } from './PropPaneGroups/ChartGrid';
@@ -123,7 +123,7 @@ import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
-import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/fps-FileDropBox';
+import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
 import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 
 
@@ -136,7 +136,6 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
   //https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/guidance/supporting-section-backgrounds
   private _themeProvider: ThemeProvider;
   private _themeVariant: IReadonlyTheme | undefined;  // 2023-01-22:  Just copied from Drilldown
-
 
   private _listPickerValue2 = '';
   private _webUrlPickerValue2 = '';

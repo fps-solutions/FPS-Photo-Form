@@ -7,8 +7,8 @@ import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-libra
 
 import { ILoadPerformance } from '../fpsReferences';
 import { IPhotoFormForm } from './Forms/PasteFormForm';
-import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
-import { IFileDropBoxProps } from './Forms/FileDropBox/fps-FileDropBox';
+import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Scatter/IScatterChartProps';
+import { IFileDropBoxProps } from './Forms/FileDropBox/IFileDropBoxProps';
 
 export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 

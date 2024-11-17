@@ -6,6 +6,17 @@ import { ISVGScatterHookProps } from './IScatterChartProps';
 import { calculatePercentageInRange } from './ScaleCalculations';
 import { check4This } from '../../fpsReferences';
 
+/***
+ *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
+ *    88'  YP `~~88~~' d8' `8b 88  `8D `~~88~~'      88   88 .8P  Y8. .8P  Y8. 88 ,8P'
+ *    `8bo.      88    88ooo88 88oobY'    88         88ooo88 88    88 88    88 88,8P
+ *      `Y8b.    88    88~~~88 88`8b      88         88~~~88 88    88 88    88 88`8b
+ *    db   8D    88    88   88 88 `88.    88         88   88 `8b  d8' `8b  d8' 88 `88.
+ *    `8888Y'    YP    YP   YP 88   YD    YP         YP   YP  `Y88P'   `Y88P'  YP   YD
+ *
+ *
+ */
+
 const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
   const { show, stateSource,
@@ -25,6 +36,17 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   const { horizontalMin, horizontalMax, verticalMin, verticalMax, ratio = 1, } = scatterSize;
 
   if ( show === false ) return null;
+
+    /***
+   *    d88888b db      d88888b .88b  d88. d88888b d8b   db d888888b .d8888.
+   *    88'     88      88'     88'YbdP`88 88'     888o  88 `~~88~~' 88'  YP
+   *    88ooooo 88      88ooooo 88  88  88 88ooooo 88V8o 88    88    `8bo.
+   *    88~~~~~ 88      88~~~~~ 88  88  88 88~~~~~ 88 V8o88    88      `Y8b.
+   *    88.     88booo. 88.     88  88  88 88.     88  V888    88    db   8D
+   *    Y88888P Y88888P Y88888P YP  YP  YP Y88888P VP   V8P    YP    `8888Y'
+   *
+   *
+   */
 
   let strokeDashArray: string = ``;
 
@@ -69,6 +91,17 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   }
 
   const viewBox: string = `${0} ${0} ${diameter} ${diameter * ratio}`;
+
+  /***
+   *    d88888b d888888b d8b   db  .d8b.  db           d88888b db      d88888b .88b  d88. d88888b d8b   db d888888b
+   *    88'       `88'   888o  88 d8' `8b 88           88'     88      88'     88'YbdP`88 88'     888o  88 `~~88~~'
+   *    88ooo      88    88V8o 88 88ooo88 88           88ooooo 88      88ooooo 88  88  88 88ooooo 88V8o 88    88
+   *    88~~~      88    88 V8o88 88~~~88 88           88~~~~~ 88      88~~~~~ 88  88  88 88~~~~~ 88 V8o88    88
+   *    88        .88.   88  V888 88   88 88booo.      88.     88booo. 88.     88  88  88 88.     88  V888    88
+   *    YP      Y888888P VP   V8P YP   YP Y88888P      Y88888P Y88888P Y88888P YP  YP  YP Y88888P VP   V8P    YP
+   *
+   *
+   */
 
   return (
     <div className={ `svg-scatter-container ${ autoFadeDots === true ? 'faded-dots' : '' }`} style={{ ...{ width: '100%', height: divHeight  }, ...{ divStyle } } }>

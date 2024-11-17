@@ -1,10 +1,10 @@
 import { ILoadPerformance, IWebpartBannerProps } from "../../fpsReferences";
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { IDefaultFormTab } from "../IFpsPhotoFormProps";
-import { IAxisMap, IChartFavorites, IChartTabProps, IPhotoButtonStyle, IScatterSourceItem, IStateSourceScatter } from "../Forms/IScatterChartProps";
+import { IAxisMap, IChartFavorites, IChartTabProps, IPhotoButtonStyle, IScatterSourceItem, IStateSourceScatter } from "../Scatter/IScatterChartProps";
 import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
-import { IFileDropBoxProps } from "../Forms/FileDropBox/fps-FileDropBox";
+import { IFileDropBoxProps } from "../Forms/FileDropBox/IFileDropBoxProps";
 
 export interface IViewTabsProps {
   ListSource: ISourceProps;

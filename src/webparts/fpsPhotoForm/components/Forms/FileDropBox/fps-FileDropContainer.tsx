@@ -1,11 +1,34 @@
 import * as React from 'react';
-import FileDropBox, { IFileDropBoxProps } from './fps-FileDropBox';  // Import the FileDropBox component
+import FileDropBox from './fps-FileDropBox';  // Import the FileDropBox component
+import { IFileDropBoxProps } from './IFileDropBoxProps';  // Import the FileDropBox component
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 import { createFileElementList } from './fps-FileDropBoxElements';
+
+/***
+ *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
+ *    88'  YP `~~88~~' d8' `8b 88  `8D `~~88~~'      88   88 .8P  Y8. .8P  Y8. 88 ,8P'
+ *    `8bo.      88    88ooo88 88oobY'    88         88ooo88 88    88 88    88 88,8P
+ *      `Y8b.    88    88~~~88 88`8b      88         88~~~88 88    88 88    88 88`8b
+ *    db   8D    88    88   88 88 `88.    88         88   88 `8b  d8' `8b  d8' 88 `88.
+ *    `8888Y'    YP    YP   YP 88   YD    YP         YP   YP  `Y88P'   `Y88P'  YP   YD
+ *
+ *
+ */
 
 const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, fileWarnSize = 10000, maxUploadCount, fileMaxSize, refreshId, useDropBox }) => {
   const [files, setFiles] = React.useState<File[]>([]);
   const totalSize: number = files.reduce((total, file) => total + file.size, 0);
+
+  /***
+ *    db   db  .d8b.  d8b   db d8888b. db      d88888b       .o88b. db      d888888b  .o88b. db   dD .d8888.
+ *    88   88 d8' `8b 888o  88 88  `8D 88      88'          d8P  Y8 88        `88'   d8P  Y8 88 ,8P' 88'  YP
+ *    88ooo88 88ooo88 88V8o 88 88   88 88      88ooooo      8P      88         88    8P      88,8P   `8bo.
+ *    88~~~88 88~~~88 88 V8o88 88   88 88      88~~~~~      8b      88         88    8b      88`8b     `Y8b.
+ *    88   88 88   88 88  V888 88  .8D 88booo. 88.          Y8b  d8 88booo.   .88.   Y8b  d8 88 `88. db   8D
+ *    YP   YP YP   YP VP   V8P Y8888D' Y88888P Y88888P       `Y88P' Y88888P Y888888P  `Y88P' YP   YD `8888Y'
+ *
+ *
+ */
 
   // Callback to handle the file data received from FileDropBox
   //  - NOTE this only handles ADDING files and bumps dup files to the top of the list
@@ -35,6 +58,17 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
     setFiles( keepFiles );
     setParentFilesData( keepFiles );  // Pass the updated list to the parent component
   }
+
+  /***
+ *    d88888b d888888b d8b   db  .d8b.  db           d88888b db      d88888b .88b  d88. d88888b d8b   db d888888b
+ *    88'       `88'   888o  88 d8' `8b 88           88'     88      88'     88'YbdP`88 88'     888o  88 `~~88~~'
+ *    88ooo      88    88V8o 88 88ooo88 88           88ooooo 88      88ooooo 88  88  88 88ooooo 88V8o 88    88
+ *    88~~~      88    88 V8o88 88~~~88 88           88~~~~~ 88      88~~~~~ 88  88  88 88~~~~~ 88 V8o88    88
+ *    88        .88.   88  V888 88   88 88booo.      88.     88booo. 88.     88  88  88 88.     88  V888    88
+ *    YP      Y888888P VP   V8P YP   YP Y88888P      Y88888P Y88888P Y88888P YP  YP  YP Y88888P VP   V8P    YP
+ *
+ *
+ */
 
   console.log( `UploadStatus:  FileDropContainer ~ 36` );
 

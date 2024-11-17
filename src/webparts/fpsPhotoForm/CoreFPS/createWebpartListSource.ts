@@ -5,7 +5,7 @@ import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules
 import { createStyleFromString } from '@mikezimm/fps-library-v2/lib/logic/Strings/reactCSS';
 import { getExpandColumns, getSelectColumns, } from '../fpsReferences';
 import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
-import { changesAxis, IAxisMap, IAxisMapWPProps, IChartTabProps, IChartFavorites, IFPSGridLineType, } from '../components/Forms/IScatterChartProps';
+import { changesAxis, IAxisMap, IAxisMapWPProps, IChartTabProps, IChartFavorites, IFPSGridLineType, } from '../components/Scatter/IScatterChartProps';
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 
 export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {

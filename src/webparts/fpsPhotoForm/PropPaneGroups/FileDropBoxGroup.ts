@@ -15,7 +15,8 @@ import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPar
 
 import { PropertyPaneMultiSelectDropdown } from '../components/Dropdown/fps-PropPaneMultiSelectDropdown';
 import { IOffice365SpecificMIMENames, Office365MIMENAME, Office365MIMENAMES, Specific_MIME_DropdownOptions } from '../components/Forms/FileDropBox/fps-FileDropTypes';
-import { FileSizeScaleOptions, FileSizeScaleRegex, IFileDropBoxWPProps } from '../components/Forms/FileDropBox/fps-FileDropBox';
+import { IFileDropBoxWPProps } from '../components/Forms/FileDropBox/IFileDropBoxProps';
+import { FileSizeScaleOptions, FileSizeScaleRegex } from '../components/Forms/FileDropBox/convertFileSizeStringToNum';
 
 
 export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
@@ -33,16 +34,19 @@ export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass
       onText: 'Paste clipboard',
       offText: 'Select files',
     }),
+
     PropertyPaneTextField('fileWarnSize', {
       label: 'file Warn size (like 50 kb)',
       description: `valid scales: ${ FileSizeScaleOptions.join( ' | ')}`,
       onGetErrorMessage: validateFileSize,
     }),
+
     PropertyPaneTextField('fileMaxSize', {
       label: 'file Max size (like 1MB)',
       description: '',
       onGetErrorMessage: validateFileSize,
     }),
+
     PropertyPaneTextField('maxUploadCount', {
       label: 'Max upload count',
       description: '',

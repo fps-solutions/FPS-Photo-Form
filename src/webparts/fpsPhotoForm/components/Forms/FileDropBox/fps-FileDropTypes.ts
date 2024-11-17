@@ -101,7 +101,6 @@ export const MIMETypes_EMAIL: IMIMETypesObject = {
     types: [ 'text/calendar' ],
 };
 
-
 export const Office365MIMENAME = 'Office 365';
 
 export const MIMETypes_MSFTOffice: IMIMETypesObject = {

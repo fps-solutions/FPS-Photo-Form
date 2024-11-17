@@ -6,20 +6,18 @@ import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/sou
 
 import styles from '../FpsPhotoForm.module.scss';
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
-import { IPhotoButtonStyle } from './IScatterChartProps';
+import { IPhotoButtonStyle } from '../Scatter/IScatterChartProps';
 import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
 import { makeid } from '../../fpsReferences';
-import FileDropContainer from './FileDropBox/fps-FileDropContainer';
 
 // import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 
 // import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
-import FileDropBox, { IFileDropBoxProps } from './FileDropBox/fps-FileDropBox';
-import ParentComponent from './FileDropBox/ParentFileSample';
+import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
 import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
 
 export interface IPhotoFormForm  {
@@ -60,6 +58,17 @@ export interface IPhotoFormFormInterface {
 const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
 const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
 
+/***
+ *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
+ *    88'  YP `~~88~~' d8' `8b 88  `8D `~~88~~'      88   88 .8P  Y8. .8P  Y8. 88 ,8P'
+ *    `8bo.      88    88ooo88 88oobY'    88         88ooo88 88    88 88    88 88,8P
+ *      `Y8b.    88    88~~~88 88`8b      88         88~~~88 88    88 88    88 88`8b
+ *    db   8D    88    88   88 88 `88.    88         88   88 `8b  d8' `8b  d8' 88 `88.
+ *    `8888Y'    YP    YP   YP 88   YD    YP         YP   YP  `Y88P'   `Y88P'  YP   YD
+ *
+ *
+ */
+
 const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
   const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
 
@@ -71,10 +80,32 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
 
+  /***
+   *    db    db .d8888. d88888b      d88888b d88888b d88888b d88888b  .o88b. d888888b
+   *    88    88 88'  YP 88'          88'     88'     88'     88'     d8P  Y8 `~~88~~'
+   *    88    88 `8bo.   88ooooo      88ooooo 88ooo   88ooo   88ooooo 8P         88
+   *    88    88   `Y8b. 88~~~~~      88~~~~~ 88~~~   88~~~   88~~~~~ 8b         88
+   *    88b  d88 db   8D 88.          88.     88      88      88.     Y8b  d8    88
+   *    ~Y8888P' `8888Y' Y88888P      Y88888P YP      YP      Y88888P  `Y88P'    YP
+   *
+   *
+   */
+
     // Update wasSubmitted to false whenever formData changes
     useEffect(() => {
       setWasSubmitted(false);
     }, [formData]);
+
+/***
+ *    db   db  .d8b.  d8b   db d8888b. db      d88888b       .o88b. db      d888888b  .o88b. db   dD .d8888.
+ *    88   88 d8' `8b 888o  88 88  `8D 88      88'          d8P  Y8 88        `88'   d8P  Y8 88 ,8P' 88'  YP
+ *    88ooo88 88ooo88 88V8o 88 88   88 88      88ooooo      8P      88         88    8P      88,8P   `8bo.
+ *    88~~~88 88~~~88 88 V8o88 88   88 88      88~~~~~      8b      88         88    8b      88`8b     `Y8b.
+ *    88   88 88   88 88  V888 88  .8D 88booo. 88.          Y8b  d8 88booo.   .88.   Y8b  d8 88 `88. db   8D
+ *    YP   YP YP   YP VP   V8P Y8888D' Y88888P Y88888P       `Y88P' Y88888P Y888888P  `Y88P' YP   YD `8888Y'
+ *
+ *
+ */
 
     const handleToggleChange = (checked: boolean): void => {
       setAutoClear(checked); // Update the state when toggle changes

@@ -1,75 +1,24 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { getMIMEObjectPropFromType, getMIMEObjectsFromSelectedTypes, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject, Specific_MIME_DropdownOptions, Specific_MIME_Objects } from './fps-FileDropTypes';
+import { getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Valid, } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
-import { makeid } from '../../../fpsReferences';
 import { createFileElementList } from './fps-FileDropBoxElements';
+import { IFileDropBoxProps } from './IFileDropBoxProps';
 
 // https://github.com/fps-solutions/FPS-Photo-Form/issues/89
 // require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
 require('./fps-FileDrop.css');
 
-export interface IFileDropBoxWPProps {
-  defaultPasteMode?: boolean;
-  maxUploadCount?: string; // Default 10
-  fileMaxSize?: string; // Max file size in kb
-  fileWarnSize?: string; // Warn file size in kb
-  fileTypes?: string[];  // Accepted MIME types (optional)
-}
-
-export const FileSizeScaleOptions: string[] = ['KB', 'MB', 'GB', 'TB'];
-export const FileSizeScaleRegex: RegExp = /^(\d+(\.\d+)?)\s*(KB|MB|GB|TB)$/i;
-
-export function convertFileSizeStringToNum(fileSize: string = '' ): number {
-
-  // Extract the numeric part and the unit part (KB, MB, GB, TB, etc.)
-  const match = fileSize.trim().match(FileSizeScaleRegex);
-
-  if ( !match ) return parseInt( fileSize );
-
-  const numValue = parseFloat(match[1]);
-  const unit = match[3].toUpperCase();
-
-  // Find the index of the scale unit
-  const index = FileSizeScaleOptions.indexOf(unit);
-
-  if (index === -1) {
-    throw new Error("Unsupported unit");
-  }
-
-  // Return the number converted to bytes
-  return numValue * Math.pow(1024, index + 1);
-}
-
-export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropBoxWPProps ): IFileDropBoxProps {
-  const result: IFileDropBoxProps = {
-    setParentFilesData: null,
-    fileTypes: [],
-    refreshId: makeid(5),
-    useDropBox: true,
-  };
-  const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes, defaultPasteMode } = properties;
-  if ( maxUploadCount ) result.maxUploadCount = parseInt( maxUploadCount );
-  if ( fileMaxSize ) result.fileMaxSize = convertFileSizeStringToNum( fileMaxSize );
-  if ( fileWarnSize ) result.fileWarnSize = convertFileSizeStringToNum( fileWarnSize );
-  if ( defaultPasteMode === true ) result.useDropBox = false;
-  if ( fileTypes && fileTypes.length > 0 ) {
-    result.fileTypes = getMIMEObjectsFromSelectedTypes( Specific_MIME_Objects, properties.fileTypes );
-  }
-  return result;
-}
-
-export interface IFileDropBoxProps {
-  useDropBox?: boolean;
-  maxUploadCount?: number; // Default 10
-  fileMaxSize?: number; // Max file size in kb
-  fileWarnSize?: number; // Warn file size in kb
-  fileTypes?: IMIMETypesObject[];  // Accepted MIME types (optional)
-  // fileTypes?: IMIMEType_Valid[];  // Accepted MIME types (optional)
-  setParentFilesData: (files: File[]) => void;  // Callback to update parent with files
-  style?: React.CSSProperties;  // Optional: Custom styling for the component
-  refreshId?: string;
-}
+/***
+ *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
+ *    88'  YP `~~88~~' d8' `8b 88  `8D `~~88~~'      88   88 .8P  Y8. .8P  Y8. 88 ,8P'
+ *    `8bo.      88    88ooo88 88oobY'    88         88ooo88 88    88 88    88 88,8P
+ *      `Y8b.    88    88~~~88 88`8b      88         88~~~88 88    88 88    88 88`8b
+ *    db   8D    88    88   88 88 `88.    88         88   88 `8b  d8' `8b  d8' 88 `88.
+ *    `8888Y'    YP    YP   YP 88   YD    YP         YP   YP  `Y88P'   `Y88P'  YP   YD
+ *
+ *
+ */
 
 const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId, useDropBox }) => {
   const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> ( getMIMETypesFromObjects( fileTypes ) );
@@ -81,6 +30,17 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   // Use a ref for the file input
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  /***
+   *    db    db .d8888. d88888b      d88888b d88888b d88888b d88888b  .o88b. d888888b
+   *    88    88 88'  YP 88'          88'     88'     88'     88'     d8P  Y8 `~~88~~'
+   *    88    88 `8bo.   88ooooo      88ooooo 88ooo   88ooo   88ooooo 8P         88
+   *    88    88   `Y8b. 88~~~~~      88~~~~~ 88~~~   88~~~   88~~~~~ 8b         88
+   *    88b  d88 db   8D 88.          88.     88      88      88.     Y8b  d8    88
+   *    ~Y8888P' `8888Y' Y88888P      Y88888P YP      YP      Y88888P  `Y88P'    YP
+   *
+   *
+   */
+
   // useEffect(() => {
   //   // Intentionally left empty
   // }, [maxUploadCount, fileMaxSize, errorMessage]);
@@ -91,6 +51,17 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   }, [fileTypes]);
 
   // if ( useDropBox === false ) return undefined;
+
+  /***
+ *    db   db  .d8b.  d8b   db d8888b. db      d88888b       .o88b. db      d888888b  .o88b. db   dD .d8888.
+ *    88   88 d8' `8b 888o  88 88  `8D 88      88'          d8P  Y8 88        `88'   d8P  Y8 88 ,8P' 88'  YP
+ *    88ooo88 88ooo88 88V8o 88 88   88 88      88ooooo      8P      88         88    8P      88,8P   `8bo.
+ *    88~~~88 88~~~88 88 V8o88 88   88 88      88~~~~~      8b      88         88    8b      88`8b     `Y8b.
+ *    88   88 88   88 88  V888 88  .8D 88booo. 88.          Y8b  d8 88booo.   .88.   Y8b  d8 88 `88. db   8D
+ *    YP   YP YP   YP VP   V8P Y8888D' Y88888P Y88888P       `Y88P' Y88888P Y888888P  `Y88P' YP   YD `8888Y'
+ *
+ *
+ */
 
   // Handle the files when dropped
   const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -159,6 +130,16 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     setDragging(false);  // Reset dragging state when drag leaves the drop zone
   };
 
+/***
+ *    d88888b d888888b d8b   db  .d8b.  db           d88888b db      d88888b .88b  d88. d88888b d8b   db d888888b
+ *    88'       `88'   888o  88 d8' `8b 88           88'     88      88'     88'YbdP`88 88'     888o  88 `~~88~~'
+ *    88ooo      88    88V8o 88 88ooo88 88           88ooooo 88      88ooooo 88  88  88 88ooooo 88V8o 88    88
+ *    88~~~      88    88 V8o88 88~~~88 88           88~~~~~ 88      88~~~~~ 88  88  88 88~~~~~ 88 V8o88    88
+ *    88        .88.   88  V888 88   88 88booo.      88.     88booo. 88.     88  88  88 88.     88  V888    88
+ *    YP      Y888888P VP   V8P YP   YP Y88888P      Y88888P Y88888P Y88888P YP  YP  YP Y88888P VP   V8P    YP
+ *
+ *
+ */
 
   console.log( `UploadStatus:  FileDropBox ~ 88` );
   return (

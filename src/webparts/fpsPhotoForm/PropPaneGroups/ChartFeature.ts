@@ -14,7 +14,7 @@ import {
 } from '@microsoft/sp-property-pane';
 
 import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IThisFPSWebPartClass1152';
-import { QtyHistoryDefaultChoices, UserHistoryDefaultChoices } from '../components/Forms/IScatterChartProps';
+import { QtyHistoryDefaultChoices, UserHistoryDefaultChoices } from '../components/Scatter/IScatterChartProps';
 
 // https://github.com/fps-solutions/FPS-Photo-Form/issues/33
 export function buildChartFeatureGroup( thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
