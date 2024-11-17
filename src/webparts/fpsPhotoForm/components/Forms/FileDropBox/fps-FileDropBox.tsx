@@ -10,6 +10,7 @@ import { createFileElementList } from './fps-FileDropBoxElements';
 require('./fps-FileDrop.css');
 
 export interface IFileDropBoxWPProps {
+  defaultPasteMode?: boolean;
   maxUploadCount?: string; // Default 10
   fileMaxSize?: string; // Max file size in kb
   fileWarnSize?: string; // Warn file size in kb
@@ -45,11 +46,13 @@ export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropB
     setParentFilesData: null,
     fileTypes: [],
     refreshId: makeid(5),
+    useDropBox: true,
   };
-  const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes } = properties;
+  const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes, defaultPasteMode } = properties;
   if ( maxUploadCount ) result.maxUploadCount = parseInt( maxUploadCount );
   if ( fileMaxSize ) result.fileMaxSize = convertFileSizeStringToNum( fileMaxSize );
   if ( fileWarnSize ) result.fileWarnSize = convertFileSizeStringToNum( fileWarnSize );
+  if ( defaultPasteMode === true ) result.useDropBox = false;
   if ( fileTypes && fileTypes.length > 0 ) {
     result.fileTypes = getMIMEObjectsFromSelectedTypes( Specific_MIME_Objects, properties.fileTypes );
   }
@@ -57,6 +60,7 @@ export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropB
 }
 
 export interface IFileDropBoxProps {
+  useDropBox?: boolean;
   maxUploadCount?: number; // Default 10
   fileMaxSize?: number; // Max file size in kb
   fileWarnSize?: number; // Warn file size in kb
@@ -67,7 +71,7 @@ export interface IFileDropBoxProps {
   refreshId?: string;
 }
 
-const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId }) => {
+const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId, useDropBox }) => {
   const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> ( getMIMETypesFromObjects( fileTypes ) );
   const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
@@ -82,6 +86,8 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     setFileMIMETypes( getMIMETypesFromObjects( fileTypes ) );
     setFileMIMELabels( getMIMETypesProp( fileTypes, 'name' ) );
   }, [fileTypes]);
+
+  if ( useDropBox === false ) return undefined;
 
   // Handle the files when dropped
   const handleDrop = (e: React.DragEvent<HTMLDivElement>): void => {
@@ -167,11 +173,6 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
           <div style={{ color: 'red' }}>
             <strong>Rejected Files: ( {invalidFiles.length} )</strong>
             { createFileElementList( invalidFiles, fileMaxSize, undefined, false, false ) }
-            {/* <ul>
-              {invalidFiles.map((file, index) => (
-                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > fileMaxSize ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
-              ))}
-            </ul> */}
           </div>
         )}
       </div>

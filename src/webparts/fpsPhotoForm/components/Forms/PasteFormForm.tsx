@@ -11,6 +11,7 @@ import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs
 import { categoryButtons } from './PasteFormPieces';
 import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
 import { makeid } from '../../fpsReferences';
+import FileDropContainer from './FileDropBox/fps-FileDropContainer';
 
 // import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
@@ -61,8 +62,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
   const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
 
     const [imageData, setImageData] = useState<string | null>(null);
+    const [imageBlob, setImageBlob] = useState<File | null>(null);
     const [imageRefresh, setImageRefresh] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
+    const [fileMode, setFileMode ] = useState< 'DropBox' | 'Paste' >( props.fileDropBoxProps.useDropBox === true ? 'DropBox' : 'Paste' );
     const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
 
@@ -74,6 +77,14 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const handleToggleChange = (checked: boolean): void => {
       setAutoClear(checked); // Update the state when toggle changes
     };
+
+    const handleFileToggle = (checked: boolean): void => {
+      setFileMode( checked === true ? 'DropBox' : 'Paste' ); // Update the state when toggle changes
+    };
+
+    const handleDropBoxFile = (updatedFiles: File[]): void => {
+      setImageBlob( updatedFiles && updatedFiles.length > 0 ? updatedFiles[0] : null );
+    }
 
     const resetForm = (): void => {
       setFormData( EmptyFormData );
@@ -315,6 +326,15 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                 offText="Manual"
                 onChange={ handleToggleChange }
               />
+
+              <FPSToggle
+                forceChecked={ fileMode === 'DropBox' ? true : false }
+                label="Image Mode"
+                onText="Dropbox"
+                offText="Paste"
+                onChange={ handleFileToggle }
+              />
+
               <div>Current Toggle State: { `${autoClear}` }</div>
 
             </div>
@@ -325,7 +345,16 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               </div>
             )} */}
 
-            <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} />
+            { fileMode === 'Paste' ? <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} /> :
+              <FileDropContainer
+                fileTypes={ props.fileDropBoxProps.fileTypes }  // Accept only PNG and JPEG files
+                setParentFilesData={handleDropBoxFile}  // Callback to receive file updates
+                maxUploadCount={props.fileDropBoxProps.maxUploadCount}
+                fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
+                fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
+                refreshId={ props.fileDropBoxProps.refreshId }
+              />
+            }
 
             <div className={ styles.spacer }/>
 

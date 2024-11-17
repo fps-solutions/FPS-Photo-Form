@@ -8,6 +8,7 @@ import {
   IPropertyPaneGroup,
   PropertyPaneTextField,
   IPropertyPaneField,
+  PropertyPaneToggle,
   // PropertyPaneTextField,
 } from '@microsoft/sp-property-pane';
 import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IThisFPSWebPartClass1152';
@@ -26,6 +27,12 @@ export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupFields: IPropertyPaneField<any>[] = [
+
+    PropertyPaneToggle('defaultPasteMode', {
+      label: 'Mode',
+      onText: 'Paste clipboard',
+      offText: 'Select files',
+    }),
     PropertyPaneTextField('fileWarnSize', {
       label: 'file Warn size (like 50 kb)',
       description: `valid scales: ${ FileSizeScaleOptions.join( ' | ')}`,
