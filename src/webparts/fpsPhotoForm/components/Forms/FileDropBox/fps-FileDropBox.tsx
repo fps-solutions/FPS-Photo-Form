@@ -166,12 +166,12 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
         {invalidFiles.length > 0 && (
           <div style={{ color: 'red' }}>
             <strong>Rejected Files: ( {invalidFiles.length} )</strong>
-            {/* { createFileElementList( invalidFiles, fileMaxSize, undefined, false ) } */}
-            <ul>
+            { createFileElementList( invalidFiles, fileMaxSize, undefined, false, false ) }
+            {/* <ul>
               {invalidFiles.map((file, index) => (
                 <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > fileMaxSize ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
               ))}
-            </ul>
+            </ul> */}
           </div>
         )}
       </div>

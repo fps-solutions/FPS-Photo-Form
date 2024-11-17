@@ -13,6 +13,7 @@ import {  getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropT
 import { getSizeLabel } from '@mikezimm/fps-core-v7/lib/logic/Math/labels';
 import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/CheckItemsResults';
 import { IFileDropBoxProps } from './fps-FileDropBox';
+import { createFileElementList } from './fps-FileDropBoxElements';
 
 
 export interface IFileDropContainerParent  {
@@ -120,16 +121,9 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
         refreshId={ props.fileDropBoxProps.refreshId }
       />
       <div>
+
         <h3>PARENT File Memory: ( { files.length } @ { getSizeLabel( totalSize )} )</h3>
-        {files.length > 0 ? (
-          <ul>
-            {files.map((file, index) => (
-              <li key={index}>{file.name}  - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No files uploaded yet.</p>
-        )}
+        { createFileElementList( files, props.fileDropBoxProps.fileWarnSize, undefined, false, true ) }
       </div>
     </div>
   );

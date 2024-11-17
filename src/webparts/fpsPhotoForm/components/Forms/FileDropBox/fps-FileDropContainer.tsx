@@ -1,7 +1,7 @@
 import * as React from 'react';
 import FileDropBox, { IFileDropBoxProps } from './fps-FileDropBox';  // Import the FileDropBox component
-import { getMIMEObjectPropFromType, IMIMEType_Specific, } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
+import { createFileElementList } from './fps-FileDropBoxElements';
 
 const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, fileWarnSize = 10000, maxUploadCount, fileMaxSize, refreshId }) => {
   const [files, setFiles] = React.useState<File[]>([]);
@@ -51,33 +51,7 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
       />
       <div>
         <h3>Uploaded Files: ( { files.length } @ { getSizeLabel( totalSize )})</h3>
-        <ol>
-          {files.map((file, index) => (
-            <li key={index}>
-              <button
-                onClick={ ( ) => { handleClearFile( file, index ) } }
-                disabled={ false }
-                style={{
-                  // position: 'absolute',
-                  top: '5px',
-                  right: '5px',
-                  background: 'rgba(255, 255, 255, 0.7)',
-                  border: 'none',
-                  borderRadius: '20%',
-                  width: '1.5em',
-                  height: '1.5em',
-                  fontSize: '14px',
-                  color: '#333',
-                  cursor: 'pointer',
-                  margin: '.25em',
-                  zIndex: 10,
-                  padding: '0px', // Added this when using trash icon
-                }}
-                title={ `CLEAR ${ file.name }` }
-              >🗑️</button>
-              {file.name} &nbsp;&nbsp;&nbsp; [ { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > fileWarnSize ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' } ]</li>
-          ))}
-        </ol>
+        { createFileElementList( files, fileWarnSize, { handleClickFile: handleClearFile, iconChar: '🗑️' }, true, true ) }
       </div>
     </div>
   );
