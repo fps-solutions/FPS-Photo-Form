@@ -20,7 +20,7 @@ export type IMIMEType_PPT = 'application/vnd.ms-powerpoint' | 'application/vnd.o
 export type IMIMEType_Text = 'text/plain' | 'text/csv' | 'text/html';
 export type IMIMEType_RichText = 'application/rtf' | 'application/vnd.oasis.opendocument.text';
 export type IMIMEType_Open = 'application/vnd.oasis.opendocument.spreadsheet';
-export type IMIMEType_Compressed = 'application/zip' | 'application/x-7z-compressed' | 'application/x-rar-compressed' | 'application/x-zip-compressed';
+export type IMIMEType_Compressed = 'application/zip' | 'application/x-7z-compressed' | 'application/x-rar-compressed' | 'application/x-zip-compressed' | 'application/x-compressed';
 
 export type IMIMETYPE_Exe = 'application/x-msdownload';
 
@@ -143,7 +143,7 @@ export const MIMETypes_Compressed: IMIMETypesObject = {
     name: 'Compressed',
     type: 'Compressed',
     usage: 'Common',
-    types: [ 'application/zip', 'application/x-zip-compressed', 'application/x-7z-compressed', 'application/x-rar-compressed' ],
+    types: [ 'application/zip', 'application/x-zip-compressed', 'application/x-7z-compressed', 'application/x-rar-compressed', 'application/x-compressed' ],
 };
 
 export const MIMETypes_VideoCommon: IMIMETypesObject = {

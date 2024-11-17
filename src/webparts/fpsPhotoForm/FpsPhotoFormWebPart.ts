@@ -124,6 +124,7 @@ import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/string
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
 import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/fps-FileDropBox';
+import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -453,6 +454,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       groups.push( buildChartDisplayGroup( thisAsAny ));
       groups.push( buildChartFeatureGroup( thisAsAny ));
       groups.push( buildMiscPropsGroup( this.properties, thisAsAny ));
+      groups.push( buildFileDropBoxGroup( this.properties, thisAsAny ));
 
       if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
 

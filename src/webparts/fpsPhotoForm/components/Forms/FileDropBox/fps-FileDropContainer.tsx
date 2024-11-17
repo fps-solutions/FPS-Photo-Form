@@ -75,7 +75,7 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
                 }}
                 title={ `CLEAR ${ file.name }` }
               >🗑️</button>
-              {file.name} &nbsp;&nbsp;&nbsp; [ { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > fileWarnSize * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' } ]</li>
+              {file.name} &nbsp;&nbsp;&nbsp; [ { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) }  { file.size > fileWarnSize ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' } ]</li>
           ))}
         </ol>
       </div>

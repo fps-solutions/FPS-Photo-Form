@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { getMIMEObjectPropFromType, getMIMEObjectsFromSelectedTypes, getMIMETypesFromObjects, getMIMETypesProp, IMIMEType_Specific, IMIMEType_Valid, IMIMETypesObject, Specific_MIME_DropdownOptions, Specific_MIME_Objects } from './fps-FileDropTypes';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 import { makeid } from '../../../fpsReferences';
+import { createFileElementList } from './fps-FileDropBoxElements';
 
 // https://github.com/fps-solutions/FPS-Photo-Form/issues/89
 // require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
@@ -15,22 +16,21 @@ export interface IFileDropBoxWPProps {
   fileTypes?: string[];  // Accepted MIME types (optional)
 }
 
-export function convertFileSizeStringToNum(fileSize: string): number {
-  const scale: string[] = ['KB', 'MB', 'GB', 'TB'];
+export const FileSizeScaleOptions: string[] = ['KB', 'MB', 'GB', 'TB'];
+export const FileSizeScaleRegex: RegExp = /^(\d+(\.\d+)?)\s*(KB|MB|GB|TB)$/i;
+
+export function convertFileSizeStringToNum(fileSize: string = '' ): number {
 
   // Extract the numeric part and the unit part (KB, MB, GB, TB, etc.)
-  const regex = /^(\d+(\.\d+)?)\s*(KB|MB|GB|TB)$/i;
-  const match = fileSize.trim().match(regex);
+  const match = fileSize.trim().match(FileSizeScaleRegex);
 
-  if (!match) {
-    throw new Error("Invalid file size string");
-  }
+  if ( !match ) return parseInt( fileSize );
 
   const numValue = parseFloat(match[1]);
   const unit = match[3].toUpperCase();
 
   // Find the index of the scale unit
-  const index = scale.indexOf(unit);
+  const index = FileSizeScaleOptions.indexOf(unit);
 
   if (index === -1) {
     throw new Error("Unsupported unit");
@@ -74,6 +74,10 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [invalidFiles, setInvalidFiles] = useState<File[]>([]);  // Track invalid files
 
+  // useEffect(() => {
+  //   // Intentionally left empty
+  // }, [maxUploadCount, fileMaxSize, errorMessage]);
+
   useEffect(() => {
     setFileMIMETypes( getMIMETypesFromObjects( fileTypes ) );
     setFileMIMELabels( getMIMETypesProp( fileTypes, 'name' ) );
@@ -101,16 +105,21 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     const validFiles: File[] = [];
 
     // https://github.com/fps-solutions/FPS-Photo-Form/issues/88 - retain invalidFiles in history
-    const currentInvalidFiles: File[] = invalidFiles;
-    const invalidNames: string[] = invalidFiles.map( file => { return file.name } );
+    let currentInvalidFiles: File[] = invalidFiles;
+    let invalidNames: string[] = invalidFiles.map( file => { return file.name } );
 
     // Validate the file types if a fileTypes prop is passed
     if (fileMIMETypes) {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (fileMIMETypes.indexOf(file.type as IMIMEType_Valid) === -1 || file.size > fileMaxSize * 1000 ) {  // Use indexOf instead of includes
+        if (fileMIMETypes.indexOf(file.type as IMIMEType_Valid) === -1 || file.size > fileMaxSize ) {  // Use indexOf instead of includes
           // https://github.com/fps-solutions/FPS-Photo-Form/issues/88 - retain invalidFiles in history
-          if ( invalidNames.indexOf( file.name ) < 0 ) { currentInvalidFiles.push(file); invalidNames.push(file.name);  }
+          const invalidIdx = invalidNames.indexOf( file.name );
+          if ( invalidIdx > -1 ) {
+            currentInvalidFiles = currentInvalidFiles.filter((_, i) => i !== invalidIdx);
+            invalidNames = invalidNames.filter((_, i) => i !== invalidIdx);
+          }
+          currentInvalidFiles.unshift(file); invalidNames.unshift(file.name);
         } else {
           validFiles.push(file);
         }
@@ -127,6 +136,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
     } else {
       setErrorMessage(null);  // Clear error if all files are valid
     }
+    if ( validFiles.length === 0 ) setParentFilesData(validFiles);
   };
 
   // Handle the drag over event to allow drop and set the dragging state
@@ -150,15 +160,16 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       style={style}
     >
       <div className={ `file-drop-box-area` } style={{}}>
-        <p>Drag and drop files here { fileMaxSize ? `< ${ getSizeLabel( fileMaxSize * 1000 ) } each` : '' }</p>
+        <p>Drag and drop files here { fileMaxSize ? `< ${ getSizeLabel( fileMaxSize ) } each` : '' }</p>
         {fileMIMELabels && <p><strong>Accepted file types: </strong>{fileMIMELabels.join(' | ')}</p>}
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
         {invalidFiles.length > 0 && (
           <div style={{ color: 'red' }}>
             <strong>Rejected Files: ( {invalidFiles.length} )</strong>
+            {/* { createFileElementList( invalidFiles, fileMaxSize, undefined, false ) } */}
             <ul>
               {invalidFiles.map((file, index) => (
-                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > fileMaxSize * 1000 ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
+                <li key={index}>{file.name} - { getMIMEObjectPropFromType( file.type as IMIMEType_Specific, 'name', 'fileType' ) } { file.size > fileMaxSize ? <span style={{ color: 'red', fontWeight: 600 }}>{ getSizeLabel( file.size ) }</span> : '' }</li>
               ))}
             </ul>
           </div>
@@ -168,7 +179,7 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
       <input
         type="file"
         multiple={ maxUploadCount === 1 ? false : true }
-        onChange={(e) => e.target.files && handleFiles(e.target.files)}
+        onChange={(e) => e.target.files ? handleFiles(e.target.files) : null}
         style={{ display: 'none' }}
       />
       <button onClick={() => (document.querySelector('input[type="file"]') as HTMLInputElement)?.click()}>Choose files</button>
