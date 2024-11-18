@@ -30,7 +30,7 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   userDisplayName: string;
 
   performance: ILoadPerformance;
-  tab: IDefaultFormTab;
+  // tab: IDefaultFormTab;
   axisMap: IAxisMap;
   chartDisplay: IChartTabProps;
 

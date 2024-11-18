@@ -12,6 +12,7 @@ export interface IFileDropBoxProps {
   setParentFilesData: (files: File[]) => void;  // Callback to update parent with files
   style?: React.CSSProperties;  // Optional: Custom styling for the component
   refreshId?: string;
+  resetId: string; // If this changes, it will clear the upload cache
 }
 
 // NOTE: changesFileDropBox must match the keys of IFileDropBoxWPProps
@@ -30,6 +31,7 @@ export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropB
     setParentFilesData: null,
     fileTypes: [],
     refreshId: makeid(5),
+    resetId: makeid(5),
     useDropBox: true,
   };
   const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes, defaultPasteMode } = properties;

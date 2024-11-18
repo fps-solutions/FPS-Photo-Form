@@ -262,7 +262,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         errMessage: '',
         bannerProps: bannerProps,
 
-        tab: upperFirstLetter( this.properties.defaultTab, true ) as IDefaultFormTab,
+        // tab: upperFirstLetter( this.properties.defaultTab, true ) as IDefaultFormTab,
         ListSource: ListSource,
         ImagesSource: ImagesSource,
         fileDropBoxProps:  fileDropBoxProps,

@@ -15,7 +15,7 @@ import { createFileElementList } from './fps-FileDropBoxElements';
  *
  */
 
-const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, fileWarnSize = 10000, maxUploadCount, fileMaxSize, refreshId, useDropBox }) => {
+const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, fileWarnSize = 10000, maxUploadCount, fileMaxSize, refreshId, resetId, useDropBox }) => {
   const [files, setFiles] = React.useState<File[]>([]);
   const totalSize: number = files.reduce((total, file) => total + file.size, 0);
 
@@ -83,6 +83,7 @@ const FileUploadContainer: React.FC<IFileDropBoxProps> = ({ fileTypes, setParent
         fileMaxSize={ fileMaxSize }
         fileWarnSize={ fileWarnSize }
         refreshId={ refreshId }
+        resetId={ resetId }
       />
       <div>
         <h3>Uploaded Files: ( { files.length } @ { getSizeLabel( totalSize )})</h3>

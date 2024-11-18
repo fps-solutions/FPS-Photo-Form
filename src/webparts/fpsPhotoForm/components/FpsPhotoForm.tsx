@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './FpsPhotoForm.module.scss';
 
-import { IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
+import { DefaultFormTabsExperimental, DefaultFormTabsProduction, IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
 
 import { Icon } from '@fluentui/react/lib/Icon';
 
@@ -65,7 +65,8 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
     super(props);
 
     if ( this._performance === null ) { this._performance = this.props.performance;  }
-    const defaultTab: IDefaultFormTab = [ 'Input', 'Map', 'List', 'Geo', 'Camera', 'Multi-Paste', 'Files' ].indexOf(this.props.tab) > -1 ? this.props.tab : 'Input';
+
+    const { defaultTab, enableExperimental } = this.props.miscFormProps;
 
     this.state = {
       pinState: this.props.bannerProps.fpsPinMenu.defPinState ? this.props.bannerProps.fpsPinMenu.defPinState : 'normal',
@@ -76,7 +77,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       debugMode: false,
       showSpinner: false,
       tab: defaultTab,
-      view: [ 'Input', 'Map', 'List' ].indexOf(defaultTab) > -1 ? 'Normal' : 'Experimental',
+      view: enableExperimental === true && DefaultFormTabsExperimental.indexOf(defaultTab) > -1 ? 'Experimental' : 'Normal',
     };
   }
 
@@ -98,7 +99,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
       this._performance.ops.fetch1 = updatePerformanceEnd( this._performance.ops.fetch1, true, 777 );
       this._performance.ops.fetch = updatePerformanceEnd( this._performance.ops.fetch, true, 999 );
 
-      const analyticsWasExecuted = this.props.tab === 'Input' ? saveViewAnalytics( 'FPS Photo Form', 'Views', 'didMount' , this.props, this.state.analyticsWasExecuted, this._performance ) : false;
+      const analyticsWasExecuted = this.props.miscFormProps.defaultTab === 'Input' ? saveViewAnalytics( 'FPS Photo Form', 'Views', 'didMount' , this.props, this.state.analyticsWasExecuted, this._performance ) : false;
 
       if ( this.state.analyticsWasExecuted !==  analyticsWasExecuted ) {
         this.setState({ analyticsWasExecuted: analyticsWasExecuted });
@@ -224,29 +225,34 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
     const farBannerElementsArray = [...this._farBannerElements,
       //  ...[<div title={'Show Code Details'}><Icon iconName={ 'Code' } onClick={ this.toggleDebugMode.bind(this) } style={ bannerProps.bannerCmdReactCSS }></Icon></div>],
     ];
+    const { enableExperimental } = this.props.miscFormProps;
+    const NewToggleMode = enableExperimental === true && this.state.view === 'Normal' ? 'Experimental' : 'Normal';
+    farBannerElementsArray.push( ...[
+      <Icon key='View' iconName='View' title={ `Press to see ${NewToggleMode} tabs`} onClick={ ( event ) => this.setState({ view: NewToggleMode }) } style={ bannerCmdReactCSS }/>,
+      <div key='Gap' style={{ cursor: 'pointer', marginRight: '.5em', }} onClick={ ( event ) => this.setState({ view: NewToggleMode }) } >Tabs:</div>,
+    ]);
+
+    if ( this.state.view === 'Normal' ) {
+      farBannerElementsArray.push( ...[
+        <Icon key='Input' iconName='Questionnaire' title='Form Input View' onClick={ ( event ) => this.handleStateClick( 'Input' ) } style={ bannerCmdReactCSS }/>,
+        <Icon key='List' iconName='BulletedList' title='List View' onClick={ ( event ) => this.handleStateClick( 'List' ) } style={ bannerCmdReactCSS }/>,
+        <Icon key='Map' iconName='ScatterChart' title='Coordinates View' onClick={ ( event ) => this.handleStateClick( 'Map' ) } style={ { ...bannerCmdReactCSS, } }/>,
+      ]);
+      if ( enableExperimental === true ) {
+        farBannerElementsArray.push( <div style={{ height: '34px', width: '34px', margin: '0px 5px 0px 0px '}} title='Just a spacer :) But you hare curious!'/> );
+      }
+    } else if ( enableExperimental === true ) {
+      farBannerElementsArray.push( ...[
+        <Icon key='Camera' iconName='Camera' title='Camera Input' onClick={ ( event ) => this.handleStateClick( 'Camera' ) } style={ bannerCmdReactCSS }/>,
+        <Icon key='Geo' iconName='World' title='Geo Locations' onClick={ ( event ) => this.handleStateClick( 'Geo' ) } style={ bannerCmdReactCSS }/>,
+        <Icon key='Multi-Paste' iconName='GridViewSmall' title='Multi-Paste View' onClick={ ( event ) => this.handleStateClick( 'Multi-Paste' ) } style={ bannerCmdReactCSS }/>,
+        <Icon key='Files' iconName='BulkUpload' title='Files View' onClick={ ( event ) => this.handleStateClick( 'Files' ) } style={ bannerCmdReactCSS }/>,
+      ]);
+    }
 
     //Setting showTricks to false here ( skipping this line does not have any impact on bug #90 )
     if ( this.props.bannerProps.beAUser === false ) {
-      const NewToggleMode = this.state.view === 'Normal' ? 'Experimental' : 'Normal';
-      farBannerElementsArray.push( ...[
-        <Icon key='View' iconName='View' title={ `Press to see ${NewToggleMode} tabs`} onClick={ ( event ) => this.setState({ view: NewToggleMode }) } style={ bannerCmdReactCSS }/>,
-        <div key='Gap' style={{ cursor: 'pointer', marginRight: '.5em', }} onClick={ ( event ) => this.setState({ view: NewToggleMode }) } >Tabs:</div>,
-      ]);
 
-      if ( this.state.view === 'Normal' ) {
-        farBannerElementsArray.push( ...[
-          <Icon key='Input' iconName='Questionnaire' title='Form Input View' onClick={ ( event ) => this.handleStateClick( 'Input' ) } style={ bannerCmdReactCSS }/>,
-          <Icon key='List' iconName='BulletedList' title='List View' onClick={ ( event ) => this.handleStateClick( 'List' ) } style={ bannerCmdReactCSS }/>,
-          <Icon key='Map' iconName='ScatterChart' title='Coordinates View' onClick={ ( event ) => this.handleStateClick( 'Map' ) } style={ { ...bannerCmdReactCSS, } }/>,
-        ]);
-      } else {
-        farBannerElementsArray.push( ...[
-          <Icon key='Camera' iconName='Camera' title='Camera Input' onClick={ ( event ) => this.handleStateClick( 'Camera' ) } style={ bannerCmdReactCSS }/>,
-          <Icon key='Geo' iconName='World' title='Geo Locations' onClick={ ( event ) => this.handleStateClick( 'Geo' ) } style={ bannerCmdReactCSS }/>,
-          <Icon key='Multi-Paste' iconName='GridViewSmall' title='Multi-Paste View' onClick={ ( event ) => this.handleStateClick( 'Multi-Paste' ) } style={ bannerCmdReactCSS }/>,
-          <Icon key='Files' iconName='BulkUpload' title='Files View' onClick={ ( event ) => this.handleStateClick( 'Files' ) } style={ bannerCmdReactCSS }/>,
-        ]);
-      }
 
       farBannerElementsArray.push( ...[
         <div key='Links' style={{ marginLeft: '3em', cursor: 'default', marginRight: '.5em' }}>Links:</div>,

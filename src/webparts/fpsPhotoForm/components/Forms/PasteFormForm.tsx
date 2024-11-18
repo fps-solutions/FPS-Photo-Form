@@ -19,7 +19,7 @@ import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Cli
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
 import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
-import { IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
+import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
 
 export interface IMiscFormWPProps {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
@@ -37,12 +37,15 @@ export function buildMiscFormFromWPProps( wpProps: IMiscFormWPProps ): IMiscForm
   const { imageSubfolder2, prefabForm, enableExperimental, forceFormTemplate, photoButtonStyles, defaultTab } = wpProps;
   let photoButtonStylesObj: IPhotoButtonStyle[] = [];
   try {
-    photoButtonStylesObj = JSON.parse( wpProps.photoButtonStyles );
+    photoButtonStylesObj = JSON.parse( photoButtonStyles );
 
   } catch(e) {
     console.log( `Unable to parse buttonStyles `);
 
   }
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/100
+  const useDefaultTab:  IDefaultFormTab = enableExperimental === true || DefaultFormTabsProduction.indexOf( defaultTab ) > -1 ? defaultTab : 'Input';
 
   const MiscProps: IMiscFormProps = {
     imageSubfolder2: imageSubfolder2,
@@ -51,7 +54,7 @@ export function buildMiscFormFromWPProps( wpProps: IMiscFormWPProps ): IMiscForm
     forceFormTemplate: forceFormTemplate,
     photoButtonStyles: photoButtonStylesObj,
 
-    defaultTab: defaultTab,
+    defaultTab: useDefaultTab,
   }
 
   return MiscProps;
@@ -131,6 +134,8 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
     const [fileMode, setFileMode ] = useState< 'DropBox' | 'Paste' >( props.fileDropBoxProps.useDropBox === true ? 'DropBox' : 'Paste' );
     const [autoClear, setAutoClear ] = useState<boolean>( true );
+    const [resetId, setResetId ] = useState<string>( props.fileDropBoxProps.resetId );
+
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
 
   /***
@@ -174,7 +179,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
 
     const resetForm = (): void => {
       setFormData( EmptyFormData );
+      setImageData( null );
+      setImageBlob( null );
       setImageRefresh( makeid(5));
+      setResetId( makeid(5));
     }
 
     // useEffect(() => {
@@ -444,6 +452,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
               fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
               refreshId={ props.fileDropBoxProps.refreshId }
+              resetId={ resetId }
             />
 
             <div className={ styles.spacer } style={{ height: fileMode === 'DropBox' ? '0px' : null }} />

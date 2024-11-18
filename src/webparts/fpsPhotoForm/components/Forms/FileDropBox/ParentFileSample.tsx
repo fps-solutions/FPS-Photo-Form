@@ -149,6 +149,7 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
         fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
         fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
         refreshId={ props.fileDropBoxProps.refreshId }
+        resetId={ props.fileDropBoxProps.resetId }
       />
       <div>
 

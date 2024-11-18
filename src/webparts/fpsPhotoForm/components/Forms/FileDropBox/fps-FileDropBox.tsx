@@ -20,7 +20,7 @@ require('./fps-FileDrop.css');
  *
  */
 
-const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId, useDropBox }) => {
+const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesData, style, maxUploadCount, fileMaxSize =100000, refreshId, resetId,  useDropBox }) => {
   const [ fileMIMETypes, setFileMIMETypes ] = useState<IMIMEType_Valid[]> ( getMIMETypesFromObjects( fileTypes ) );
   const [ fileMIMELabels, setFileMIMELabels ] = useState<string[]> (getMIMETypesProp( fileTypes, 'name' ) );
   const [dragging, setDragging] = useState<boolean>(false);  // Track if files are being dragged over the box
@@ -41,9 +41,10 @@ const FileDropBox: React.FC<IFileDropBoxProps> = ({ fileTypes, setParentFilesDat
    *
    */
 
-  // useEffect(() => {
-  //   // Intentionally left empty
-  // }, [maxUploadCount, fileMaxSize, errorMessage]);
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    handleClear();
+  }, [resetId]);
 
   useEffect(() => {
     setFileMIMETypes( getMIMETypesFromObjects( fileTypes ) );
