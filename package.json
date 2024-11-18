@@ -1,6 +1,6 @@
 {
   "name": "fps-photo-form",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "private": true,
   "engines": {
     "node": ">=16.13.0 <17.0.0"
