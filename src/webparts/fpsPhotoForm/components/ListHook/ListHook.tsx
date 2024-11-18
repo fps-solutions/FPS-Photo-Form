@@ -34,7 +34,7 @@ import { createExampleRow, } from './Row';
 import { IStateSource } from '@mikezimm/fps-core-v7/lib/components/molecules/state-source/IStateSource';
 
 import { CustomPanel } from '@mikezimm/fps-library-v2/lib/components/molecules/SourceList/Custom/CustomPanel';
-import { IAxisMap, } from '../Forms/IScatterChartProps';
+import { IAxisMap, } from '../Scatter/IScatterChartProps';
 
 /***
  *     .o88b.  .d88b.  d8b   db .d8888. d888888b  .d8b.  d8b   db d888888b .d8888.
@@ -100,7 +100,7 @@ const ListHook: React.FC<IListHookProps> = ( props ) => {
 
   const [ topSearch, setTopSearch ] = useState<number | null>( 0 );
 
-  const handleFetch = async () => {
+  const handleFetch = async (): Promise<void> => {
     await refreshData();
     console.log('Items fetched!');
   }

@@ -12,13 +12,13 @@ import { check4Gulp, EmptyStateSource, makeid } from "../../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fpsReferences";
 
-import ScatterChart from '../Forms/ScatterChart';
+import ScatterChart from '../Scatter/ScatterChart';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { IFpsPhotoFormProps } from '../IFpsPhotoFormProps';
-import { IScatterSourceItem, IStateSourceScatter } from '../Forms/IScatterChartProps';
+import { IScatterSourceItem, IStateSourceScatter } from '../Scatter/IScatterChartProps';
 import { buildStateMetaX, transformCoordinates, updateFavorites } from './transformCoordinates';
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
-import { getHistoryPresetItems } from '../Forms/ScatterLogic';
+import { getHistoryPresetItems } from '../Scatter/ScatterLogic';
 // import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
 import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/GeoLocation/component';
 import CameraCapture from '../Forms/Camera/component';
@@ -118,6 +118,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     if ( refresh === false && this.state.stateSource.ok !== true && this.state.stateSource.status === 'Unknown' ) refresh = true;
     if ( refresh === false && JSON.stringify( this.props.ListSource ) !== JSON.stringify( prevProps.ListSource ) ) refresh = true;
+    if ( refresh === false && JSON.stringify( this.props.fileDropBoxProps ) !== JSON.stringify( prevProps.fileDropBoxProps ) ) refresh = true;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     if ( refresh === true ) this.fetchItems();
@@ -185,6 +186,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
           ListHookSourceProps={ this.props.ListSource }
           stateSource={ this.state.stateSource }
           refreshId={ this.state.stateSource.refreshId }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           context={ this.props.bannerProps.context as any }
           expandedState={ this.props.tab === 'List' ? true : false }
           axisMap={ this.props.axisMap }
@@ -193,7 +195,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
         /> : undefined }
 
 
-        { this.props.tab === 'Files' ? <ParentComponent FilesSource={ this.props.ImagesSource }/> : undefined }
+        { this.props.tab === 'Files' ? <ParentComponent fileDropBoxProps={ this.props.fileDropBoxProps } FilesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Multi-Paste' ? <ParentForm imageCount={ 1 } elementCSS = {{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr)' }} imageBoxCSS= {{ height: '125px', width: '200px'} }

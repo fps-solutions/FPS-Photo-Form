@@ -111,7 +111,7 @@ import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonSty
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
-import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Forms/IScatterChartProps';
+import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Scatter/IScatterChartProps';
 import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
 import { buildListColumnsGroup } from './PropPaneGroups/ListColumns';
 import { buildChartDisplayGroup } from './PropPaneGroups/ChartGrid';
@@ -123,6 +123,9 @@ import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
+import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
+import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -134,7 +137,6 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
   //https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/guidance/supporting-section-backgrounds
   private _themeProvider: ThemeProvider;
   private _themeVariant: IReadonlyTheme | undefined;  // 2023-01-22:  Just copied from Drilldown
-
 
   private _listPickerValue2 = '';
   private _webUrlPickerValue2 = '';
@@ -232,15 +234,6 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, );
 
-    try {
-      this._photoButtonStyles = JSON.parse( this.properties.photoButtonStyles );
-
-    } catch(e) {
-      console.log( `Unable to parse buttonStyles `);
-
-    }
-
-
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
     const ChartDisplay: IChartTabProps = createChartDisplay( this.properties );
@@ -252,6 +245,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     ImagesSource.subFolder = this.properties.imageSubfolder2;
 
     const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
+    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties );
+    const miscFormProps = buildMiscFormFromWPProps( this.properties );
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
       FpsPhotoForm,
@@ -267,10 +262,10 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         errMessage: '',
         bannerProps: bannerProps,
 
-        tab: upperFirstLetter( this.properties.defaultTab, true ) as IDefaultFormTab,
+        // tab: upperFirstLetter( this.properties.defaultTab, true ) as IDefaultFormTab,
         ListSource: ListSource,
         ImagesSource: ImagesSource,
-
+        fileDropBoxProps:  fileDropBoxProps,
         ListSiteUrl: this.properties.webUrlPickerValue,
         ListTitle: this.properties.listPickerValue,
         LibrarySiteUrl: this.properties.webUrlPickerValue2,
@@ -281,8 +276,6 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
         imageSubfolder2: this.properties.imageSubfolder2,
 
-        photoButtonStyles: this._photoButtonStyles,
-
         axisMap: AxisMap,
         chartDisplay: ChartDisplay,
 
@@ -290,6 +283,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         eleProps: buildFPSTileEleWPProps( this.properties ),
         eleExtras: buildFPSTileEleWPExtras( this.properties ),
 
+        miscFormProps: miscFormProps,
         // axisMap: {
         //   type: 'MC',
         //   Title: 'Title',
@@ -450,7 +444,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       groups.push( buildListColumnsGroup( thisAsAny ));
       groups.push( buildChartDisplayGroup( thisAsAny ));
       groups.push( buildChartFeatureGroup( thisAsAny ));
-      groups.push( buildMiscPropsGroup( thisAsAny ));
+      groups.push( buildMiscPropsGroup( this.properties, thisAsAny ));
+      groups.push( buildFileDropBoxGroup( this.properties, thisAsAny ));
 
       if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
 

@@ -1,4 +1,4 @@
-import { IPhotoButtonStyle } from "./IScatterChartProps";
+import { IPhotoButtonStyle } from "../Scatter/IScatterChartProps";
 
 
 const PlaceholderButtons: IPhotoButtonStyle[] = [

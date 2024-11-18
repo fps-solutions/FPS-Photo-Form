@@ -70,7 +70,6 @@ export interface IChartFeatureWPProps {
   chart_F_defHistoryCap: string;
 }
 
-
 export interface IChartTabWPProps extends IChartGridWPProps, IChartFeatureWPProps {
 
 }
@@ -92,7 +91,6 @@ export const UserHistoryDefaultChoices = [
   { index: 1, key: 'Everyone', text: "Everyone" },
   { index: 2, key: 'Others', text: "Others" },
 ];
-
 
 // Should match:  IHistoryCapDefault = 'Last5' | 'Last10' | '24Hours' | '7Days';
 export const QtyHistoryDefaultChoices = [
@@ -196,7 +194,6 @@ export interface IFPSItemWithScatter extends IFPSItem {
 export interface IScatterSourceItem extends Omit<IAnySourceItem, 'FPSItem'> {
   FPSItem: IFPSItemWithScatter; // Override FPSItem to include the Scatter property
 }
-
 
 export interface IScatterPlotItem {
   horz: number;

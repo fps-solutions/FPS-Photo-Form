@@ -1,6 +1,6 @@
 
 import { doesObjectExistInArrayInt } from "@mikezimm/fps-library-v2/lib/logic/Arrays/searching/objectfind";
-import { IScatterSourceItem, IAxisMap, IScatterPlotItem, IFPSItemWithScatter, IChartFavorites } from "../Forms/IScatterChartProps";
+import { IScatterSourceItem, IAxisMap, IScatterPlotItem, IFPSItemWithScatter, IChartFavorites } from "../Scatter/IScatterChartProps";
 
 export function transformCoordinates(
   items: IScatterSourceItem[],

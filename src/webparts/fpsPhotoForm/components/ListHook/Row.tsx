@@ -15,7 +15,7 @@ import { ISourceRowRender } from '@mikezimm/fps-library-v2/lib/components/molecu
 import styles from './RowStyles.module.scss';
 import { IAnySourceItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { GetFirstWord } from '@mikezimm/fps-core-v7/lib/logic/Strings/drillParse/getWords';
-import { IScatterSourceItem } from '../Forms/IScatterChartProps';
+import { IScatterSourceItem } from '../Scatter/IScatterChartProps';
 
 require ('@mikezimm/fps-styles/dist/fpsGeneralCSS.css');
 const noWrap = `fps-gen-text-ellipse`; // From fps-stiles fpsGeneralCSS.css

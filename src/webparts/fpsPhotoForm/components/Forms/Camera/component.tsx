@@ -1,15 +1,13 @@
 import * as React from 'react';
 import { useEffect, useRef, useState } from 'react';
-require('./fps-Camera.css'); // Import your local CSS file
 import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { ActionButtons, ImageDisplay } from './pieces';
 import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
-// import { postSourceFilesAPI } from '../FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 import { EmptyStateSource, IStateSource, makeid } from '../../../fpsReferences';
-// import ImagePaste from './ClipboardImage/fps-ImagePaste';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
+require('./fps-Camera.css'); // Import your local CSS file
 
 export interface ICameraFormInput {
   ImagesSource: ISourceProps;
@@ -23,8 +21,6 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const [image, setImage] = useState<string | null>(null); // State to hold captured image
   const [imageRefresh, setImageRefresh] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null); // State to hold error messages
-  const [debugMode, setDebugMode] = useState<boolean>(false);
-  const [showTurnOnCam, setShowTurnOnCam] = useState<boolean>(true); // State to track camera status
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false); // State to track camera status
   const [useFrontCamera, setUseFrontCamera] = useState<boolean>(true); // State to track camera status
   const [imprintTimestamp, setImprintTimestamp] = useState<boolean>(false); // State for timestamp toggle
@@ -64,7 +60,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   // To use the front camera, you would call initCamera(true).
 
   // Function to turn the camera off
-  const turnCameraOff = () => {
+  const turnCameraOff = (): void => {
     if (stream) {
       stream.getTracks().forEach(track => track.stop()); // Stop all tracks
       if (videoRef.current) {
@@ -151,7 +147,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
     // await uploadBase64ImageToLibrary( ImagesSource, image ,fileName );
   }
 
-    // Component to display the video feed from the camera
+  // Component to display the video feed from the camera
   const TurnCameraOnElement: JSX.Element =
   <div className='placeholder' style={{  }}>
     <h3>Live Feed is Disabled</h3>

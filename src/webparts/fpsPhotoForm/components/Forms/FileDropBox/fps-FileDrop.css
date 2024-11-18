@@ -1,10 +1,11 @@
 .file-drop-box {
-  border: 2px dashed #ccc;
+  border: 4px dashed #7e7e7e;
+  border-radius: 8px;
   padding: 20px;
   text-align: center;
   transition: background-color 0.3s ease;
-  width: 100%;
-  max-width: 400px;
+  /* width: 100%; */
+  /* max-width: 400px; */
   margin: 0 auto;
 }
 
@@ -26,6 +27,11 @@
   border: none;
   border-radius: 4px;
   font-size: 14px;
+}
+
+.file-drop-box button.reset {
+  background: #7e7e7e;
+  color: black;
 }
 
 .file-drop-box p {

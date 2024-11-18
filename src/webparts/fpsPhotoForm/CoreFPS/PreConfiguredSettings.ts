@@ -56,7 +56,7 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         listPickerValue2: '',
         listItemPickerValue2: '',
         imageSubfolder2: '',
-
+        prefabForm: 'Custom',
         photoButtonStyles: JSON.stringify( ButtonStylesMC ),
 
         axis_type: 'MC',

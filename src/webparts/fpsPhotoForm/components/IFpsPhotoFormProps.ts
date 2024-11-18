@@ -7,11 +7,20 @@ import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-libra
 
 import { ILoadPerformance } from '../fpsReferences';
 import { IPhotoFormForm } from './Forms/PasteFormForm';
-import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Forms/IScatterChartProps';
+import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './Scatter/IScatterChartProps';
+import { IFileDropBoxProps } from './Forms/FileDropBox/IFileDropBoxProps';
 
-export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
+// export type IDefSourceType = 'lists...' | '' | '' | '' | '' | '*';
 
-export type IDefaultFormTab = 'Input' | 'List' | 'Geo' | 'Camera' | 'Multi-Paste' | 'Files' | 'Map';
+export type IPrefabFormTemplates = 'Expense' | 'Price Tracker' | 'Custom' | 'Minecraft' | 'Subnautica';
+export type IDefaultFormTab = 'Input' | 'List'  | 'Map' | 'Geo' | 'Camera' | 'Multi-Paste' | 'Files';
+
+export const PrefabFormTemplates: IPrefabFormTemplates[] = [ 'Expense', 'Price Tracker', 'Custom', 'Minecraft', 'Subnautica', ];
+
+export const DefaultFormTabsProduction: IDefaultFormTab[] = [ 'Input', 'List', 'Map', ];
+export const DefaultFormTabsExperimental: IDefaultFormTab[] = [ 'Geo', 'Camera', 'Multi-Paste', 'Files' ];
+
+export const DefaultFormTabsAll: IDefaultFormTab[] = [ ...DefaultFormTabsProduction, ...DefaultFormTabsExperimental ];
 
 export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhotoFormForm {
   description: string;
@@ -21,11 +30,12 @@ export interface IFpsPhotoFormProps  extends IFPSCoreReactComponentProps, IPhoto
   userDisplayName: string;
 
   performance: ILoadPerformance;
-  tab: IDefaultFormTab;
+  // tab: IDefaultFormTab;
   axisMap: IAxisMap;
   chartDisplay: IChartTabProps;
 
-  photoButtonStyles: IPhotoButtonStyle[];
+  fileDropBoxProps: IFileDropBoxProps;
+  // photoButtonStyles: IPhotoButtonStyle[]; 2024-11-17:  Moved to IMiscFormProps
 
   FPSItem: IFPSItem;
   eleExtras: IFPSTileElementExtras;

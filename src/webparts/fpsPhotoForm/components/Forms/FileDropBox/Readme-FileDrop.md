@@ -59,10 +59,11 @@ npm install react
 npm install typescript
 ```
 
-2. **Install CSS**: Add the accompanying CSS file to your project:
+2. **Install CSS**: Add the accompanying CSS file to your project using one of these:
 
 ```bash
-import './fps-FileDropBox.css';
+require('@mikezimm/fps-styles/dist/fps-FileDrop.css');
+require('./fps-FileDrop.css');
 ```
 
 3. **Usage**:

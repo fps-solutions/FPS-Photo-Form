@@ -17,7 +17,7 @@ export function categoryButtons( CatNum: number, categoryX: number[], formProps:
           title={ category }
           type="button"
           onClick={() => handleCategoryXClick( CatNum, idx)}
-          style={ {...{  }, ...getButtonStyles( CategoryXs[ idx ], formProps.photoButtonStyles ) } }
+          style={ {...{  }, ...getButtonStyles( CategoryXs[ idx ], formProps.miscFormProps.photoButtonStyles ) } }
         >
           {category}
         </button>
