@@ -109,7 +109,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
       <ul>
         {users.map((user) => (
           <li key={user.Id}>
-            {user.Title} - {user.Email}
+            <img src={ user.imageUrl } height={ '20px' } style={{ marginRight: '10px' }}/> {user.Title} - {user.Email}
           </li>
         ))}
       </ul>
