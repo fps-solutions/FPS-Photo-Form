@@ -80,7 +80,8 @@ import { IPropertyPaneDropdownOption } from '@mikezimm/fps-core-v7/lib/types/@ms
 
 import { PreConfiguredProps,  } from './CoreFPS/PreConfiguredSettings';
 
-import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
+// import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
+import { PropertyPaneWebPartInformation } from './PropPaneGroups/WebPartInfoGroup/PropertyPaneWebPartInformation';
 import { getAllDefaultFPSFeatureGroups } from '@mikezimm/fps-library-v2/lib/banner/propPane/AllDefaultFPSGroups';
 
 import { WebPartInfoGroup, } from '@mikezimm/fps-library-v2/lib/banner/propPane/WebPartInfoGroup';
@@ -409,7 +410,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-this-alias
     const thisAsAny: IThisFPSWebPartClass = this as any;
-    const WPInfoLabel: string = 'Sample FPS Banner component :)';
+    const WPInfoLabel: string = 'FPS Photo Form Webpart :)';
 
     const { enableLockProps, propsEasyMode } = this.properties;
 
