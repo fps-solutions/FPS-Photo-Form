@@ -121,7 +121,6 @@ import { FPSTileWPGroup } from "@mikezimm/fps-library-v2/lib/components/molecule
 import { buildFpsTileWPProps } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageFPSTileProps";
 import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageWPPropsExtras";
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
-import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
 import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/IFileDropBoxProps';

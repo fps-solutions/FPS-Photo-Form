@@ -198,7 +198,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         { this.props.tab === 'Files' ? <ParentComponent fileDropBoxProps={ this.props.fileDropBoxProps } FilesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
-        { this.props.tab === 'Geo' ? <SharePointUserSearch siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl}/> : undefined }
+        { this.props.tab === 'Geo' ? <SharePointUserSearch typeToShow={ false } preFilter='UserWEmail' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl}/> : undefined }
 
 
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }

@@ -1,19 +1,18 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 
+import { ISiteUserInfo } from '@mikezimm/fps-core-v7/lib/types/@pnp/@2.14.0/sp/site-users';
+
+export type ISharePointUserPreFilterRule = 'User' | 'UserWEmail' | 'All'; // User is PrincipalType 1 or 2, UserWEmail is more specific and more likely a real person vs a group
+
 // Define the interface for the props
 interface SharePointUserSearchProps {
-  onUsersFetched?: (users: SharePointUser[]) => void; // Optional callback to pass users back to parent
+  onUsersFetched?: (users: ISiteUserInfo[]) => void; // Optional callback to pass users back to parent
   debounceDelay?: number; // Optional debounce delay with default value of 200ms
   siteUrl?: string; // Optional SharePoint site URL
   size?: 'S' | 'M' | 'L';
-}
-
-interface SharePointUser {
-  Id: number;
-  Title: string;
-  Email: string;
-  imageUrl: string;
+  preFilter: ISharePointUserPreFilterRule;
+  typeToShow: boolean; // if true, does not show any names until user types a search.  Data is loaded upon clicking the field
 }
 
 const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
@@ -21,10 +20,12 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
   debounceDelay = 200, // Default value for debounceDelay
   siteUrl = "/sites/YourSiteUrl", // Default site URL
   size = 'L',
+  preFilter = 'UserWEmail',
+  typeToShow = false,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [users, setUsers] = useState<SharePointUser[]>([]);
-  const [allUsers, setAllUsers] = useState<SharePointUser[]>([]); // Store all users
+  const [users, setUsers] = useState<ISiteUserInfo[]>([]);
+  const [allUsers, setAllUsers] = useState<ISiteUserInfo[]>([]); // Store all users - verified ISiteUserInfo is same object return from rest endpoint
   const [loading, setLoading] = useState<boolean>(false);
   const [fetchingMessage, setFetchingMessage] = useState<string>(''); // Message for fetching state
 
@@ -47,12 +48,12 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
       }
 
       const data = await response.json();
-      const results = data.d.results.map((user: any) => ({
-        Id: user.Id,
-        Title: user.Title,
-        Email: user.Email,
+      let results = data.d.results.map((user: any) => ({ ...user, ...{
         imageUrl: `${window.location.origin}/_layouts/15/userphoto.aspx?size=${size}&accountname=${user.Email ? user.Email : user.AccountName}`,
+      }
       }));
+
+      if ( preFilter === 'UserWEmail' ) results = results.filter((user: ISiteUserInfo ) => (user.PrincipalType === 1 || user.PrincipalType === 2) && !!user.Email );
 
       setAllUsers(results); // Save all users to state
       setUsers(results); // Initialize user list
@@ -106,10 +107,11 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
         placeholder="Search for a user..."
       />
       {loading && <p>{fetchingMessage}</p>} {/* Show loading message when fetching */}
+
       <ul>
-        {users.map((user) => (
-          <li key={user.Id}>
-            <img src={ user.imageUrl } height={ '20px' } style={{ marginRight: '10px' }}/> {user.Title} - {user.Email}
+        { !loading && !fetchingMessage && ( !searchTerm || typeToShow !== true ) && users.length > 0 ? 'Type a name to search users' : users.map((user) => (
+          <li key={user.Id} style={{ display: 'flex' }}>
+            <div style={{ minWidth: '36px', flexShrink: 0 }}><img src={ user.imageUrl } height={ '20px' }/></div> {user.Title} - {user.Email}
           </li>
         ))}
       </ul>
