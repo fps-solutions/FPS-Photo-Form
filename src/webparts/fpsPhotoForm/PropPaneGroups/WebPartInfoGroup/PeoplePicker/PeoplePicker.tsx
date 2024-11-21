@@ -105,7 +105,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
   };
 
   // Handle checkbox change for multi-select functionality
-  const handleCheckboxChange = (user: ISiteUserInfo) => {
+  const handleCheckboxChange = (user: ISiteUserInfo): void => {
     if (multiSelect) {
       // Add or remove user from selected list
       setSelectedUsers((prev) => {
@@ -120,7 +120,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
   };
 
   // Remove a selected user from the list
-  const removeSelectedUser = (userId: number) => {
+  const removeSelectedUser = (userId: number): void => {
     setSelectedUsers((prev) => prev.filter((user) => user.Id !== userId));
   };
 
@@ -154,7 +154,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
       <ul className="user-list">
         {/* Display no users found message if there are no results */}
         { !loading && !fetchingMessage && ( !searchTerm || typeToShow !== true ) && users.length > 0
-          ? 'Type a name to search users'
+          ? `Type a name to search ${ users.length } users`
           : users.map((user) => (
           <li key={user.Id} className="user-item">
             <input
