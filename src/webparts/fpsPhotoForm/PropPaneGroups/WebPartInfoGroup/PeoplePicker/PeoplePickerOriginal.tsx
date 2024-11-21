@@ -1,111 +1,154 @@
-
-/**
- * THIS DID NOT WORK well as you can not pre-filter users via the api.
- *
- */
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
+import { ISiteUserInfo } from '@mikezimm/fps-core-v7/lib/types/@pnp/@2.14.0/sp/site-users';
+import './fps-People-Picker.css'; // Import the CSS file
 
-// Define the interface for the props
+export type ISharePointUserPreFilterRule = 'User' | 'UserWEmail' | 'All';
+
 interface SharePointUserSearchProps {
-  onUsersFetched?: (users: SharePointUser[]) => void; // Optional callback to pass users back to parent
-  debounceDelay?: number; // Optional debounce delay with default value of 200ms
-  siteUrl?: string; // Optional SharePoint site URL
+  onUsersFetched?: (users: ISiteUserInfo[]) => void;
+  debounceDelay?: number;
+  siteUrl?: string;
   size?: 'S' | 'M' | 'L';
-}
-
-interface SharePointUser {
-  Id: number;
-  Title: string;
-  Email: string;
-  imageUrl: string;
+  preFilter: ISharePointUserPreFilterRule;
+  typeToShow: boolean;
+  multiSelect?: boolean;
 }
 
 const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
   onUsersFetched,
-  debounceDelay = 200, // Default value for debounceDelay
-  siteUrl = "/sites/YourSiteUrl", // Default site URL
+  debounceDelay = 200,
+  siteUrl = "/sites/YourSiteUrl",
   size = 'L',
+  preFilter = 'UserWEmail',
+  typeToShow = false,
+  multiSelect = true,
 }) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [users, setUsers] = useState<SharePointUser[]>([]);
+  const [users, setUsers] = useState<ISiteUserInfo[]>([]);
+  const [allUsers, setAllUsers] = useState<ISiteUserInfo[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [fetchingMessage, setFetchingMessage] = useState<string>('');
+  const [selectedUsers, setSelectedUsers] = useState<ISiteUserInfo[]>([]);
 
-  // Debounced function to handle API calls
-  const fetchUsers = useCallback(
-    async (term: string) => {
-      if (!term) {
-        setUsers([]);
-        return;
+  const fetchAllUsers = useCallback(async () => {
+    setLoading(true);
+    setFetchingMessage("Fetching site users...");
+
+    try {
+      const response = await fetch(`${siteUrl}/_api/web/siteusers`, {
+        headers: {
+          Accept: "application/json;odata=verbose",
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
       }
 
-      setLoading(true);
-      try {
-        const encodedTerm = encodeURIComponent(term);
-        // Construct the SharePoint REST API URL
-        const response = await fetch(
-          `${siteUrl}/_api/web/siteusers?$filter=substringof('DisplayName', '${term}')`, // This did not search any case
-          {
-            headers: {
-              Accept: "application/json;odata=verbose",
-            },
-          }
-        );
+      const data = await response.json();
+      let results = data.d.results.map((user: any) => ({
+        ...user,
+        imageUrl: `${window.location.origin}/_layouts/15/userphoto.aspx?size=${size}&accountname=${user.Email ? user.Email : user.AccountName}`,
+      }));
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-        const results = data.d.results.map((user: any) => ({
-          Id: user.Id,
-          Title: user.Title,
-          Email: user.Email,
-          imageUrl: `${window.location.origin}/_layouts/15/userphoto.aspx?size=S&accountname=${user.Email ? user.Email : user.AccountName}`,
-        }));
-
-        setUsers(results);
-
-        // Call the parent callback, if provided, to pass the users up
-        if (onUsersFetched) {
-          onUsersFetched(results);
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-        setUsers([]);
-      } finally {
-        setLoading(false);
+      if (preFilter === 'UserWEmail') {
+        results = results.filter((user: ISiteUserInfo) => (user.PrincipalType === 1 || user.PrincipalType === 2) && !!user.Email);
       }
-    },
-    [siteUrl, onUsersFetched]
-  );
 
-  // Debounced logic
+      setAllUsers(results);
+      setUsers(results);
+
+      if (onUsersFetched) {
+        onUsersFetched(results);
+      }
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      setUsers([]);
+    } finally {
+      setLoading(false);
+      setFetchingMessage('');
+    }
+  }, [siteUrl, size, onUsersFetched, preFilter]);
+
   useEffect(() => {
-    const handler = setTimeout(async () => {
-      try {
-        await fetchUsers(searchTerm);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
+    if (!searchTerm) {
+      setUsers(allUsers);
+      return;
+    }
+
+    const handler = setTimeout(() => {
+      const filteredUsers = allUsers.filter(user =>
+        user.Title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (user.Email && user.Email.toLowerCase().includes(searchTerm.toLowerCase()))
+      );
+      setUsers(filteredUsers);
     }, debounceDelay);
 
     return () => clearTimeout(handler);
-  }, [searchTerm, fetchUsers, debounceDelay]);
+  }, [searchTerm, allUsers, debounceDelay]);
+
+  const handleFocus = async (): Promise<void> => {
+    if (allUsers.length === 0) {
+      await fetchAllUsers();
+    }
+  };
+
+  const handleCheckboxChange = (user: ISiteUserInfo) => {
+    if (multiSelect) {
+      setSelectedUsers((prev) => {
+        if (prev.some((u) => u.Id === user.Id)) {
+          return prev.filter((u) => u.Id !== user.Id);
+        }
+        return [...prev, user];
+      });
+    } else {
+      setSelectedUsers([user]);
+    }
+  };
+
+  const removeSelectedUser = (userId: number) => {
+    setSelectedUsers((prev) => prev.filter((user) => user.Id !== userId));
+  };
 
   return (
-    <div>
+    <div className="fps-people-picker">
+      {/* Display selected users */}
+      <div className="selected-users">
+        {selectedUsers.map((user) => (
+          <span key={user.Id} className="selected-user">
+            <img src={user.imageUrl} alt={user.Title} className="user-image" />
+            {user.Title}
+            <button className="remove-user-btn" onClick={() => removeSelectedUser(user.Id)}>
+              ✕
+            </button>
+          </span>
+        ))}
+      </div>
+
+      {/* Search input */}
       <input
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        onFocus={handleFocus}
         placeholder="Search for a user..."
+        className="search-input"
       />
-      {loading && <p>Loading...</p>}
-      <ul>
-        {users.map((user) => (
-          <li key={user.Id}>
-            <img src={ user.imageUrl } height={ '20px' } style={{ marginRight: '10px' }}/> {user.Title} - {user.Email}
+      {loading && <p>{fetchingMessage}</p>}
+
+      {/* User list */}
+      <ul className="user-list">
+        {!loading && !fetchingMessage && (typeToShow === false || searchTerm) && users.map((user) => (
+          <li key={user.Id} className="user-item">
+            <input
+              type="checkbox"
+              checked={selectedUsers.some((u) => u.Id === user.Id)}
+              onChange={() => handleCheckboxChange(user)}
+              className="user-checkbox"
+            />
+            <img src={user.imageUrl} alt={user.Title} className="user-image" />
+            {user.Title} - {user.Email}
           </li>
         ))}
       </ul>
