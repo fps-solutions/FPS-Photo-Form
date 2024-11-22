@@ -50,6 +50,11 @@ export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass
       label: 'Max upload count',
       description: '',
     }),
+
+    PropertyPaneTextField('fileNameHandlebar', {
+      label: 'File Name handle-bars template',
+      description: 'Click yellow button in banner for help',
+    }),
   ];
 
   groupFields.push(

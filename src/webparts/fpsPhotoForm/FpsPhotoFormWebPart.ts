@@ -123,9 +123,10 @@ import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-l
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
-import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps, IFileNameHandleBars } from './components/Forms/FileDropBox/IFileDropBoxProps';
 import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
+import { buildPhotoFormFileNameHandleBarsDef } from './components/Forms/FileDropBox/buildPhotoFormFileNameHandleBarsDef';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -236,15 +237,18 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
+    const HandleBarsNameGen: IFileNameHandleBars = buildPhotoFormFileNameHandleBarsDef( this.properties.fileNameHandlebar, AxisMap );
     const ChartDisplay: IChartTabProps = createChartDisplay( this.properties );
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
+
     // NO NEED to replace 'List' because Libraries do not add that.
     const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
     ImagesSource.subFolder = this.properties.imageSubfolder2;
 
     const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
+
     const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties );
     const miscFormProps = buildMiscFormFromWPProps( this.properties );
 

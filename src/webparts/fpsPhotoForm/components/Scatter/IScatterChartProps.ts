@@ -15,12 +15,17 @@ export interface IAxisMapWPProps {
   axis_Category1: string;
   axis_Category2: string;
   axis_Category3: string;
+
   axis_Color: string;
   axis_Shape: string;
   axis_Screenshot: string;
   axis_horz: string; // raw item property key representing Horizontal Axis
   axis_vert: string; // raw item property key representing Vertical Chart Axis
   axis_depth: string; // raw item property key representing Depth Axis
+
+  // Added for expense type tracking lists or date X-Axis scale
+  axis_Date1?: string;
+  axis_Date2?: string;
 }
 
 export interface IPhotoButtonStyle {
@@ -41,6 +46,13 @@ export interface IAxisMap {
   horz: string; // raw item property key representing Horizontal Axis
   vert: string; // raw item property key representing Vertical Chart Axis
   depth: string; // raw item property key representing Depth Axis
+
+  // Added for expense type tracking lists or date X-Axis scale
+  Date1?: string;
+  Time1?: string;
+  Date2?: string;
+  Time2?: string;
+
 }
 
 export type IFPSGridLineType = 'Solid' | 'Dashed' | 'Dotted';
@@ -206,4 +218,10 @@ export interface IScatterPlotItem {
   Comments: string;
   Shape: 'circle' | 'triangle' | 'square' | 'X' | '-' | 'image';
   Color: string;
+
+  // Added for expense type tracking lists or date X-Axis scale
+  Date1?: string;
+  Time1?: string;
+  Date2?: string;
+  Time2?: string;
 }

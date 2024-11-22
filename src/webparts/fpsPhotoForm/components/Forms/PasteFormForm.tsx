@@ -451,6 +451,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               maxUploadCount={ 1 }
               fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
               fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
+              fileNameHandlebar={ props.fileDropBoxProps.fileNameHandlebar }
               refreshId={ props.fileDropBoxProps.refreshId }
               resetId={ resetId }
             />
