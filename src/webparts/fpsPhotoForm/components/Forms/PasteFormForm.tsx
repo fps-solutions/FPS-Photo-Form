@@ -20,6 +20,7 @@ import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/fil
 import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
 import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
 import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
+import { buildPhotoFormFileName } from './FileDropBox/filenameGenerator';
 
 export interface IMiscFormWPProps {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
@@ -126,7 +127,7 @@ const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [],
  */
 
 const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
-  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
+  const { display, ListSource, ImagesSource, Category1s, Category2s, Category3s, fileDropBoxProps } = props; // ListSiteUrl, ListTitle, LibrarySiteUrl, LibraryName,
 
     const [imageData, setImageData] = useState<string | null>(null);
     const [imageBlob, setImageBlob] = useState<File | null>(null);
@@ -287,18 +288,14 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
         }
 
         const listItemResponse = await createListItem(formData.title);
-        const fileDesc = [ `${ Category1s[formData.category1 ]}` ];
-        fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
-        formData.category2.map( idx => { if ( formData.title.indexOf( Category2s[ idx ] ) < 0 ) fileDesc.push( Category2s[ idx ] ); });
-        formData.category3.map( idx => { if ( formData.title.indexOf( Category3s[ idx ] ) < 0 ) fileDesc.push( Category3s[ idx ] ); });
-        fileDesc.push( `${formData.title}` );
+        // const fileDesc = [ `${ Category1s[formData.category1 ]}` ];
+        // fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
+        // formData.category2.map( idx => { if ( formData.title.indexOf( Category2s[ idx ] ) < 0 ) fileDesc.push( Category2s[ idx ] ); });
+        // formData.category3.map( idx => { if ( formData.title.indexOf( Category3s[ idx ] ) < 0 ) fileDesc.push( Category3s[ idx ] ); });
+        // fileDesc.push( `${formData.title}` );
+        // {{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Comments}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Title}}
 
-        const fileName = `screenshot_${new Date().toISOString().replace(/[:.]/g, '-')}_${ fileDesc.join('_') }.png`;
-        let shortFileName = fileName.length > 190 ? `${fileName.substring(0, 190)}...and more_.png` : fileName;
-
-        // remove special characters from the filename:  https://github.com/fps-solutions/FPS-Photo-Form/issues/9, https://github.com/fps-solutions/FPS-Photo-Form/issues/81
-        // eslint-disable-next-line no-useless-escape
-        shortFileName = shortFileName.replace(/[\\/:*?\'"<>|#&]/g, '' );
+        const shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
 
         const blob = fileMode === 'DropBox' ? imageBlob : base64ToBlob(imageData);
 
@@ -353,6 +350,8 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
 
     const numberFields = ['x', 'y', 'z'];
+
+    const shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
 
     return (
         <form className={ styles.fpsPhotoFormGrid }
@@ -430,6 +429,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               />
 
               <div>Current Toggle State: { `${autoClear}` }</div>
+              <div>FileName: { `${shortFileName}` }</div>
 
             </div>
             {/* {imageData && (
@@ -451,11 +451,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               maxUploadCount={ 1 }
               fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
               fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
-              fileNameHandlebar={ props.fileDropBoxProps.fileNameHandlebar }
+              fileNameHandleBars={ props.fileDropBoxProps.fileNameHandleBars }
               refreshId={ props.fileDropBoxProps.refreshId }
               resetId={ resetId }
             />
-
             <div className={ styles.spacer } style={{ height: fileMode === 'DropBox' ? '0px' : null }} />
 
         </form>

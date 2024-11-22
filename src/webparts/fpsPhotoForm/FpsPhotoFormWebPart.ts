@@ -126,7 +126,6 @@ import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
 import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps, IFileNameHandleBars } from './components/Forms/FileDropBox/IFileDropBoxProps';
 import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
-import { buildPhotoFormFileNameHandleBarsDef } from './components/Forms/FileDropBox/buildPhotoFormFileNameHandleBarsDef';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -237,7 +236,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
-    const HandleBarsNameGen: IFileNameHandleBars = buildPhotoFormFileNameHandleBarsDef( this.properties.fileNameHandlebar, AxisMap );
+
     const ChartDisplay: IChartTabProps = createChartDisplay( this.properties );
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
@@ -249,7 +248,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
 
-    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties );
+    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties, AxisMap );
     const miscFormProps = buildMiscFormFromWPProps( this.properties );
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(

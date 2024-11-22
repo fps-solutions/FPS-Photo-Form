@@ -51,7 +51,7 @@ export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass
       description: '',
     }),
 
-    PropertyPaneTextField('fileNameHandlebar', {
+    PropertyPaneTextField('fileNameHandleBars', {
       label: 'File Name handle-bars template',
       description: 'Click yellow button in banner for help',
     }),

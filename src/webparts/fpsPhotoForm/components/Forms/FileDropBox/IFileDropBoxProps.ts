@@ -1,10 +1,12 @@
 import { makeid } from "../../../fpsReferences";
+import { IAxisMap } from "../../Scatter/IScatterChartProps";
+import { buildPhotoFormFileNameHandleBarsDef } from "./buildPhotoFormFileNameHandleBarsDef";
 import { convertFileSizeStringToNum } from "./convertFileSizeStringToNum";
 import { getMIMEObjectsFromSelectedTypes, IMIMETypesObject, Specific_MIME_Objects } from "./fps-FileDropTypes";
 
 export interface IFileNameHandleBars {
 
-  fileNameHandlebar: string; // Handle Bars syntax for naming files
+  fileNameHandleBars: string; // Handle Bars syntax for naming files
   // Original: string;
   // Today: string;
   // Now: string;
@@ -41,7 +43,7 @@ export interface IFileDropBoxProps {
 }
 
 // NOTE: changesFileDropBox must match the keys of IFileDropBoxWPProps
-export const changesFileDropBox: (keyof IFileDropBoxWPProps)[] = [ 'defaultPasteMode', 'maxUploadCount', 'fileMaxSize', 'fileWarnSize', 'fileTypes', 'fileNameHandlebar' ]
+export const changesFileDropBox: (keyof IFileDropBoxWPProps)[] = [ 'defaultPasteMode', 'maxUploadCount', 'fileMaxSize', 'fileWarnSize', 'fileTypes', 'fileNameHandleBars' ]
 
 export interface IFileDropBoxWPProps {
   defaultPasteMode?: boolean;
@@ -49,12 +51,14 @@ export interface IFileDropBoxWPProps {
   fileMaxSize?: string; // Max file size in kb
   fileWarnSize?: string; // Warn file size in kb
   fileTypes?: string[];  // Accepted MIME types (optional)
-  fileNameHandlebar: string; // Handle Bars syntax for naming files
+  fileNameHandleBars: string; // Handle Bars syntax for naming files
 }
 
-export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropBoxWPProps ): IFileDropBoxProps {
+export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropBoxWPProps, AxisMap: IAxisMap ): IFileDropBoxProps {
 
-  const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes, defaultPasteMode, fileNameHandlebar } = properties;
+  const { maxUploadCount, fileMaxSize, fileWarnSize, fileTypes, defaultPasteMode, fileNameHandleBars } = properties;
+
+  const HandleBarsNameGen: IFileNameHandleBars = buildPhotoFormFileNameHandleBarsDef( fileNameHandleBars, AxisMap );
 
   const result: IFileDropBoxProps = {
     setParentFilesData: null,
@@ -62,7 +66,7 @@ export function convertFileDropWPPropsToFileDropBoxProps( properties: IFileDropB
     refreshId: makeid(5),
     resetId: makeid(5),
     useDropBox: true,
-    fileNameHandleBars: null,
+    fileNameHandleBars: HandleBarsNameGen,
   };
 
   if ( maxUploadCount ) result.maxUploadCount = parseInt( maxUploadCount );

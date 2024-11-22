@@ -146,7 +146,7 @@ console.log( `UploadStatus:  ParentFileSample ~ 94` );
         fileTypes={ props.fileDropBoxProps.fileTypes }  // Accept only PNG and JPEG files
         setParentFilesData={handleFileUpdate}  // Callback to receive file updates
         maxUploadCount={props.fileDropBoxProps.maxUploadCount}
-        fileNameHandlebar={props.fileDropBoxProps.fileNameHandlebar}
+        fileNameHandleBars={props.fileDropBoxProps.fileNameHandleBars}
         fileMaxSize={ props.fileDropBoxProps.fileMaxSize }
         fileWarnSize={ props.fileDropBoxProps.fileWarnSize }
         refreshId={ props.fileDropBoxProps.refreshId }
