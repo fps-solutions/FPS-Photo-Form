@@ -15,6 +15,9 @@
     "strictNullChecks": false,
     "noImplicitAny": true,
 
+    // Added this for importing exif-js
+    // "allowSyntheticDefaultImports": true,
+
     "noUnusedLocals": false,
 
     "typeRoots": [

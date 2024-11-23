@@ -25,6 +25,7 @@ import CameraCapture from '../Forms/Camera/component';
 import ParentForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-MultiImageParent';
 import ListHook from '../ListHook/ListHook';
 import ParentComponent from '../Forms/FileDropBox/ParentFileSample';
+import SharePointUserSearch from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker/PeoplePicker';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -197,6 +198,9 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         { this.props.tab === 'Files' ? <ParentComponent fileDropBoxProps={ this.props.fileDropBoxProps } FilesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
+        { this.props.tab === 'Geo' ? <SharePointUserSearch typeToShow={ true } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl}/> : undefined }
+
+
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Multi-Paste' ? <ParentForm imageCount={ 1 } elementCSS = {{ gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr)' }} imageBoxCSS= {{ height: '125px', width: '200px'} }
           preloadImages={

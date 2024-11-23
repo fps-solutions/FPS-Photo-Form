@@ -40,7 +40,7 @@ import { SPPermission, } from '@microsoft/sp-page-context';
 
 import * as strings from 'FpsPhotoFormWebPartStrings';
 import FpsPhotoForm from './components/FpsPhotoForm';
-import { IDefaultFormTab, IFpsPhotoFormProps } from './components/IFpsPhotoFormProps';
+import { IDefaultFormTab, IFpsPhotoFormProps, IPrefabFormTemplates } from './components/IFpsPhotoFormProps';
 import { IFpsPhotoFormWebPartProps } from './IFpsPhotoFormWebPartProps';
 
  /***
@@ -76,11 +76,13 @@ import { analyticsList, AnalyticsOptions } from './CoreFPS/Analytics';
 */
 import { IFPSListItemPropPaneDropDownOption } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPropPaneDropDownOption';
 import { IPropertyPaneDropdownOption } from '@mikezimm/fps-core-v7/lib/types/@msft/1.15.2/sp-property-pane';
+import { getStringArrayFromString } from '@mikezimm/fps-core-v7/lib/logic/Strings/arraysFromString';
 
 
 import { PreConfiguredProps,  } from './CoreFPS/PreConfiguredSettings';
 
-import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
+// import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
+import { PropertyPaneWebPartInformation } from './PropPaneGroups/WebPartInfoGroup/PropertyPaneWebPartInformation';
 import { getAllDefaultFPSFeatureGroups } from '@mikezimm/fps-library-v2/lib/banner/propPane/AllDefaultFPSGroups';
 
 import { WebPartInfoGroup, } from '@mikezimm/fps-library-v2/lib/banner/propPane/WebPartInfoGroup';
@@ -107,7 +109,7 @@ import { panelVersionNumber } from './HelpPanel/About';
 import { FPSCert } from './CoreFPS/fpsCert';
 import { IFPSCert } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IFPSCert';
 import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
-import { ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './components/Forms/getButtonStyles';
+import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './components/Forms/getButtonStyles';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
@@ -120,12 +122,13 @@ import { FPSTileWPGroup } from "@mikezimm/fps-library-v2/lib/components/molecule
 import { buildFpsTileWPProps } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageFPSTileProps";
 import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/functions/packageWPPropsExtras";
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
-import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
-import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps, IFileNameHandleBars } from './components/Forms/FileDropBox/IFileDropBoxProps';
 import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
+import { FileNameHandleBarsMC } from './PropPaneHelp/PropPaneHelpFilePicker';
+import { PartialWBPropsMineCraft } from './CoreFPS/PreConfigSettingsMC';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -236,16 +239,19 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
+
     const ChartDisplay: IChartTabProps = createChartDisplay( this.properties );
     const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
+
     // NO NEED to replace 'List' because Libraries do not add that.
     const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
     ImagesSource.subFolder = this.properties.imageSubfolder2;
 
     const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
-    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties );
+
+    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties, AxisMap );
     const miscFormProps = buildMiscFormFromWPProps( this.properties );
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
@@ -270,9 +276,12 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         ListTitle: this.properties.listPickerValue,
         LibrarySiteUrl: this.properties.webUrlPickerValue2,
         LibraryName: this.properties.listPickerValue2,
-        Category1s:  ButtonStylesMinecraftDimensions.map( x => x.label),
-        Category2s: ButtonStylesMinecraftBiomes.map( x => x.label),
-        Category3s:  ButtonStylesMinecraftStructures.map( x => x.label),
+        // Category1s:  ButtonStylesMinecraftDimensions.map( x => x.label),
+        // Category2s: ButtonStylesMinecraftBiomes.map( x => x.label),
+        // Category3s:  ButtonStylesMinecraftStructures.map( x => x.label),
+        Category1s:  getStringArrayFromString( this.properties.category1s, ',or;', true, null, true ),
+        Category2s: getStringArrayFromString( this.properties.category2s, ',or;', true, null, true ),
+        Category3s:  getStringArrayFromString( this.properties.category3s, ',or;', true, null, true ),
 
         imageSubfolder2: this.properties.imageSubfolder2,
 
@@ -397,6 +406,16 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // await onListItemPickerChanged( this as any, propertyPath, oldValue, newValue, );
 
+    // https://github.com/fps-solutions/FPS-Photo-Form/issues/99
+    if ( propertyPath === `prefabForm` ) {
+      const x: IPrefabFormTemplates = newValue;
+      if ( x === 'Minecraft' ) {
+        const BaseProps = JSON.parse(JSON.stringify( PartialWBPropsMineCraft ));
+        Object.keys( BaseProps ).map( prop => {
+          this.properties[ prop as 'description' ] = BaseProps[ prop as 'prefabForm' ];
+        })
+      }
+    }
     // https://github.com/fps-solutions/FPS-Photo-Form/issues/49
     this.properties.expandListPickerGroups = false;
 
@@ -409,7 +428,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-this-alias
     const thisAsAny: IThisFPSWebPartClass = this as any;
-    const WPInfoLabel: string = 'Sample FPS Banner component :)';
+    const WPInfoLabel: string = 'FPS Photo Form Webpart :)';
 
     const { enableLockProps, propsEasyMode } = this.properties;
 

@@ -3,24 +3,28 @@ import { IUnifiedPerformanceOps } from "@mikezimm/fps-core-v7/lib/types/fps-retu
 import { IAnySourceItem, IStateSource } from "../../fpsReferences";
 import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
-
-export type ICustomScatterType = 'Normal' | 'MC';
+import { IPrefabFormTemplates } from "../IFpsPhotoFormProps";
 
 export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth' ].map( (str => `axis_${str}`));
 
 export interface IAxisMapWPProps {
-  axis_type: ICustomScatterType;
+  axis_type: IPrefabFormTemplates;
   axis_Title: string;
   axis_Comments: string;
   axis_Category1: string;
   axis_Category2: string;
   axis_Category3: string;
+
   axis_Color: string;
   axis_Shape: string;
   axis_Screenshot: string;
   axis_horz: string; // raw item property key representing Horizontal Axis
   axis_vert: string; // raw item property key representing Vertical Chart Axis
   axis_depth: string; // raw item property key representing Depth Axis
+
+  // Added for expense type tracking lists or date X-Axis scale
+  axis_Date1?: string;
+  axis_Date2?: string;
 }
 
 export interface IPhotoButtonStyle {
@@ -29,7 +33,7 @@ export interface IPhotoButtonStyle {
 }
 
 export interface IAxisMap {
-  type: ICustomScatterType;
+  type: IPrefabFormTemplates;
   Title: string;
   Comments: string;
   Category1: string;
@@ -41,6 +45,13 @@ export interface IAxisMap {
   horz: string; // raw item property key representing Horizontal Axis
   vert: string; // raw item property key representing Vertical Chart Axis
   depth: string; // raw item property key representing Depth Axis
+
+  // Added for expense type tracking lists or date X-Axis scale
+  Date1?: string;
+  Time1?: string;
+  Date2?: string;
+  Time2?: string;
+
 }
 
 export type IFPSGridLineType = 'Solid' | 'Dashed' | 'Dotted';
@@ -206,4 +217,10 @@ export interface IScatterPlotItem {
   Comments: string;
   Shape: 'circle' | 'triangle' | 'square' | 'X' | '-' | 'image';
   Color: string;
+
+  // Added for expense type tracking lists or date X-Axis scale
+  Date1?: string;
+  Time1?: string;
+  Date2?: string;
+  Time2?: string;
 }

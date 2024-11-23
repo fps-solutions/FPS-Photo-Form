@@ -16,6 +16,8 @@ import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPar
 import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
 import { DefaultFormTabsProduction, DefaultFormTabsAll, PrefabFormTemplates } from '../components/IFpsPhotoFormProps';
 
+import { JSON_Edit_Link } from '../fpsReferences';  //JSON_Edit_Link, ValidLocalLanguages
+
 export function buildMiscPropsGroup( wpProps: IFpsPhotoFormWebPartProps, thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,6 +50,23 @@ export function buildMiscPropsGroup( wpProps: IFpsPhotoFormWebPartProps, thisWPC
         onText: 'Fixed settings',
         offText: 'Pre-filled',
       }),
+
+      ...[ 1,2,3 ].map( i => {
+        return PropertyPaneTextField(`category${i}s`, {
+          label: `Categoryy${i} Labels ; separated`,
+          description: '',
+          multiline: true,
+        })
+      }),
+
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/18
+      PropertyPaneTextField('photoButtonStyles', {
+        label: 'Photo Button Styles',
+        description: '',
+        multiline: true,
+      }),
+
+      JSON_Edit_Link,
 
     ]
   );

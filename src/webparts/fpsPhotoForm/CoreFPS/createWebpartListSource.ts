@@ -17,6 +17,7 @@ export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     AxisMap[ AxisKey as keyof IAxisMap ] = wpProps[ prop ] as any ;
   });
+  AxisMap.type = wpProps.prefabForm;
 
   return AxisMap;
 }

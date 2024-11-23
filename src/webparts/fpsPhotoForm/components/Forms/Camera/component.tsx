@@ -7,6 +7,8 @@ import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/componen
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 import { EmptyStateSource, IStateSource, makeid } from '../../../fpsReferences';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
+import { extractImageLocationData, IImageLocationData } from '../FileDropBox/functions/getImageLocation';
+import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
 require('./fps-Camera.css'); // Import your local CSS file
 
 export interface ICameraFormInput {
@@ -19,6 +21,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const { ImagesSource } = props;
 
   const [image, setImage] = useState<string | null>(null); // State to hold captured image
+  const [imageInfo, setImageInfo] = useState<IImageLocationData | null>(null); // State to hold captured image - https://github.com/fps-solutions/FPS-Photo-Form/issues/105
   const [imageRefresh, setImageRefresh] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null); // State to hold error messages
   const [isCameraOn, setIsCameraOn] = useState<boolean>(false); // State to track camera status
@@ -90,7 +93,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   }, [stream]);
 
   // Function to capture the image from the video feed
-  const captureImage = ():void => {
+  const captureImage = async ():Promise<void> => {
     if (canvasRef.current && videoRef.current) {
       const context = canvasRef.current.getContext('2d');
       if (context) {
@@ -109,8 +112,11 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
           context.fillStyle = 'white'; // Text color
           context.fillText(timestamp, 15, canvasRef.current.height - 15); // Position text
         }
+        const imageUrl: string = canvasRef.current.toDataURL('image/png');
+        setImage( imageUrl ); // Convert canvas to image data URL
+        // https://github.com/fps-solutions/FPS-Photo-Form/issues/105
+        setImageInfo( await extractImageLocationData( imageUrl ) );
 
-        setImage(canvasRef.current.toDataURL('image/png')); // Convert canvas to image data URL
       }
     }
   };
@@ -195,6 +201,7 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
           { VideoFeed } {/* Pass videoRef to VideoFeed */}
           { image ? <ImagePaste clearId={ imageRefresh } setParentImageData={ clearImage } imageUrl={ image } viewOnly={ true }/> : undefined }
           <ImageDisplay image={image} /> {/* Display the captured image */}
+          <FPSReactJSON jsonObject={ imageInfo } name='ImageExIf' />
         </div>
       )}
       <canvas ref={canvasRef} style={{ display: 'none' }} /> {/* Hidden canvas for image capture */}

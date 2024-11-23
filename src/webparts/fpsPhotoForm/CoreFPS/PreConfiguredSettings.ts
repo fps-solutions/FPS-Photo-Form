@@ -12,9 +12,10 @@
 // import { encrptMeOriginalTest } from '../fpsReferences';
 
 import { PreConfigFpsTileCompProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
-import { ButtonStylesMC } from '../components/Forms/getButtonStyles';
+import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from '../components/Forms/getButtonStyles';
 import { PresetFPSBanner, } from '../fpsReferences';
 import { IPreConfigSettings, IAllPreConfigSettings,  } from '../fpsReferences';
+import { PartialWBPropsMineCraft } from './PreConfigSettingsMC';
 
 
 /***
@@ -56,25 +57,12 @@ export const WPPresetEverywhere : IPreConfigSettings = {
         listPickerValue2: '',
         listItemPickerValue2: '',
         imageSubfolder2: '',
-        prefabForm: 'Custom',
-        photoButtonStyles: JSON.stringify( ButtonStylesMC ),
 
-        axis_type: 'MC',
-        axis_Title: 'Title',
-        axis_Comments: 'Notes',
-        axis_Category1: 'Category1',
-        axis_Category2: 'Category2',
-        axis_Category3: 'Category3',
-        axis_Color: '',
-        axis_Screenshot: 'ScreenshotUrl',
-        axis_Shape: '',
-        axis_horz: 'CoordX', // raw item property key representing Horizontal Axis
-        axis_vert: 'CoordZ', // raw item property key representing Vertical Chart Axis
-        axis_depth: 'CoordY', // raw item property key representing Depth Axis
+        ...PartialWBPropsMineCraft,
 
-        chart_G_diameter: 6000, // Total height of the chart
-        chart_G_gridStep: 1000, // Step for grid lines
-        chart_G_reverseVerticalAxis: true, // Flag to reverse the vertical axis  = false
+        // chart_G_diameter: 6000, // Total height of the chart
+        // chart_G_gridStep: 1000, // Step for grid lines
+        // chart_G_reverseVerticalAxis: true, // Flag to reverse the vertical axis  = false
 
         chart_G_gridlineColor: 'lightgray', // = 'lightgray'
         chart_G_displaySize: null, // Default display size for circles
