@@ -57,13 +57,38 @@ export interface IImageLocationData {
      * @param file - The image file to process.
      * @returns An object implementing IImageLocationData.
      */
-    export async function extractImageLocationData(file: File): Promise<IImageLocationData> {
-      if (!file || !file.type.startsWith('image/')) {
-        throw new Error('Invalid file. Please provide a valid image file.');
-      }
+    export async function extractImageLocationData(image: File  | string ): Promise<IImageLocationData> {
 
-      const arrayBuffer = await readFileAsArrayBuffer(file);
-      return await getExifData(arrayBuffer, file);
+      if ( !image ) return {
+          hasGpsData: false,
+          filename: 'NoFileProvided',
+          humanReadable: 'getExifData ERROR ~ 65',
+          additionalData: {status: 'Error' },
+        };
+
+      // Check if it's a File object (from camera or file input)
+      if (image instanceof File) {
+        if (!image || !image.type.startsWith('image/')) {
+          throw new Error('Invalid file. Please provide a valid image file.');
+        }
+
+        const arrayBuffer = await readFileAsArrayBuffer(image);
+        return await getExifData(arrayBuffer, image);
+
+      // Handle image data URL (base64 string or data URL format)
+      } else if (typeof image === 'string') {
+        // Decode the base64 string into binary data
+        const base64Data = image.split(',')[1]; // Remove data URL prefix (e.g., "data:image/jpeg;base64,")
+        const binaryString = atob(base64Data);
+        const binaryData = new Uint8Array(binaryString.length);
+
+        for (let i = 0; i < binaryString.length; i++) {
+          binaryData[i] = binaryString.charCodeAt(i);
+        }
+
+        return await getExifData(binaryData.buffer, { name: 'Clipboard.png', type: 'image/png' } as File);
+
+      }
     }
 
     /**
@@ -88,6 +113,7 @@ export interface IImageLocationData {
  * @returns A promise resolving to an object containing image metadata.
  */
 async function getExifData(arrayBuffer: ArrayBuffer, file: File): Promise<IImageLocationData> {
+  console.log( 'getExifData ~ 116 - Starting' );
   return new Promise((resolve, reject) => {
     try {
       // Convert ArrayBuffer to a Blob, then create an object URL
@@ -158,7 +184,14 @@ async function getExifData(arrayBuffer: ArrayBuffer, file: File): Promise<IImage
         });
       });
     } catch (error) {
-      reject(new Error('Failed to parse EXIF metadata.'));
+      alert( `getExifData ~ 179 - Unknown error getting ImageInfo... See console.` );
+      console.log( `getExifData ~ 179 - arrayBuffer, file:`, arrayBuffer, file, );
+
+      reject( {
+          filename: file.name,
+          humanReadable: 'getExifData ERROR ~ 191',
+          additionalData: {status: 'Error' },
+        });
     }
   });
 }

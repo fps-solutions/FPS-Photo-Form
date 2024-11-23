@@ -21,6 +21,8 @@ import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import 
 import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
 import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
 import { buildPhotoFormFileName } from './FileDropBox/filenameGenerator';
+import { extractImageLocationData, IImageLocationData } from './FileDropBox/functions/getImageLocation';
+import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
 
 export interface IMiscFormWPProps {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
@@ -131,6 +133,8 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
 
     const [imageData, setImageData] = useState<string | null>(null);
     const [imageBlob, setImageBlob] = useState<File | null>(null);
+    const [imageInfo, setImageInfo] = useState<IImageLocationData | null>(null); // State to hold captured image - https://github.com/fps-solutions/FPS-Photo-Form/issues/105
+
     const [imageRefresh, setImageRefresh] = useState<string | null>(null);
     const [formData, setFormData] = useState<IPhotoFormFormInterface>( EmptyFormData );
     const [fileMode, setFileMode ] = useState< 'DropBox' | 'Paste' >( props.fileDropBoxProps.useDropBox === true ? 'DropBox' : 'Paste' );
@@ -174,14 +178,26 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
       setFileMode( checked === true ? 'DropBox' : 'Paste' ); // Update the state when toggle changes
     };
 
-    const handleDropBoxFile = (updatedFiles: File[]): void => {
-      setImageBlob( updatedFiles && updatedFiles.length > 0 ? updatedFiles[0] : null );
+    const handleImagePaste = async ( dataString: string ): Promise<void> => {
+      setImageData( dataString );
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/105
+      const newImageInfo: IImageLocationData = await extractImageLocationData( dataString )
+      setImageInfo( newImageInfo );
+    }
+
+    const handleDropBoxFile = async (updatedFiles: File[]): Promise<void> => {
+      const tempBlob = updatedFiles && updatedFiles.length > 0 ? updatedFiles[0] : null;
+      setImageBlob( tempBlob );
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/105
+      const newImageInfo: IImageLocationData = await extractImageLocationData( tempBlob )
+      setImageInfo( newImageInfo );
     }
 
     const resetForm = (): void => {
       setFormData( EmptyFormData );
       setImageData( null );
       setImageBlob( null );
+      setImageInfo( null );
       setImageRefresh( makeid(5));
       setResetId( makeid(5));
     }
@@ -431,6 +447,8 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               <div>Current Toggle State: { `${autoClear}` }</div>
               <div>FileName: { `${shortFileName}` }</div>
 
+              {/* https://github.com/fps-solutions/FPS-Photo-Form/issues/105 */}
+              <FPSReactJSON jsonObject={ imageInfo } name='ImageExIf' />
             </div>
             {/* {imageData && (
               <div className={ styles.imagePreview }>
@@ -439,7 +457,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               </div>
             )} */}
 
-            { fileMode === 'Paste' ? <ImagePaste clearId= { imageRefresh } setParentImageData={ setImageData } imageBoxCSS={{ height: '200px', width: '300px' }} /> : undefined }
+            { fileMode === 'Paste' ? <ImagePaste clearId= { imageRefresh } setParentImageData={ handleImagePaste } imageBoxCSS={{ height: '200px', width: '300px' }} /> : undefined }
             {/* <ParentComponent
               FilesSource={ props.ImagesSource }
               fileDropBoxProps={ props. fileDropBoxProps }
