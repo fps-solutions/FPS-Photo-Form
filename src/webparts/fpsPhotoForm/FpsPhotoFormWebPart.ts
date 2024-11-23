@@ -406,6 +406,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     // await onListItemPickerChanged( this as any, propertyPath, oldValue, newValue, );
 
+    // https://github.com/fps-solutions/FPS-Photo-Form/issues/99
     if ( propertyPath === `prefabForm` ) {
       const x: IPrefabFormTemplates = newValue;
       if ( x === 'Minecraft' ) {

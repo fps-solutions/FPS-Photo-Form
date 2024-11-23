@@ -8,6 +8,7 @@ import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimen
 // category2s: ButtonStylesMinecraftBiomes.map( x => x.label).join(', '),
 // category3s: ButtonStylesMinecraftStructures.map( x => x.label).join(', '),
 
+// https://github.com/fps-solutions/FPS-Photo-Form/issues/18
 export function getWebPartHelpButtonStyles (  ): JSX.Element {
 
   const WebPartHelpElement = <PivotItem headerText={ 'Button Styles' } >

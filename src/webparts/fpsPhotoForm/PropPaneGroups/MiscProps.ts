@@ -59,6 +59,7 @@ export function buildMiscPropsGroup( wpProps: IFpsPhotoFormWebPartProps, thisWPC
         })
       }),
 
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/18
       PropertyPaneTextField('photoButtonStyles', {
         label: 'Photo Button Styles',
         description: '',
