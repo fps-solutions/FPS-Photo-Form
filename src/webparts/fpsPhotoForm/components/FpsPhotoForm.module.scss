@@ -109,7 +109,8 @@
     "submit summary"
     "category2 category3"
     "imagePreview imagePreview"
-    "spacer spacer";
+    "spacer spacer"
+    "json json";
   gap: 1em;
   row-gap: 0em;
   label {
@@ -170,6 +171,11 @@
   grid-area: spacer;
 }
 
+.json {
+  height: auto;
+  grid-area: json;
+}
+
 @media (min-width: 685px) {
   .fpsPhotoFormGrid {
     grid-template-columns: 1fr 125px 125px;
@@ -181,13 +187,17 @@
       "submit category2 category3"
       "summary category2 category3"
       "imagePreview category2 category3"
-      "spacer category2 category3";
+      "spacer category2 category3"
+      "json json json";
     // grid-template-rows: 64px 24px 48px 140px 50px 100px auto;
     row-gap: 0em;
   }
   .spacer {
     height: 1000px;
   }
+  // .json {
+  //   height: 1000px;
+  // }
   .category2 .categoryButtons, .category3 .categoryButtons {
     display: grid;
   }
@@ -203,13 +213,17 @@
       "comments comments category2 category3"
       "summary summary category2 category3"
       "submit imagePreview category2 category3"
-      "spacer spacer category2 category3";
+      "spacer spacer category2 category3"
+      "json json json json";
     grid-template-rows: 64px 24px 48px 140px 90px 100px 500px;
     row-gap: 0em;
   }
   .spacer {
     height: 500px;
   }
+  // .json {
+  //   height: 500px;
+  // }
 }
 
 @media (min-width: 1300px) {

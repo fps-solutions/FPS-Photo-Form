@@ -36,6 +36,14 @@ export interface IImageLocationData {
   thumbnail?: string; // Base64-encoded thumbnail image
   dimensions?: string; // Image dimensions in 'width x height' format
   orientation?: number; // Image orientation (1 to 8, see below)
+
+  // Seen during testing and may be useful
+  make?: string;
+  model?: string;
+  software?: string;
+  hostComputer?: string;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   additionalData?: Record<string, any>; // Any other useful EXIF data
 }
 
@@ -50,10 +58,12 @@ export interface IImageLocationData {
     7 = Rotated 90 degrees clockwise and flipped horizontally
     8 = Rotated 90 degrees clockwise
  */
-    import * as EXIF from 'exif-js';
+    import * as EXIF from 'exifr';
 
     /**
      * Extracts location, timestamp, image dimensions, orientation, and other useful metadata from an image file.
+     *    https://github.com/fps-solutions/FPS-Photo-Form/issues/105
+     *
      * @param file - The image file to process.
      * @returns An object implementing IImageLocationData.
      */
@@ -113,85 +123,86 @@ export interface IImageLocationData {
  * @returns A promise resolving to an object containing image metadata.
  */
 async function getExifData(arrayBuffer: ArrayBuffer, file: File): Promise<IImageLocationData> {
-  console.log( 'getExifData ~ 116 - Starting' );
-  return new Promise((resolve, reject) => {
-    try {
-      // Convert ArrayBuffer to a Blob, then create an object URL
-      const blob = new Blob([arrayBuffer], { type: file.type });
-      const imageUrl = URL.createObjectURL(blob);
+  console.log('getExifData ~ Starting');
 
-      // Use the imageUrl with EXIF.getData() to extract metadata
-      EXIF.getData(imageUrl, function () {
-        // Extract GPS tags
-        const gpsLatitude = EXIF.getTag(this, 'GPSLatitude');
-        const gpsLongitude = EXIF.getTag(this, 'GPSLongitude');
-        const gpsLatitudeRef = EXIF.getTag(this, 'GPSLatitudeRef');
-        const gpsLongitudeRef = EXIF.getTag(this, 'GPSLongitudeRef');
-        const additionalData = EXIF.getAllTags(this);
+  try {
+    // Use exifr.parse to extract EXIF data
 
-        // Extract timestamp (DateTimeOriginal)
-        const timestamp = EXIF.getTag(this, 'DateTimeOriginal') || undefined;
+    // This was format for exif-js
+    // const exifData = await EXIF.parse(arrayBuffer, {
+    //   gps: true, // Extract GPS data
+    //   tiff: true, // Extract dimensions, timestamp, etc.
+    // });
+    const exifData = await EXIF.parse(arrayBuffer, true);
 
-        // Extract thumbnail (if available)
-        const thumbnail = EXIF.getTag(this, 'Thumbnail') || undefined;
-
-        // Extract image dimensions
-        const imageWidth = EXIF.getTag(this, 'PixelXDimension');
-        const imageHeight = EXIF.getTag(this, 'PixelYDimension');
-        const dimensions = imageWidth && imageHeight ? `${imageWidth}x${imageHeight}` : undefined;
-
-        // Extract image orientation
-        const orientation = EXIF.getTag(this, 'Orientation');
-
-        let latitude: number | undefined;
-        let longitude: number | undefined;
-        let humanReadable: string | undefined;
-
-        if (gpsLatitude && gpsLongitude) {
-          // Convert GPS coordinates to decimal format
-          latitude =
-            (gpsLatitude[0] +
-              gpsLatitude[1] / 60 +
-              gpsLatitude[2] / 3600) *
-            (gpsLatitudeRef === 'S' ? -1 : 1);
-
-          longitude =
-            (gpsLongitude[0] +
-              gpsLongitude[1] / 60 +
-              gpsLongitude[2] / 3600) *
-            (gpsLongitudeRef === 'W' ? -1 : 1);
-
-          // Create human-readable string
-          const latDirection = gpsLatitudeRef || '';
-          const lonDirection = gpsLongitudeRef || '';
-          humanReadable = `${latitude.toFixed(6)} ${latDirection}, ${longitude.toFixed(6)} ${lonDirection}`;
-        }
-
-        // Convert thumbnail to base64 (if present)
-        const base64Thumbnail = thumbnail ? `data:image/jpeg;base64,${thumbnail}` : undefined;
-
-        resolve({
-          filename: file.name,
-          latitude,
-          longitude,
-          hasGpsData: !!(latitude && longitude),
-          humanReadable,
-          timestamp,
-          thumbnail: base64Thumbnail,
-          dimensions,
-          orientation, // Adding orientation to the result
-          additionalData, // Optional additional EXIF metadata
-        });
-      });
-    } catch (error) {
-      alert( `getExifData ~ 179 - Unknown error getting ImageInfo... See console.` );
-      console.log( `getExifData ~ 179 - arrayBuffer, file:`, arrayBuffer, file, );
-
-      reject( {
-          filename: file.name,
-          humanReadable: 'getExifData ERROR ~ 191',
-          additionalData: {status: 'Error' },
-        });
+    if (!exifData) {
+      throw new Error('No EXIF data found');
     }
-  });
+
+    const {
+      GPSLatitude: gpsLatitude,
+      GPSLongitude: gpsLongitude,
+      GPSLatitudeRef: gpsLatitudeRef,
+      GPSLongitudeRef: gpsLongitudeRef,
+      DateTimeOriginal: timestamp,
+      Orientation: orientation,
+      PixelXDimension: imageWidth,
+      PixelYDimension: imageHeight,
+      ImageWidth: ImageWidth,
+      ImageHeight: ImageHeight,
+      ExifImageWidth: ExifImageWidth,
+      ExifImageHeight: ExifImageHeight,
+    } = exifData;
+
+    let latitude: number | undefined;
+    let longitude: number | undefined;
+    let humanReadable: string | undefined;
+
+    if (gpsLatitude && gpsLongitude) {
+      latitude =
+        (gpsLatitude[0] +
+          gpsLatitude[1] / 60 +
+          gpsLatitude[2] / 3600) *
+        (gpsLatitudeRef === 'S' ? -1 : 1);
+
+      longitude =
+        (gpsLongitude[0] +
+          gpsLongitude[1] / 60 +
+          gpsLongitude[2] / 3600) *
+        (gpsLongitudeRef === 'W' ? -1 : 1);
+
+      const latDirection = gpsLatitudeRef || '';
+      const lonDirection = gpsLongitudeRef || '';
+      humanReadable = `${latitude.toFixed(6)} ${latDirection}, ${longitude.toFixed(6)} ${lonDirection}`;
+    }
+
+    // Generate result object
+    return {
+      filename: file.name,
+      latitude,
+      longitude,
+      hasGpsData: !!(latitude && longitude),
+      humanReadable,
+      timestamp,
+      thumbnail: undefined, // Thumbnails are not directly extracted by exifr
+      dimensions: imageWidth && imageHeight ? `${imageWidth}x${imageHeight}` :
+          ImageWidth && ImageHeight ? `${ImageWidth}x${ImageHeight}` :
+          ExifImageWidth && ExifImageHeight ? `${ExifImageWidth}x${ExifImageHeight}` : undefined,
+      orientation,
+      make: exifData.Make,
+      model: exifData.Model,
+      software: exifData.Software,
+      hostComputer: exifData.HostComputer,
+      additionalData: exifData, // Includes all parsed EXIF metadata
+    };
+  } catch (error) {
+    console.error('Error extracting EXIF data:', error);
+
+    return {
+      filename: file.name,
+      humanReadable: 'Failed to parse EXIF metadata.',
+      hasGpsData: false,
+      additionalData: { status: 'Error', error },
+    };
+  }
 }
