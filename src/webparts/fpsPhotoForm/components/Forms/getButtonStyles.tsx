@@ -14,7 +14,7 @@ const PlaceholderButtons: IPhotoButtonStyle[] = [
     label: 'NA',
     styles: { }
   }
-]
+];
 
 export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
   {

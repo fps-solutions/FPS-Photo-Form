@@ -25,7 +25,7 @@ export { IPinMeState, } from '@mikezimm/fps-core-v7/lib/banner/features/PinMe/In
 export { PresetFPSBanner, } from '@mikezimm/fps-core-v7/lib/common/PropPaneHelp/preconfig/PreConfiguredConstants';
 export { IPreConfigSettings, IAllPreConfigSettings,  } from '@mikezimm/fps-core-v7/lib/common/PropPaneHelp/preconfig/IPreConfig';
 
-// export { JSON_Edit_Link } from '@mikezimm/fps-core-v7/lib/common/PropPaneHelp/atoms/JSONEdit';  //JSON_Edit_Link,
+export { JSON_Edit_Link } from '@mikezimm/fps-library-v2/lib/common/PropPaneHelp/atoms/JSONEdit';  //JSON_Edit_Link,
 
 export { defaultBannerCommandStyles } from '@mikezimm/fps-core-v7/lib/common/commandStyles/defaults';
 export { createAudienceGroup } from '@mikezimm/fps-library-v2/lib/banner/propPane/Audiences/AudiencePropGroup';

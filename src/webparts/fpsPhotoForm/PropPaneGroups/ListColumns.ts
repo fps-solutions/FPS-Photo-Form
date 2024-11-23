@@ -69,11 +69,6 @@ export function buildListColumnsGroup( thisWPClass: IThisFPSWebPartClass ): IPro
       //   label: '',
       //   description: '',
       // }),
-
-      PropertyPaneTextField('axis_type', {
-        label: 'Special Mapping',
-        description: 'MC for Minecraft (only adds custom logic)',
-      }),
     ]
 
 

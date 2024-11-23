@@ -12,7 +12,7 @@ import { checkCert, } from '@mikezimm/fps-core-v7/lib/banner/bannerX/checkCert';
 // import { createSpecialElement } from '@mikezimm/fps-library-v2/lib/banner/components/SpecialBanner/component';
 // import { ISpecialMessage, } from '@mikezimm/fps-library-v2/lib/banner/components/SpecialBanner/interface';
 
-import { getWebPartHelpElementBoxTiles } from '../PropPaneHelp/PropPaneHelp';
+import { getHelpPhotoForm } from '../PropPaneHelp/PhotoFormHelp';
 import { getBannerPages, } from '../HelpPanel/AllContent';
 import { check4Gulp, IBannerPages, makeid } from "../fpsReferences";
 
@@ -30,7 +30,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
   private _performance: ILoadPerformance = null;
 
   private _webPartHelpElement = [
-    getWebPartHelpElementBoxTiles( ),
+    getHelpPhotoForm( this.props.bannerProps ),
   ];
 
   private _contentPages : IBannerPages = getBannerPages( this.props.bannerProps );

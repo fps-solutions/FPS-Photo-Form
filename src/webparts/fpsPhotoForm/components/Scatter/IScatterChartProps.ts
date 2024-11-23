@@ -3,13 +3,12 @@ import { IUnifiedPerformanceOps } from "@mikezimm/fps-core-v7/lib/types/fps-retu
 import { IAnySourceItem, IStateSource } from "../../fpsReferences";
 import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
-
-export type ICustomScatterType = 'Normal' | 'MC';
+import { IPrefabFormTemplates } from "../IFpsPhotoFormProps";
 
 export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth' ].map( (str => `axis_${str}`));
 
 export interface IAxisMapWPProps {
-  axis_type: ICustomScatterType;
+  axis_type: IPrefabFormTemplates;
   axis_Title: string;
   axis_Comments: string;
   axis_Category1: string;
@@ -34,7 +33,7 @@ export interface IPhotoButtonStyle {
 }
 
 export interface IAxisMap {
-  type: ICustomScatterType;
+  type: IPrefabFormTemplates;
   Title: string;
   Comments: string;
   Category1: string;

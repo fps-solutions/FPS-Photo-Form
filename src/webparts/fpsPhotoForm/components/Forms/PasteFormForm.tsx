@@ -32,6 +32,10 @@ export interface IMiscFormWPProps {
   forceFormTemplate: boolean;
   photoButtonStyles: string;
 
+  category1s: string;
+  category2s: string;
+  category3s: string;
+
   defaultTab: IDefaultFormTab;
 }
 
@@ -449,7 +453,6 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               <div>Current Toggle State: { `${autoClear}` }</div>
               <div>FileName: { `${shortFileName}` }</div>
 
-
             </div>
             {/* {imageData && (
               <div className={ styles.imagePreview }>
@@ -475,7 +478,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               resetId={ resetId }
             />
             <div className={ styles.spacer } style={{ height: fileMode === 'DropBox' ? '0px' : null }}/>
-            <div  className={ styles.json } >
+            <div className={ styles.json } >
               {/* https://github.com/fps-solutions/FPS-Photo-Form/issues/105 */}
               <FPSReactJSON jsonObject={ imageInfo } name='ImageExIf' />
             </div>
