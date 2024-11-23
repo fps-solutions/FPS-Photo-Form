@@ -410,8 +410,9 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     if ( propertyPath === `prefabForm` ) {
       const x: IPrefabFormTemplates = newValue;
       if ( x === 'Minecraft' ) {
-        Object.keys( PartialWBPropsMineCraft ).map( prop => {
-          this.properties[ prop as 'description' ] = PartialWBPropsMineCraft[ prop as 'prefabForm' ];
+        const BaseProps = JSON.parse(JSON.stringify( PartialWBPropsMineCraft ));
+        Object.keys( BaseProps ).map( prop => {
+          this.properties[ prop as 'description' ] = BaseProps[ prop as 'prefabForm' ];
         })
       }
     }

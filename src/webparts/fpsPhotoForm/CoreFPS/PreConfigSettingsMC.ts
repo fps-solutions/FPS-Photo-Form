@@ -1,4 +1,5 @@
 import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from "../components/Forms/getButtonStyles";
+import { FileNameHandleBarsMC } from "../PropPaneHelp/PropPaneHelpFilePicker";
 
 export const PartialWBPropsMineCraft = {
   prefabForm: 'Minecraft',
@@ -7,6 +8,8 @@ export const PartialWBPropsMineCraft = {
   category1s: ButtonStylesMinecraftDimensions.map( x => x.label).join(', '),
   category2s: ButtonStylesMinecraftBiomes.map( x => x.label).join(', '),
   category3s: ButtonStylesMinecraftStructures.map( x => x.label).join(', '),
+
+  fileNameHandleBars: FileNameHandleBarsMC,
 
   axis_type: 'Minecraft',  // THIS NEEDS TO BE REMOVED OR SET TO THE other variable now on the form
   axis_Title: 'Title',
