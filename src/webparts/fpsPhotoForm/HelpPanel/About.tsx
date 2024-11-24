@@ -40,7 +40,7 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
     // table.rows.push( createAboutRow('2024-12-XX',"0.0.18",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.17",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
-    table.rows.push( createAboutRow('2024-11-23',"0.0.16",`#108, #109`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    table.rows.push( createAboutRow('2024-11-23',"0.0.16",`#108, #109, #110, #111`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
     table.rows.push( createAboutRow('2024-11-23',"0.0.15",`#15, #18, #97, #99, #105, #106,`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     table.rows.push( createAboutRow('2024-11-17',"0.0.14",`#88, #89, #90, #91, #93, #94, #95, #96, #98, #100, #101 - FileDrop`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
