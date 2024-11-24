@@ -248,9 +248,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     return  <span className='fade-bright' style={highlightCSS}>{ str }</span>
   };
 
-  const favoriteButtons: JSX.Element[] = [
-    <button key='reCenter' className='favButton' onClick={ (event) => reCenterOnItem( event) } title={ `Center on ${ centerItem.FPSItem.Scatter.Title}`}>⊙</button>
-  ];
+  const favoriteButtons: JSX.Element[] = [];
+  if ( centerItem ) favoriteButtons.push( <button key='reCenter' className='favButton' onClick={ (event) => reCenterOnItem( event) } title={ `Center on ${ centerItem.FPSItem.Scatter.Title}`}>⊙</button> );
 
   favorites.map( fav => {
     if ( fav.item ) {
