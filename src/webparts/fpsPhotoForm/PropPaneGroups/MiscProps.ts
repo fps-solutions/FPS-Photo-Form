@@ -40,6 +40,12 @@ export function buildMiscPropsGroup( wpProps: IFpsPhotoFormWebPartProps, thisWPC
         options: UseDefaultFormTabs.map( tab => { return { key: tab, text: tab }}),
       }),
 
+      // https://github.com/fps-solutions/FPS-Photo-Form/issues/108
+      PropertyPaneTextField('maxFetchCount', {
+        label: 'Number between 100-5000',
+        description: '',
+      }),
+
       PropertyPaneDropdown('prefabForm', {
         label: 'Template form',
         options: PrefabFormTemplates.map( tab => { return { key: tab, text: tab }}),

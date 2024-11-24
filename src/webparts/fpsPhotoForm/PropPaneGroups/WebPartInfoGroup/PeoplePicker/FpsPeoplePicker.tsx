@@ -8,7 +8,7 @@ import './fps-People-Picker.css'; // Import the CSS file for styling
 export type ISharePointUserPreFilterRule = 'User' | 'UserWEmail' | 'All';
 
 // Define the interface for the props
-interface SharePointUserSearchProps {
+interface FpsPeoplePickerProps {
   onUsersFetched?: (users: ISiteUserInfo[]) => void; // Optional callback to pass users back to parent
   debounceDelay?: number; // Optional debounce delay with default value of 200ms
   siteUrl?: string; // Optional SharePoint site URL
@@ -18,7 +18,7 @@ interface SharePointUserSearchProps {
   multiSelect?: boolean; // New optional property for enabling multi-select (default is true)
 }
 
-const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
+const FpsPeoplePicker: React.FC<FpsPeoplePickerProps> = ({
   onUsersFetched,
   debounceDelay = 200, // Default value for debounceDelay
   siteUrl = "/sites/YourSiteUrl", // Default site URL
@@ -172,4 +172,4 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
   );
 };
 
-export default SharePointUserSearch;
+export default FpsPeoplePicker;

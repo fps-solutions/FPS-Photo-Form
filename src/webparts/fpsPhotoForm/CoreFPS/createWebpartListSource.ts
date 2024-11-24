@@ -83,6 +83,11 @@ export function createPhotoListSourceProps( wpProps: IFpsPhotoFormWebPartProps, 
   ListSource.orderBy = createSeriesSort( 'Id', false );
   ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
 
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/108
+  let maxFetchCount = wpProps.maxFetchCount ? parseInt( wpProps.maxFetchCount ) : 100;
+  if ( maxFetchCount === 0 ) maxFetchCount = 100;
+  ListSource.fetchCount =  Math.min( maxFetchCount, 5000 );
+
   return ListSource;
 
 }

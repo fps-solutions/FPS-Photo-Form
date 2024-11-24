@@ -453,7 +453,14 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
           label: 'Image Library Folder',
         })
       );
-      groups.push(   FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' ) );
+      const ListPickerGroup = FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' );
+      ListPickerGroup.groupFields.push(
+        PropertyPaneTextField('maxFetchCount', {
+          label: 'Max items to fetch for views',
+          description: '',
+        })
+      )
+      groups.push( ListPickerGroup );
       groups.push( LibraryGroup );
 
       // https://github.com/fps-solutions/FPS-Photo-Form/issues/49

@@ -4,6 +4,10 @@ import { buildPhotoFormFileNameHandleBarsDef } from "./buildPhotoFormFileNameHan
 import { convertFileSizeStringToNum } from "./convertFileSizeStringToNum";
 import { getMIMEObjectsFromSelectedTypes, IMIMETypesObject, Specific_MIME_Objects } from "./fps-FileDropTypes";
 
+/**
+ * Use this with function similar to buildPhotoFormFileNameHandleBarsDef to create the expected result
+ *
+ */
 export interface IFileNameHandleBars {
 
   fileNameHandleBars: string; // Handle Bars syntax for naming files

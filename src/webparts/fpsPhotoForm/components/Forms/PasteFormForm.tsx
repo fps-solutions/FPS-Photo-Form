@@ -20,7 +20,7 @@ import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/fil
 import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
 import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
 import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
-import { buildPhotoFormFileName } from './FileDropBox/filenameGenerator';
+import { buildPhotoFormFileName } from "./FileDropBox/buildPhotoFormFileName";
 import { extractImageLocationData, IImageLocationData } from './FileDropBox/functions/getImageLocation';
 import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
 
@@ -35,6 +35,9 @@ export interface IMiscFormWPProps {
   category1s: string;
   category2s: string;
   category3s: string;
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/108
+  maxFetchCount: string;
 
   defaultTab: IDefaultFormTab;
 }
@@ -435,12 +438,12 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
               <button className={ styles.clearButton }type="reset" onClick={ () => resetForm( )}>Reset</button>
 
-              <FPSToggle
+              {/* <FPSToggle
                 label="Reset on Create"
                 onText="Auto"
                 offText="Manual"
                 onChange={ handleToggleChange }
-              />
+              /> */}
 
               <FPSToggle
                 forceChecked={ fileMode === 'DropBox' ? true : false }
@@ -450,8 +453,9 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                 onChange={ handleFileToggle }
               />
 
-              <div>Current Toggle State: { `${autoClear}` }</div>
-              <div>FileName: { `${shortFileName}` }</div>
+              {/* <div>Current Toggle State: { `${autoClear}` }</div> */}
+              <label style={{ }}>FileName to create:</label>
+              <div>{ `${shortFileName}` }</div>
 
             </div>
             {/* {imageData && (

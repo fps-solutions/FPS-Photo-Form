@@ -4,7 +4,7 @@ import { PivotItem, } from '@fluentui/react/lib/Pivot';
 import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
 import { Specific_MIME_Objects } from '../components/Forms/FileDropBox/fps-FileDropTypes';
 
-export const FileNameHandleBarsMC: string = `{{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Comments}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Title}}`;
+export const FileNameHandleBarsMC: string = `{{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Title}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Comments}}`;
 
 export function getWebPartHelpFilePicker (  ): JSX.Element {
 
