@@ -290,6 +290,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-RequestDigest': requestDigest,
+                    // In your example, the If-Match: '*' simplifies the update process by ignoring ETag/versioning checks.
+                    // This is efficient but could lead to unintended overwrites if the list item is being concurrently modified
+                    // by other processes or users. If version control is critical in your application, you might want to fetch
+                    // and use the item's current ETag instead.
                     'If-Match': '*'
                 },
                 body: JSON.stringify(body)

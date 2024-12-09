@@ -47,7 +47,7 @@ storedSecrets
 add webpack analyzer into gulpfile.js
 gulp build
 
-- npm install exifr --save;
+- npm install exifr --save;  << == Used for getting geoLocations from images
 - npm install @mikezimm/fps-library-v2@2.0.23; gulp serve --nobrowser
 
 - gulp clean; gulp build; gulp bundle --ship; gulp package-solution --ship
