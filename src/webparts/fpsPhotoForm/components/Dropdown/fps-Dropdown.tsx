@@ -5,9 +5,12 @@ require('./fps-Dropdown.css');
 export interface IMultiSelectDropdownOption {
   key: string;
   text: string;
-  // https://github.com/fps-solutions/FPS-Photo-Form/issues/109
+  // Optional inline styles for this option
   style?: React.CSSProperties;
   icon?: string | JSX.Element;
+  // New property to indicate if the option is a label and not selectable
+  heading?: boolean; // If true, auto-disables and applies bold styling
+  disabled?: boolean;
 }
 
 export interface IMultiSelectDropdownProps {
@@ -51,7 +54,12 @@ const MultiSelectDropdown: React.FC<IMultiSelectDropdownProps> = ({
         }}
       >
         {options.map((option) => (
-          <option key={option.key} value={option.key} style={{ ...{ padding: '4px' }, ...option.style ? option.style : {} }}>
+          <option
+            key={option.key}
+            value={option.key}
+            style={{ ...{ padding: '4px' }, ...option.style ? option.style : option.heading ? { fontWeight: 'bold', paddingTop: '5px' } : {} }}
+            disabled={ option.disabled || option.heading ? true : false } // Disable the option if the `disabled` property is true
+          >
             { option.icon ? option.icon : undefined }
             {option.text}
           </option>
