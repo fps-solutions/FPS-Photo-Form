@@ -9,7 +9,6 @@ import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Togg
 import { IPhotoButtonStyle } from '../Scatter/IScatterChartProps';
 import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
-import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
 import { makeid } from '../../fpsReferences';
 
 // import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
@@ -17,8 +16,8 @@ import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Cli
 
 // import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
-import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
-import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
+import { IFileDropBoxProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
+import FileUploadContainer from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/FileDropBox/fps-FileDropContainer';
 import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
 import { buildPhotoFormFileName } from "./FileDropBox/buildPhotoFormFileName";
 import { extractImageLocationData, IImageLocationData } from './FileDropBox/functions/getImageLocation';

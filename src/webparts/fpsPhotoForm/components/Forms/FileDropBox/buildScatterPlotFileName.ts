@@ -1,7 +1,9 @@
-import { ITheTime } from "@mikezimm/fps-core-v7/lib/logic/Time/Interfaces";
+
 import { makeTheTimeObject } from "@mikezimm/fps-core-v7/lib/logic/Time/timeObject";
 import { IScatterPlotItem } from "../../Scatter/IScatterChartProps";
-import { IFileNameHandleBars, getTextFromVarious, processCommonFileNameHandleBars } from "./filenameGenerator";
+import { getTextFromVarious } from "./filenameGenerator";
+import { IFileNameHandleBars, } from "@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileNameHandleBars";
+import { processCommonFileNameHandleBars } from "@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/processCommonFileNameHandleBars";
 
 
 export function buildScatterPlotFileName(item: IScatterPlotItem, originalName: string, mapping: IFileNameHandleBars, maxLength: number = 190): string {

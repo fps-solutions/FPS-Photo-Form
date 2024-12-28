@@ -1,12 +1,13 @@
 
 import { ISourceProps, StandardMetaViewProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
-import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/Lists/createListSource';
+import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/Lists/createListSource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
 import { createStyleFromString } from '@mikezimm/fps-library-v2/lib/logic/Strings/reactCSS';
 import { getExpandColumns, getSelectColumns, } from '../fpsReferences';
 import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
 import { changesAxis, IAxisMap, IAxisMapWPProps, IChartTabProps, IChartFavorites, IFPSGridLineType, } from '../components/Scatter/IScatterChartProps';
 import { upperFirstLetter } from '@mikezimm/fps-core-v7/lib/logic/Strings/stringCase';
+import { IFpsSpHttpServiceMIN } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/Sp/IFpsSpHttpServiceMIN';
 
 export function createAxisMap( wpProps: IFpsPhotoFormWebPartProps ): IAxisMap {
 
@@ -64,9 +65,9 @@ export function createChartDisplay( wpProps: IFpsPhotoFormWebPartProps ): IChart
   return ChartDisplay;
 }
 
-export function createPhotoListSourceProps( wpProps: IFpsPhotoFormWebPartProps, axisMap: IAxisMap ): ISourceProps {
+export function createPhotoListSourceProps( fpsSpService: IFpsSpHttpServiceMIN, wpProps: IFpsPhotoFormWebPartProps, axisMap: IAxisMap,  ): ISourceProps {
 
-  const ListSource: ISourceProps = createListSource( wpProps.webUrlPickerValue, wpProps.listPickerValue.replace(/List([^L]*)$/, ''), wpProps.listItemPickerValue  );
+  const ListSource: ISourceProps = createListSource( fpsSpService, wpProps.webUrlPickerValue, wpProps.listPickerValue.replace(/List([^L]*)$/, ''), wpProps.listItemPickerValue  );
 
   const allColumns: string[] = [];
   Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { if ( col !== 'type' )  allColumns.push( axisMap[ col ] ) } );

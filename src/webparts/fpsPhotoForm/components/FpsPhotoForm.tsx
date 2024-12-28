@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './FpsPhotoForm.module.scss';
 
-import { DefaultFormTabsExperimental, DefaultFormTabsProduction, IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
+import { DefaultFormTabsExperimental, IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
 
 import { Icon } from '@fluentui/react/lib/Icon';
 

@@ -11,8 +11,7 @@
 
 // import { encrptMeOriginalTest } from '../fpsReferences';
 
-import { PreConfigFpsTileCompProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
-import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from '../components/Forms/getButtonStyles';
+import { PreConfigFpsTileCompPropsIcon } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
 import { PresetFPSBanner, } from '../fpsReferences';
 import { IPreConfigSettings, IAllPreConfigSettings,  } from '../fpsReferences';
 import { PartialWBPropsMineCraft } from './PreConfigSettingsMC';
@@ -45,7 +44,7 @@ export const WPForceEverywhere : IPreConfigSettings = {
 export const WPPresetEverywhere : IPreConfigSettings = {
     source: 'WPPresetEverywhere',
     location: '*',
-    props: {...PreConfigFpsTileCompProps,
+    props: {...PreConfigFpsTileCompPropsIcon,
         expandListPickerGroups: true,
         bannerTitle: 'FPS Photo Form',
         defPinState: 'disabled',

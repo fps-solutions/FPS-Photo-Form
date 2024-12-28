@@ -1,5 +1,6 @@
 import { IAxisMap } from "../../Scatter/IScatterChartProps";
-import { IFileNameHandleBars } from "./IFileDropBoxProps";
+import { IFileNameHandleBars } from "@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileNameHandleBars";
+// import { IFileNameHandleBars } from "./IFileNameHandleBars";
 
 /**
  * This builds a mapping cross reference between IScatterPlotItem and IFileNameHandleBars used later for replacing handle bar values

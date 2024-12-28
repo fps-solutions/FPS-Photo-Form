@@ -164,7 +164,7 @@ export function saveViewAnalytics( Title: string, ListOption: IAnalyticsOptions,
       // Required for non-PnpJS POST operations
       saveObject.__metadata = { type: `SP.Data.${UseList}ListItem` }
 
-      saveAnalytics4( `${ UseList }` , saveObject, true );
+      saveAnalytics4( parentProps.bannerProps.fpsSpService, `${ UseList }` , saveObject, true );
 
       const saved = true;
       console.log('saved view info');

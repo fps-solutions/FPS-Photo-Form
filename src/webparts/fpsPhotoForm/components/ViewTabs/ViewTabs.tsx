@@ -8,7 +8,7 @@ import { buildFPSAnyTileItems } from '@mikezimm/fps-library-v2/lib/components/mo
 
 import { IViewTabsProps, IViewTabsState } from './IViewTabsProps';
 
-import { check4Gulp, EmptyStateSource, makeid } from "../../fpsReferences";
+import { check4Gulp, EmptyStateSource, IStateSource, makeid } from "../../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fpsReferences";
 
@@ -24,7 +24,7 @@ import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/In
 import CameraCapture from '../Forms/Camera/component';
 import ParentForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-MultiImageParent';
 import ListHook from '../ListHook/ListHook';
-import ParentComponent from '../Forms/FileDropBox/ParentFileSample';
+import ParentComponent from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/FileDropBox/ParentFileSample';
 import FpsPeoplePicker from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker/FpsPeoplePicker';
 
 //Use this to add more console.logs for this component
@@ -138,7 +138,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     const FPSItemCopy: IFPSItem = JSON.parse(JSON.stringify(this.props.FPSItem));
 
-    FetchedSource = buildFPSAnyTileItems(FetchedSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
+    FetchedSource = buildFPSAnyTileItems(FetchedSource as IStateSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
 
     const filteredItems: IScatterSourceItem[] = getHistoryPresetItems( FetchedSource, this.props.chartDisplay );
     const filteredIds = filteredItems.map(( item: IScatterSourceItem ) => item.Id );
@@ -185,7 +185,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         { this.props.tab === 'List' ? <ListHook
           ListHookSourceProps={ this.props.ListSource }
-          stateSource={ this.state.stateSource }
+          stateSource={ this.state.stateSource as IStateSource }
           refreshId={ this.state.stateSource.refreshId }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           context={ this.props.bannerProps.context as any }

@@ -1,7 +1,7 @@
+import { IFileNameHandleBars } from "@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileNameHandleBars";
 import { IPhotoFormFormInterface, IPhotoFormForm } from "../PasteFormForm";
-import { IFileNameHandleBars, getTextFromVarious, processCommonFileNameHandleBars } from "./filenameGenerator";
-
-
+import { getTextFromVarious } from "./filenameGenerator";
+import { processCommonFileNameHandleBars } from "@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/processCommonFileNameHandleBars";
 
 export function buildPhotoFormFileName(formData: IPhotoFormFormInterface, formProps: IPhotoFormForm, originalName: string, mapping: IFileNameHandleBars, maxLength: number = 190): string {
 

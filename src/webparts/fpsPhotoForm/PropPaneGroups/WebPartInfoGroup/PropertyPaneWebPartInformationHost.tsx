@@ -42,6 +42,7 @@ export default class PropertyPaneWebPartInformationHost extends React.Component<
           // linkProperties[prop] = this.props.videoProperties[prop];
           // To this to get past typescript:
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (linkProperties as { [key: string]: any })[prop] = (this.props.videoProperties as { [key: string]: any })[prop];
         }
       }

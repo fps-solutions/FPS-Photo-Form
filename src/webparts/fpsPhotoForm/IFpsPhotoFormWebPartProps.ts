@@ -16,8 +16,7 @@ import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fp
 import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
 import { changesAxis, changesChartFeature, changesChartGrid, IAxisMapWPProps, IChartTabWPProps } from './components/Scatter/IScatterChartProps';
 import { changesFpsTileComp, IFpsTileComponentWPProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
-import { IDefaultFormTab, IPrefabFormTemplates } from './components/IFpsPhotoFormProps';
-import { changesFileDropBox, IFileDropBoxWPProps } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { changesFileDropBox, IFileDropBoxWPProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';
 import { changesInputForm, IMiscFormWPProps } from './components/Forms/PasteFormForm';
 
 

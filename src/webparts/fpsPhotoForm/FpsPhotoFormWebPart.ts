@@ -40,7 +40,7 @@ import { SPPermission, } from '@microsoft/sp-page-context';
 
 import * as strings from 'FpsPhotoFormWebPartStrings';
 import FpsPhotoForm from './components/FpsPhotoForm';
-import { IDefaultFormTab, IFpsPhotoFormProps, IPrefabFormTemplates } from './components/IFpsPhotoFormProps';
+import { IFpsPhotoFormProps, IPrefabFormTemplates } from './components/IFpsPhotoFormProps';
 import { IFpsPhotoFormWebPartProps } from './IFpsPhotoFormWebPartProps';
 
  /***
@@ -109,9 +109,8 @@ import { panelVersionNumber } from './HelpPanel/About';
 import { FPSCert } from './CoreFPS/fpsCert';
 import { IFPSCert } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IFPSCert';
 import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
-import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from './components/Forms/getButtonStyles';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
-import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createLibrarySource';
+import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/Users/createLibrarySource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
 import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Scatter/IScatterChartProps';
 import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
@@ -124,11 +123,11 @@ import { buildFPSTileEleWPProps, buildFPSTileEleWPExtras } from "@mikezimm/fps-l
 import { IFPSItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';
 import { buildMiscPropsGroup } from './PropPaneGroups/MiscProps';
 import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
-import { convertFileDropWPPropsToFileDropBoxProps, IFileDropBoxProps, IFileNameHandleBars } from './components/Forms/FileDropBox/IFileDropBoxProps';
+import { IFileDropBoxProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';
 import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
-import { FileNameHandleBarsMC } from './PropPaneHelp/PropPaneHelpFilePicker';
 import { PartialWBPropsMineCraft } from './CoreFPS/PreConfigSettingsMC';
+import { convertFileDropToFileDropBoxProps } from './components/Forms/FileDropBox/convertFileDropWPPropsToFileDropBoxProps';
 
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
@@ -241,17 +240,17 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     const AxisMap: IAxisMap = createAxisMap( this.properties );
 
     const ChartDisplay: IChartTabProps = createChartDisplay( this.properties );
-    const ListSource: ISourceProps = createPhotoListSourceProps( this.properties, AxisMap );
+    const ListSource: ISourceProps = createPhotoListSourceProps( bannerProps.fpsSpService,this.properties, AxisMap );
     ListSource.orderBy = createSeriesSort( 'Id', false );
     ListSource.viewProps = [ 'Category1', 'Category2', 'Category3', 'CoordX', 'CoordY', 'CoordZ', 'Notes', 'ScreenshotUrl' ];
 
     // NO NEED to replace 'List' because Libraries do not add that.
-    const ImagesSource: ISourceProps = createLibrarySource( this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2  );
+    const ImagesSource: ISourceProps = createLibrarySource( bannerProps.fpsSpService, this.properties.webUrlPickerValue2, this.properties.listPickerValue2, this.properties.listItemPickerValue2,  );
     ImagesSource.subFolder = this.properties.imageSubfolder2;
 
     const FPSItem: IFPSItem = buildFpsTileWPProps( this.properties );
 
-    const fileDropBoxProps: IFileDropBoxProps = convertFileDropWPPropsToFileDropBoxProps( this.properties, AxisMap );
+    const fileDropBoxProps: IFileDropBoxProps = convertFileDropToFileDropBoxProps( this.properties, AxisMap );
     const miscFormProps = buildMiscFormFromWPProps( this.properties );
 
     const element: React.ReactElement<IFpsPhotoFormProps> = React.createElement(
@@ -473,7 +472,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       groups.push( buildMiscPropsGroup( this.properties, thisAsAny ));
       groups.push( buildFileDropBoxGroup( this.properties, thisAsAny ));
 
-      if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true ) );
+      if ( this.properties.propsEasyMode !== true ) groups.push( FPSTileWPGroup( this.properties, true, 'tiles' ) );
 
       // LOOCKPROOPS REFACTOR:  ADD THIS Loop for all other groups
       if ( propsEasyMode !== true ) {

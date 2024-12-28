@@ -1,5 +1,5 @@
 
-import { IUnifiedPerformanceOps } from "@mikezimm/fps-core-v7/lib/types/fps-returns/common/IFpsErrorObject";
+import { IUnifiedPerformanceOpsWithRequiredFetch } from "@mikezimm/fps-core-v7/lib/types/fps-returns/common/IFpsErrorObject";
 import { IAnySourceItem, IStateSource } from "../../fpsReferences";
 import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent";
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
@@ -191,7 +191,7 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
 export interface IStateSourceScatter extends IStateSource {
   // HAD TO ADD THESE first two to pass gulp lint errors even though it's already on IStateSource
   refreshId: string;
-  unifiedPerformanceOps: IUnifiedPerformanceOps;
+  unifiedPerformanceOps: IUnifiedPerformanceOpsWithRequiredFetch;
   items: IScatterSourceItem[];
   itemsY: IScatterSourceItem[];
 }
