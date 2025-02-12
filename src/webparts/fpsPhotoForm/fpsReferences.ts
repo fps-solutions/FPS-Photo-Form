@@ -33,7 +33,7 @@ export { defaultBannerCommandStyles } from '@mikezimm/fps-core-v7/lib/common/com
 
 // export { doesObjectExistInArray, } from '@mikezimm/fps-library-v2/lib/logic/Arrays/searching/objectfind';
 
-export { IFPSUser, } from '@mikezimm/fps-core-v7/lib/logic/Users/IUserInterfaces';
+export { IFPSUser, } from '@mikezimm/fps-core-v7/lib/components/atoms/Users/IUserInterfaces';
 
 // export { openThisLinkInNewTab, } from '@mikezimm/fps-library-v2/lib/components/atoms/Links/CreateLinks';
 // export { replaceHTMLEntities, } from '@mikezimm/fps-library-v2/lib/logic/Strings/html';

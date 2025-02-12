@@ -18,7 +18,7 @@ export { IPinMeState, } from '@mikezimm/fps-core-v7/lib/banner/features/PinMe/In
 export { PresetFPSBanner, } from '@mikezimm/fps-core-v7/lib/common/PropPaneHelp/preconfig/PreConfiguredConstants';
 export { IPreConfigSettings, IAllPreConfigSettings, } from '@mikezimm/fps-core-v7/lib/common/PropPaneHelp/preconfig/IPreConfig';
 export { defaultBannerCommandStyles } from '@mikezimm/fps-core-v7/lib/common/commandStyles/defaults';
-export { IFPSUser, } from '@mikezimm/fps-core-v7/lib/logic/Users/IUserInterfaces';
+export { IFPSUser, } from '@mikezimm/fps-core-v7/lib/components/atoms/Users/IUserInterfaces';
 /**
  * COMMON for any Fetching
  *

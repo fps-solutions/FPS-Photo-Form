@@ -21,7 +21,7 @@ import { DisplayMode, } from '@microsoft/sp-core-library';
 
  import { IFpsPhotoFormProps } from '../components/IFpsPhotoFormProps';
  import { check4Gulp, ILoadPerformance, } from '../fpsReferences';
- import { saveAnalytics4, getMinPerformanceString } from '@mikezimm/fps-library-v2/lib/pnpjs/Logging/saveAnalytics';
+ import { saveAnalytics4, getMinPerformanceString } from '@mikezimm/fps-core-v7/lib/restAPIs/logging/Analytics/saveAnalyticsAPI';
  import { IZLoadAnalytics, IZSentAnalytics, } from '@mikezimm/fps-core-v7/lib/components/atoms/easy-analytics/interfaces/analytics';
 import { panelVersionNumber } from '../HelpPanel/About';
 

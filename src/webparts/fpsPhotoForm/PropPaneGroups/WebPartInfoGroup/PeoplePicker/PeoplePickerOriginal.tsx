@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { ISiteUserInfo } from '@mikezimm/fps-core-v7/lib/types/@pnp/@2.14.0/sp/site-users';
 import './fps-People-Picker.css'; // Import the CSS file
 
-export type ISharePointUserPreFilterRule = 'User' | 'UserWEmail' | 'All';
+export type ISharePointUserPreFilterRule = 'User' | 'UserWithEmail' | 'All';
 
 interface SharePointUserSearchProps {
   onUsersFetched?: (users: ISiteUserInfo[]) => void;
@@ -20,7 +20,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
   debounceDelay = 200,
   siteUrl = "/sites/YourSiteUrl",
   size = 'L',
-  preFilter = 'UserWEmail',
+  preFilter = 'UserWithEmail',
   typeToShow = false,
   multiSelect = true,
 }) => {
@@ -53,7 +53,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
         imageUrl: `${window.location.origin}/_layouts/15/userphoto.aspx?size=${size}&accountname=${user.Email ? user.Email : user.AccountName}`,
       }));
 
-      if (preFilter === 'UserWEmail') {
+      if (preFilter === 'UserWithEmail') {
         results = results.filter((user: ISiteUserInfo) => (user.PrincipalType === 1 || user.PrincipalType === 2) && !!user.Email);
       }
 

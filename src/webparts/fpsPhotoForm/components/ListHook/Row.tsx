@@ -10,7 +10,7 @@ import * as React from 'react';
 
 import { getHighlightedText } from '@mikezimm/fps-library-v2/lib/components/atoms/Elements/HighlightedText';
 
-import { ISourceRowRender } from '@mikezimm/fps-library-v2/lib/components/molecules/SourcePage/ISourceRowRender';
+import { ISourceRowRender } from '@mikezimm/fps-core-v7/lib/components/molecules/SourcePage/ISourceRowRender';
 
 import styles from './RowStyles.module.scss';
 import { IAnySourceItem } from '@mikezimm/fps-core-v7/lib/components/molecules/AnyContent/IAnyContent';

@@ -2,7 +2,7 @@
 import { ISourceProps, StandardMetaViewProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { createListSource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/Lists/createListSource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
-import { createStyleFromString } from '@mikezimm/fps-library-v2/lib/logic/Strings/reactCSS';
+import { createStyleFromString } from '@mikezimm/fps-core-v7/lib/logic/Strings/reactCSS';
 import { getExpandColumns, getSelectColumns, } from '../fpsReferences';
 import { IFpsPhotoFormWebPartProps } from '../IFpsPhotoFormWebPartProps';
 import { changesAxis, IAxisMap, IAxisMapWPProps, IChartTabProps, IChartFavorites, IFPSGridLineType, } from '../components/Scatter/IScatterChartProps';

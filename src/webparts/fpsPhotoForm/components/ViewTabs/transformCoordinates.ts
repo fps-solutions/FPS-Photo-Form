@@ -1,5 +1,5 @@
 
-import { doesObjectExistInArrayInt } from "@mikezimm/fps-library-v2/lib/logic/Arrays/searching/objectfind";
+import { doesObjectExistInArrayInt } from "@mikezimm/fps-core-v7/lib/logic/Arrays/searching/objectfind";
 import { IScatterSourceItem, IAxisMap, IScatterPlotItem, IFPSItemWithScatter, IChartFavorites } from "../Scatter/IScatterChartProps";
 
 export function addScatterPotItem( item: IScatterSourceItem, axisMap: IAxisMap ): IScatterSourceItem {

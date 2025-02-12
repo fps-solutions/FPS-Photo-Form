@@ -21,7 +21,7 @@ import FileUploadContainer from '@mikezimm/fps-library-v2/lib/components/atoms/I
 import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
 import { buildPhotoFormFileName } from "./FileDropBox/buildPhotoFormFileName";
 import { extractImageLocationData, IImageLocationData } from './FileDropBox/functions/getImageLocation';
-import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
+import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObjectV2';
 
 export interface IMiscFormWPProps {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24

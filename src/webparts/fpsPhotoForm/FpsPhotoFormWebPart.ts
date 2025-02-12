@@ -110,7 +110,7 @@ import { FPSCert } from './CoreFPS/fpsCert';
 import { IFPSCert } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IFPSCert';
 import { buildEasyModeGroup } from './PropPaneGroups/EasyProps';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
-import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/Users/createLibrarySource';
+import { createLibrarySource } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/Lists/createLibrarySource';
 import { createSeriesSort } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createOrderBy';
 import { IAxisMap, IChartTabProps, IPhotoButtonStyle } from './components/Scatter/IScatterChartProps';
 import { createAxisMap, createChartDisplay, createPhotoListSourceProps } from './CoreFPS/createWebpartListSource';
