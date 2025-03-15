@@ -126,7 +126,7 @@ import { buildChartFeatureGroup } from './PropPaneGroups/ChartFeature';
 import { IFileDropBoxProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';
 import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
-import { PartialWBPropsMineCraft } from './CoreFPS/PreConfigSettingsMC';
+import { PartialWBPropsMineCraft, PartialWBPropsSubnautica } from './CoreFPS/PreConfigSettingsMC';
 import { convertFileDropToFileDropBoxProps } from './components/Forms/FileDropBox/convertFileDropWPPropsToFileDropBoxProps';
 
 
@@ -234,7 +234,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
   public render(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, );
+    const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, SPPermission );
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
@@ -410,6 +410,12 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
       const x: IPrefabFormTemplates = newValue;
       if ( x === 'Minecraft' ) {
         const BaseProps = JSON.parse(JSON.stringify( PartialWBPropsMineCraft ));
+        Object.keys( BaseProps ).map( prop => {
+          this.properties[ prop as 'description' ] = BaseProps[ prop as 'prefabForm' ];
+        });
+
+      } else if ( x === 'Subnautica' ) {
+        const BaseProps = JSON.parse(JSON.stringify( PartialWBPropsSubnautica ));
         Object.keys( BaseProps ).map( prop => {
           this.properties[ prop as 'description' ] = BaseProps[ prop as 'prefabForm' ];
         })

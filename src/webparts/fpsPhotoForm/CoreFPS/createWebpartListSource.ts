@@ -70,7 +70,8 @@ export function createPhotoListSourceProps( fpsSpService: IFpsSpHttpServiceMIN, 
   const ListSource: ISourceProps = createListSource( fpsSpService, wpProps.webUrlPickerValue, wpProps.listPickerValue.replace(/List([^L]*)$/, ''), wpProps.listItemPickerValue  );
 
   const allColumns: string[] = [];
-  Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { if ( col !== 'type' )  allColumns.push( axisMap[ col ] ) } );
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/116
+  Object.keys( axisMap ).map ( ( col: keyof IAxisMap ) => { if ( col !== 'type' && axisMap[ col ] )  allColumns.push( axisMap[ col ] ) } );
   allColumns.push( ...StandardMetaViewProps );
 
   // Added this for https://github.com/fps-solutions/FPS-Photo-Form/issues/56

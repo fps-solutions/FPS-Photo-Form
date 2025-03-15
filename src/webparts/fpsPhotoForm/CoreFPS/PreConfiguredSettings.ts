@@ -119,4 +119,5 @@ export const PreConfiguredProps : IAllPreConfigSettings = {
   //For Presets, Order should be:  CUSTOM Sites, WPPresetEverywhere, PresetFPSBanner,
   preset: [ PresetSomeRandomSite, WPPresetEverywhere, PresetFPSBanner,  ],
   _class: [],
+  _webpart: [],
 };

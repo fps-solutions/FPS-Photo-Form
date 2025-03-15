@@ -5,6 +5,7 @@ import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/Reac
 import { Specific_MIME_Objects } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/fps-FileDropTypes';
 
 export const FileNameHandleBarsMC: string = `{{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Title}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Comments}}`;
+export const FileNameHandleBarsSub1: string = `{{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Title}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Comments}}`;
 
 export function getWebPartHelpFilePicker (  ): JSX.Element {
 

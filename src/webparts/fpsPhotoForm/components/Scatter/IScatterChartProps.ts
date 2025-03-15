@@ -5,7 +5,7 @@ import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 import { IPrefabFormTemplates } from "../IFpsPhotoFormProps";
 
-export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth' ].map( (str => `axis_${str}`));
+export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth', 'Value1', 'Value2', 'Value3' ].map( (str => `axis_${str}`));
 
 export interface IAxisMapWPProps {
   axis_type: IPrefabFormTemplates;
@@ -21,6 +21,10 @@ export interface IAxisMapWPProps {
   axis_horz: string; // raw item property key representing Horizontal Axis
   axis_vert: string; // raw item property key representing Vertical Chart Axis
   axis_depth: string; // raw item property key representing Depth Axis
+
+  axis_Value1: string;
+  axis_Value2: string;
+  axis_Value3: string;
 
   // Added for expense type tracking lists or date X-Axis scale
   axis_Date1?: string;
@@ -45,6 +49,10 @@ export interface IAxisMap {
   horz: string; // raw item property key representing Horizontal Axis
   vert: string; // raw item property key representing Vertical Chart Axis
   depth: string; // raw item property key representing Depth Axis
+
+  Value1: string; // raw item property key representing Depth Axis
+  Value2: string; // raw item property key representing Depth Axis
+  Value3: string; // raw item property key representing Depth Axis
 
   // Added for expense type tracking lists or date X-Axis scale
   Date1?: string;
