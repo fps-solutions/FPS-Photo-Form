@@ -10,7 +10,7 @@ import { IHelpTable, } from '@mikezimm/fps-core-v7/lib/banner/components/SingleH
 import { createAboutRow } from '@mikezimm/fps-library-v2/lib/banner/components/Panel/createAboutRow';
 import { IWebpartBannerProps } from '@mikezimm/fps-core-v7/lib/banner/mainReact/IWebpartBannerProps';
 
-export const panelVersionNumber = '2025-03-15 - 0.0.17 PF'; //Added to show in panel
+export const panelVersionNumber = '2025-03-17 - 0.0.17 PF'; //Added to show in panel
 
 export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTable } {
 
@@ -40,7 +40,7 @@ export function aboutTable( bannerProps: IWebpartBannerProps ): { table: IHelpTa
     // table.rows.push( createAboutRow('2024-12-XX',"0.0.18",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
     // table.rows.push( createAboutRow('2024-11-XX',"0.0.17",`#`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
-    table.rows.push( createAboutRow('2025-03-15',"0.0.17",`#114, #115, #116`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
+    table.rows.push( createAboutRow('2025-03-17',"0.0.17",`#92, #114, #115, #116, #117, #118 - Happy St Patrick's Day!`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 
     table.rows.push( createAboutRow('2024-11-23',"0.0.16",`#108, #109, #110, #111`, bannerProps.showRepoLinks === true ? bannerProps.gitHubRepo : null ) );
 

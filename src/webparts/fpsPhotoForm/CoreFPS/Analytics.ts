@@ -21,7 +21,7 @@ import { DisplayMode, } from '@microsoft/sp-core-library';
 
  import { IFpsPhotoFormProps } from '../components/IFpsPhotoFormProps';
  import { check4Gulp, ILoadPerformance, } from '../fpsReferences';
- import { saveAnalytics4, getMinPerformanceString } from '@mikezimm/fps-core-v7/lib/restAPIs/logging/Analytics/saveAnalyticsAPI';
+ import { saveAnalytics4, getMinPerformanceString, getContextLoadPropertiesObject } from '@mikezimm/fps-core-v7/lib/restAPIs/logging/Analytics/saveAnalyticsAPI';
  import { IZLoadAnalytics, IZSentAnalytics, } from '@mikezimm/fps-core-v7/lib/components/atoms/easy-analytics/interfaces/analytics';
 import { panelVersionNumber } from '../HelpPanel/About';
 
@@ -38,8 +38,8 @@ import { panelVersionNumber } from '../HelpPanel/About';
 
 //  export const analyticsWeb: string = "/sites/Templates/Analytics/";
  export const analyticsList: string = "PhotoForm";
- export type IAnalyticsOptions = 'Views' | 'Creates' | 'Updates' | '';
- export const AnalyticsOptions = [  'Views' , 'Creates', 'Updates' ];
+ export type IAnalyticsOptions = 'Views' | 'Creates' | '';
+ export const AnalyticsOptions = [  'Views' , 'Creates' ];
 
 /***
  *     .d8b.  d8b   db  .d8b.  db      db    db d888888b d888888b  .o88b. .d8888.
@@ -65,18 +65,19 @@ export function saveViewAnalytics( Title: string, ListOption: IAnalyticsOptions,
       // Do not save anlytics while in Edit Mode... only after save and page reloads
       if ( displayMode === DisplayMode.Edit ) { return; }
 
-      const loadProperties: IZLoadAnalytics = {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        SiteID: context.pageContext.site.id['_guid'] as any,  //Current site collection ID for easy filtering in large list
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        WebID:  context.pageContext.web.id['_guid'] as any,  //Current web ID for easy filtering in large list
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        SiteTitle:  context.pageContext.web.title as any, //Web Title        TargetSite:  context.pageContext.web.serverRelativeUrl,  //Saved as link column.  Displayed as Relative Url
-        ListID:  `${context.pageContext.list.id}`,  //Current list ID for easy filtering in large list
-        ListTitle:  context.pageContext.list.title,
-        TargetList: `${context.pageContext.web.serverRelativeUrl}`,  //Saved as link column.  Displayed as Relative Url
+      // const loadProperties: IZLoadAnalytics = {
+      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      //   SiteID: context.pageContext.site.id['_guid'] as any,  //Current site collection ID for easy filtering in large list
+      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      //   WebID:  context.pageContext.web.id['_guid'] as any,  //Current web ID for easy filtering in large list
+      //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      //   SiteTitle:  context.pageContext.web.title as any, //Web Title        TargetSite:  context.pageContext.web.serverRelativeUrl,  //Saved as link column.  Displayed as Relative Url
+      //   ListID:  `${context.pageContext.list.id}`,  //Current list ID for easy filtering in large list
+      //   ListTitle:  context.pageContext.list.title,
+      //   TargetList: `${context.pageContext.web.serverRelativeUrl}`,  //Saved as link column.  Displayed as Relative Url
 
-      };
+      // };
+      const loadProperties: IZLoadAnalytics = getContextLoadPropertiesObject( context );
 
       // const zzzRichText1Obj: any = null;
       // const zzzRichText2Obj: any = null;
@@ -86,7 +87,7 @@ export function saveViewAnalytics( Title: string, ListOption: IAnalyticsOptions,
       // console.log( 'zzzRichText2Obj:', zzzRichText2Obj);
       // console.log( 'zzzRichText3Obj:', zzzRichText3Obj);
 
-      const performance : string = getMinPerformanceString( performanceObj );
+      const performance : string = performanceObj[ `label` as 'sets' ] ? JSON.stringify( performanceObj ) :  getMinPerformanceString( performanceObj );
 
       let FPSProps: string = null;
       if ( analyticsProps ) {
@@ -126,7 +127,7 @@ export function saveViewAnalytics( Title: string, ListOption: IAnalyticsOptions,
 
         Result: Result,  //Success or Error
 
-        zzzText1: `${ fpsPinMenu.defPinState } - ${ fpsPinMenu.forcePinState ===  true ? 'forced' : '' }`,
+        // zzzText1: `${ fpsPinMenu.defPinState } - ${ fpsPinMenu.forcePinState ===  true ? 'forced' : '' }`,
 
         // zzzText2: `${ 'zzzText2' }`,
         // zzzText3: `${ 'zzzText3' }`,

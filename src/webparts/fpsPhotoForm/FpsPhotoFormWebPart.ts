@@ -129,6 +129,8 @@ import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
 import { PartialWBPropsMineCraft, PartialWBPropsSubnautica } from './CoreFPS/PreConfigSettingsMC';
 import { convertFileDropToFileDropBoxProps } from './components/Forms/FileDropBox/convertFileDropWPPropsToFileDropBoxProps';
 
+const wpTDBaseLeft = `performanceObj.`;
+const wpTDLeft = [ `${wpTDBaseLeft}ms`,  `${wpTDBaseLeft}c` ];
 
 export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPartProps> {
 
@@ -177,6 +179,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     this._repoLink = gitPhotoForm; //Set as any but will get created in FPSSuperOnOnit
     this._analyticsListX = analyticsList;
     this._analyticsOptionsX = AnalyticsOptions;  // Add this if you have multiple lists
+    this._wpTDLeft = wpTDLeft;
+    this._wpTDRight = [ 'Result' ];
 
     this._fpsSiteThemes = stylesFPS;
     this._exportIgnorePropsWP = exportIgnorePropsWP;

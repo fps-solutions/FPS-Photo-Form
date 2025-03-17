@@ -112,7 +112,7 @@
     "spacer spacer"
     "json json";
   gap: 1em;
-  row-gap: 0em;
+  row-gap: .5em;
   label {
     font-weight: 600;
   }
@@ -215,7 +215,7 @@
       "submit imagePreview category2 category3"
       "spacer spacer category2 category3"
       "json json json json";
-    grid-template-rows: 64px 24px 48px 140px 90px 100px 500px;
+    grid-template-rows: 48px 24px 60px 140px 90px 100px 500px;
     row-gap: 0em;
   }
   .spacer {

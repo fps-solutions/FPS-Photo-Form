@@ -29,9 +29,9 @@ export function buildPhotoFormFileName(formData: IPhotoFormFormInterface, formPr
   if (Category2) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Category2}}`, getTextFromVarious(formData.category2.map((idx: number) => { return formProps.Category2s[idx]; })));
   if (Category3) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Category3}}`, getTextFromVarious(formData.category3.map((idx: number) => { return formProps.Category3s[idx]; })));
 
-  if (Number1) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Number1}}`, getTextFromVarious(formData.x));
-  if (Number2) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Number2}}`, getTextFromVarious(formData.y));
-  if (Number3) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Number3}}`, getTextFromVarious(formData.z));
+  if (Number1) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Number1}}`, getTextFromVarious(formData.n1));
+  if (Number2) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Number2}}`, getTextFromVarious(formData.n2));
+  if (Number3) fileNameHandleBarStr = fileNameHandleBarStr.replace(`{{Number3}}`, getTextFromVarious(formData.n3));
 
   // if ( Date1 ) fileNameHandleBarStr = fileNameHandleBarStr.replace( `{{Date1}}`, makeTheTimeObject(item[ Date1 as unknown as 'Title' ]).dayYYYYMMDD );
   // if ( Date2 ) fileNameHandleBarStr = fileNameHandleBarStr.replace( `{{Date2}}`, makeTheTimeObject(item[ Date2 as unknown as 'Title' ]).dayYYYYMMDD );
