@@ -242,3 +242,86 @@ export function getButtonStyles(label: string, buttonStyles: IPhotoButtonStyle[]
   });
   return results;
 }
+
+
+export const ButtonStylesSubnauticaLevels: IPhotoButtonStyle[] = [
+  {
+    label: 'Surface',
+    styles: { background: 'lightblue', color: 'darkblue' }
+  },
+  {
+    label: 'GreenRiver',
+    styles: { background: 'limegreen', color: 'black' }
+  },
+  {
+    label: 'Lava Zone',
+    styles: { background: 'orange', color: 'yellow' }
+  },
+];
+
+export const ButtonStylesSubnauticaBiomes: IPhotoButtonStyle[] = [
+  {
+    label: 'Shallows',
+    styles: { background: 'green', color: 'white' }
+  },
+  {
+    label: 'Island',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Mushroom',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Kelp',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Red',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Bulbs',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Hazardous',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+];
+
+
+export const ButtonStylesSubnauticaFeatures: IPhotoButtonStyle[] = [
+  {
+    label: 'Alien',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+  {
+    label: 'Base',
+    styles: { background: 'green', color: 'white' }
+  },
+  {
+    label: 'Wreck',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Resources',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+  {
+    label: 'Return',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+  {
+    label: 'Site',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+  {
+    label: 'Inventory',
+    styles: { background: 'gray', color: 'yellow' }
+  },
+];
+
+export const ButtonStylesSub1: IPhotoButtonStyle[] = [
+  ...ButtonStylesSubnauticaLevels, ...ButtonStylesSubnauticaBiomes, ...ButtonStylesSubnauticaFeatures
+];

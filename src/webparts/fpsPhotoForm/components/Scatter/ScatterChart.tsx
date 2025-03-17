@@ -63,6 +63,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   const [clickedIdx, setClickedIdx] = useState<number>( -1 ); // Initial centerX
   const [highlightIds, setHighlightIds] = useState<number[]>( [] ); // Initial centerX
   const [itemHistory, setItemHistory] = useState<IScatterSourceItem[]>( filteredItems ); // Initial centerX
+  const [centerItem, setCenterItem ] = useState<IScatterSourceItem>( null ); // Initial centerX
   const [idHistory, setIdHistory] = useState<number[]>( filteredIds ); // Initial centerX
   const [historyRefresh, setHistoryRefresh ] = useState<string>( makeid(5) )
   const [chartHistory, setChartHistory] = useState<boolean>( false ); // Initial centerX
@@ -90,10 +91,11 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     if ( filteredItems.length > 0 ) setGridScale( gridGaps.length > 3 ? 3 : gridScale );
 
     if ( !centerLatest ) return; // Do not recenter if feature is turned off
-    const centerItem: IScatterSourceItem = filteredItems.length > 0 ? filteredItems[0] : stateSource.itemsY.length > 0 ? stateSource.itemsY[0] : null;
-    if ( !centerItem ) return; // Do not move on or it will cause error
-    setCenterX(centerItem.FPSItem.Scatter.horz);
-    setCenterY(centerItem.FPSItem.Scatter.vert);
+    const centerItemX: IScatterSourceItem = filteredItems.length > 0 ? filteredItems[0] : stateSource.itemsY.length > 0 ? stateSource.itemsY[0] : null;
+    if ( !centerItemX ) return; // Do not move on or it will cause error
+    setCenterX(centerItemX.FPSItem.Scatter.horz);
+    setCenterY(centerItemX.FPSItem.Scatter.vert);
+    setCenterItem( centerItemX );
 
   }, [refreshId]);
 
@@ -121,21 +123,14 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
    *
    */
 
+  const reCenterOnItem = ( event: IMinReactMouseEvent ): void => {
+    setCenterX(centerItem.FPSItem.Scatter.horz);
+    setCenterY(centerItem.FPSItem.Scatter.vert);
+  }
+
   const closePanel = (): void => {
     setClickedIdx( -1 );
   };
-
-  const historyClick = (event: IMinReactMouseEvent, item: IAnySourceItem): void => {
-
-    if ( event.shiftKey === true ) { // Remove item from history  https://github.com/fps-solutions/FPS-Photo-Form/issues/48
-      setItemHistory( itemHistory.filter( itemX => itemX.Id !== item.Id ) ); // Remove the item from the history list
-      setIdHistory( idHistory.filter( IdH => IdH !== item.Id ) );
-      return;
-    }
-
-    const idx: boolean | string = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
-    setClickedIdx( idx === false ? -1 : parseInt( idx ) );
-  }
 
   const onDotClick = ( Id: number, type: string, item: IScatterSourceItem, event: React.MouseEvent<SVGCircleElement, MouseEvent> ): void =>  {
     const newCenterX: number = item.FPSItem.Scatter.horz;
@@ -151,8 +146,9 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       // Add item to highlights
       setHighlightIds( [ ...highlightIds, Id ] );
 
-    } else if ( event.ctrlKey === true ) {
+    } else if ( event.ctrlKey === true  || type === 'CenterClick' ) {
       setHighlightIds( [ Id ] );
+      setCenterItem( item );
       setCenterX(newCenterX);
       setCenterY(newCenterY);
 
@@ -170,6 +166,31 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
       setHistoryRefresh( makeid(5) );
     }
   };
+
+  const historyClick = (event: IMinReactMouseEvent, item: IAnySourceItem): void => {
+    if ( event.shiftKey === true ) { // Remove item from history  https://github.com/fps-solutions/FPS-Photo-Form/issues/48
+      setItemHistory( itemHistory.filter( itemX => itemX.Id !== item.Id ) ); // Remove the item from the history list
+      setIdHistory( idHistory.filter( IdH => IdH !== item.Id ) );
+      return;
+    // https://github.com/fps-solutions/FPS-Photo-Form/issues/111
+    } else if ( event.ctrlKey === true ) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      onDotClick( item.Id, '', item as IScatterSourceItem, event as any );
+    } else {
+      const idx: boolean | string = doesObjectExistInArray( stateSource.items, 'Id', item.Id, false );
+      setClickedIdx( idx === false ? -1 : parseInt( idx ) );
+    }
+  }
+
+  const centerOnThisId = ( Id: number, type: string, event: React.MouseEvent<SVGCircleElement, MouseEvent> ): void => {
+    let centerItemX: IScatterSourceItem = null;
+    stateSource.itemsY.map( item => { if ( item.Id === Id ) centerItemX = item; });
+    if ( !centerItemX ) {
+      alert(`Unable to find this item Id: ${Id}`);
+      return;
+    }
+    onDotClick( Id, type, centerItemX, event );
+  }
 
   const handleHighlightHistory = (): void => {
     setHighlightIds( idHistory );
@@ -228,15 +249,16 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
   };
 
   const favoriteButtons: JSX.Element[] = [];
+  if ( centerItem ) favoriteButtons.push( <button key='reCenter' className='favButton' onClick={ (event) => reCenterOnItem( event) } title={ `Center on ${ centerItem.FPSItem.Scatter.Title}`}>⊙</button> );
 
   favorites.map( fav => {
     if ( fav.item ) {
       favoriteButtons.push(
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <button onClick={(event) => onDotClick( fav.item.Id, 'DotClick', fav.item, event as any)}
-          className='favButton' style={{ background: fav.Color }} title={ `CTRL-Click to recenter on location` }>
+        <button onClick={(event) => centerOnThisId( fav.item.Id, 'CenterClick', event as any)}
+          className='favButton' style={{ background: fav.Color }} title={ `Click to recenter on location ${ fav.item.FPSItem.Scatter.Title}` }>
           { fav.Label ? <span>{ fav.Label }</span> : undefined }
-          <Icon iconName={ fav.Icon } />
+          { fav.Icon ? <Icon iconName={ fav.Icon } /> : undefined }
         </button>
       );
     }

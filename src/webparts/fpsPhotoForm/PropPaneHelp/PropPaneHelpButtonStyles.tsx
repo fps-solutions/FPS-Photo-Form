@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import { Icon } from '@fluentui/react/lib/Icon';
 import { PivotItem, } from '@fluentui/react/lib/Pivot';
-import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
+import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObjectV2';
 import { ButtonStylesMC, ButtonStylesMinecraftBiomes, ButtonStylesMinecraftDimensions, ButtonStylesMinecraftStructures } from '../components/Forms/getButtonStyles';
 
 // category1s: ButtonStylesMinecraftDimensions.map( x => x.label).join(', '),

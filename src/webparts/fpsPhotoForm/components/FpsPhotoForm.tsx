@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './FpsPhotoForm.module.scss';
 
-import { DefaultFormTabsExperimental, DefaultFormTabsProduction, IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
+import { DefaultFormTabsExperimental, IDefaultFormTab, IFpsPhotoFormProps, IFpsPhotoFormState } from './IFpsPhotoFormProps';
 
 import { Icon } from '@fluentui/react/lib/Icon';
 
@@ -314,6 +314,7 @@ export default class FpsPhotoForm extends React.Component<IFpsPhotoFormProps, IF
             Category3s={ this.props.Category3s }
             imageSubfolder2={ this.props.imageSubfolder2 }
             miscFormProps={ this.props.miscFormProps }
+            bannerProps={ bannerProps }
 
             // Category1s={ [ 'Overworld', 'Nether', 'End' ] }
             // Category2s={ [ 'Desert', 'Jungle', 'Bamboo', 'Mountain', 'Island', 'Lush', 'Snow', 'Ocean', 'Dark Oak', 'Tiaga', 'Moo Shroom', 'Other' ] }

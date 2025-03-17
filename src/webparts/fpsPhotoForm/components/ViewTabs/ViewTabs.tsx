@@ -8,7 +8,7 @@ import { buildFPSAnyTileItems } from '@mikezimm/fps-library-v2/lib/components/mo
 
 import { IViewTabsProps, IViewTabsState } from './IViewTabsProps';
 
-import { check4Gulp, EmptyStateSource, makeid } from "../../fpsReferences";
+import { check4Gulp, EmptyStateSource, IStateSource, makeid } from "../../fpsReferences";
 
 import { ILoadPerformance, startPerformOp, updatePerformanceEnd } from "../../fpsReferences";
 
@@ -24,8 +24,11 @@ import FpsGpsLocationForm from '@mikezimm/fps-library-v2/lib/components/atoms/In
 import CameraCapture from '../Forms/Camera/component';
 import ParentForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-MultiImageParent';
 import ListHook from '../ListHook/ListHook';
-import ParentComponent from '../Forms/FileDropBox/ParentFileSample';
-import SharePointUserSearch from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker/PeoplePicker';
+import ParentComponent from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/FileDropBox/ParentFileSample';
+import FpsPeoplePicker from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker/FpsPeoplePicker';
+import FpsPeoplePicker2 from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker2/fps-PeoplePicker';
+
+import { stringifyFpsSpServiceObj } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/cloneSourceProps';
 
 //Use this to add more console.logs for this component
 const consolePrefix: string = 'fpsconsole: FpsCore1173Banner';
@@ -118,7 +121,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
     let refresh = this.props.bannerProps.displayMode !== prevProps.bannerProps.displayMode ? true : false;
 
     if ( refresh === false && this.state.stateSource.ok !== true && this.state.stateSource.status === 'Unknown' ) refresh = true;
-    if ( refresh === false && JSON.stringify( this.props.ListSource ) !== JSON.stringify( prevProps.ListSource ) ) refresh = true;
+    if ( refresh === false && stringifyFpsSpServiceObj( this.props.ListSource ) !== stringifyFpsSpServiceObj( prevProps.ListSource ) ) refresh = true;
     if ( refresh === false && JSON.stringify( this.props.fileDropBoxProps ) !== JSON.stringify( prevProps.fileDropBoxProps ) ) refresh = true;
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -128,7 +131,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
   private async fetchItems(): Promise<void> {
 
     // return;
-    let FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, true ) as IStateSourceScatter;
+    let FetchedSource: IStateSourceScatter = await getSourceItemsAPI( this.props.ListSource, false, false, true ) as IStateSourceScatter;
 
     FetchedSource.itemsY = addSearchMeta1(FetchedSource.items, this.props.ListSource, null) as IScatterSourceItem[];
     FetchedSource.itemsY = transformCoordinates( FetchedSource.itemsY, this.props.axisMap );
@@ -138,7 +141,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
     const FPSItemCopy: IFPSItem = JSON.parse(JSON.stringify(this.props.FPSItem));
 
-    FetchedSource = buildFPSAnyTileItems(FetchedSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
+    FetchedSource = buildFPSAnyTileItems(FetchedSource as IStateSource, this.props.bannerProps, FPSItemCopy) as IStateSourceScatter;
 
     const filteredItems: IScatterSourceItem[] = getHistoryPresetItems( FetchedSource, this.props.chartDisplay );
     const filteredIds = filteredItems.map(( item: IScatterSourceItem ) => item.Id );
@@ -164,7 +167,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
         <ScatterChart
           show={ this.props.tab === 'Map' ? true : false }
           Category1={ 'Overworld' }
-          chartDisplay={ { ...this.props.chartDisplay, ...{ gridStep: 1000, diameter: 6000 } } }
+          chartDisplay={ { ...this.props.chartDisplay, } }
 
           hCenter={ 0 }   // Example center x coordinate
           vCenter={ 0 }   // Example center y coordinate
@@ -185,7 +188,7 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         { this.props.tab === 'List' ? <ListHook
           ListHookSourceProps={ this.props.ListSource }
-          stateSource={ this.state.stateSource }
+          stateSource={ this.state.stateSource as IStateSource }
           refreshId={ this.state.stateSource.refreshId }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           context={ this.props.bannerProps.context as any }
@@ -198,7 +201,8 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         { this.props.tab === 'Files' ? <ParentComponent fileDropBoxProps={ this.props.fileDropBoxProps } FilesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
-        { this.props.tab === 'Geo' ? <SharePointUserSearch typeToShow={ true } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl}/> : undefined }
+        { this.props.tab === 'Geo' ? <FpsPeoplePicker typeToShow={ false } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl}/> : undefined }
+        { this.props.tab === 'Geo' ? <FpsPeoplePicker2 typeToShow={ true } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl } key='xyz' fpsSpService={ this.props.bannerProps.fpsSpService }/> : undefined }
 
 
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }

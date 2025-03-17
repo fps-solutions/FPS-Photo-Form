@@ -61,18 +61,19 @@
 
 .favButton {
   transition: all 0.5s ease;
-  font-size: x-large;
+  font-size: large;
   padding: .5em 1em;
-  margin-left: 1em;
+  /* margin-left: 1em; */
   font-weight: 600;
   border: 1px solid transparent;
   cursor: pointer;
   opacity: .6;
   border-radius: .5em;
+  margin: .5em 0em;
 }
 
-.favButton span {
-  margin-right: .5em;
+.favButton i {
+  margin-left: .5em;
 }
 
 .favButton:hover {

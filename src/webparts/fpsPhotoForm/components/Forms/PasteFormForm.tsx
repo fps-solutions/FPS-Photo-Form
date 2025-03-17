@@ -9,20 +9,22 @@ import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Togg
 import { IPhotoButtonStyle } from '../Scatter/IScatterChartProps';
 import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { categoryButtons } from './PasteFormPieces';
-import { handleImagePaste } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/handlePasteImage';
-import { makeid } from '../../fpsReferences';
+import { ILoadPerformance, IWebpartBannerProps, makeid, startPerformOp, updatePerformanceEnd } from '../../fpsReferences';
 
 // import ImagePaste from './Camera/ClipboardImage/fps-ImagePaste';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 
 // import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
-import { IFileDropBoxProps } from './FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
-import FileUploadContainer from './FileDropBox/fps-FileDropContainer';
-import { DefaultFormTabsProduction, IDefaultFormTab, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
-import { buildPhotoFormFileName } from './FileDropBox/filenameGenerator';
+import { IFileDropBoxProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
+import FileUploadContainer from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/FileDropBox/fps-FileDropContainer';
+import { DefaultFormTabsProduction, IDefaultFormTab, IFpsPhotoFormProps, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
+import { buildPhotoFormFileName } from "./FileDropBox/buildPhotoFormFileName";
 import { extractImageLocationData, IImageLocationData } from './FileDropBox/functions/getImageLocation';
-import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
+import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObjectV2';
+import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_SpecificObject, IMIMETypesObject } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/fps-FileDropTypes';
+import { saveViewAnalytics } from '../../CoreFPS/Analytics';
+import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 
 export interface IMiscFormWPProps {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
@@ -35,6 +37,9 @@ export interface IMiscFormWPProps {
   category1s: string;
   category2s: string;
   category3s: string;
+
+  // https://github.com/fps-solutions/FPS-Photo-Form/issues/108
+  maxFetchCount: string;
 
   defaultTab: IDefaultFormTab;
 }
@@ -100,6 +105,7 @@ export interface IPhotoFormForm  {
 
   miscFormProps: IMiscFormProps;
 
+  bannerProps: IWebpartBannerProps;
 
 }
 
@@ -113,13 +119,13 @@ export interface IPhotoFormFormInterface {
   category3: number[];
   title: string;
   comments: string;
-  x: number;
-  y: number;
-  z: number;
+  n1: number;
+  n2: number;
+  n3: number;
 }
 
 const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
-const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', x: 0, y: 0, z: 0 };
+const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', n1: null, n2: null, n3: null };
 
 /***
  *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
@@ -242,9 +248,9 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
           //     "results": formData.category3.map(idx => Category3s[idx])
           // },
 
-          CoordX: formData.x,
-          CoordY: formData.y,
-          CoordZ: formData.z,
+          CoordX: formData.n1,
+          CoordY: formData.n2,
+          CoordZ: formData.n3,
           Notes: formData.comments,
       };
 
@@ -287,6 +293,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json',
                     'X-RequestDigest': requestDigest,
+                    // In your example, the If-Match: '*' simplifies the update process by ignoring ETag/versioning checks.
+                    // This is efficient but could lead to unintended overwrites if the list item is being concurrently modified
+                    // by other processes or users. If version control is critical in your application, you might want to fetch
+                    // and use the item's current ETag instead.
                     'If-Match': '*'
                 },
                 body: JSON.stringify(body)
@@ -309,6 +319,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
             return;
         }
 
+        let summaryOp = startPerformOp( 'createItem, uploadFile', null, true );
         const listItemResponse = await createListItem(formData.title);
         // const fileDesc = [ `${ Category1s[formData.category1 ]}` ];
         // fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
@@ -317,20 +328,49 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
         // fileDesc.push( `${formData.title}` );
         // {{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Comments}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Title}}
 
-        const shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
+        let shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
 
         const blob = fileMode === 'DropBox' ? imageBlob : base64ToBlob(imageData);
 
+        /**
+         * 2025-03-15:  Migrate allMIMETypeSpecificObjects and getExtensionFromMIMEType to fps-core-v7
+         */
+        const allMIMETypeSpecificObjects: IMIMEType_SpecificObject[] = ([] as IMIMEType_SpecificObject[]).concat(...Common_MIME_Objects.map(obj => obj.types));
+        function getExtensionFromMIMEType(mimeType: string): string | undefined {
+          const foundObject = allMIMETypeSpecificObjects.find(obj => obj.type === mimeType);
+          return foundObject ? foundObject.ext : undefined; // Returns the extension or undefined if not found
+        }
+        const ext = getExtensionFromMIMEType( blob.type );
+        shortFileName += `.${ext}`;
+
+        // if ( blob && blob.type ) {
+        //   const ext = getExtensionFromMIMEType( blob.type );
+        //   const testThis = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+        //   const typeObject: IMIMETypesObject = getMIMEObjectPropFromType( testThis , 'EntireObject', 'fileType' ) as IMIMETypesObject;
+        //   const specificType = typeObject.types.filter( item => item.type === testThis );
+        //   console.log( 'typeObject', ext, allMIMETypeSpecificObjects, specificType, typeObject );
+        // }
+
         const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
-        const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, shortFileName, true, true );
+        // const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, shortFileName, true, true );
+        const fileReturn = await postSourceFilesAPI( ImagesSource, true, blob, shortFileName, true, true );
 
         if (fileReturn.itemUrl ) {
             await updateListItemWithImage(listItemResponse.Id, fileReturn.itemUrl);
             setWasSubmitted( true );
             if ( autoClear === true ) setFormData( EmptyFormData );
             if ( autoClear === true ) setImageRefresh( makeid(5));
+
+            summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
+            summaryOp.note = `Item ${listItemResponse.Id}|File: ${getSizeLabel (blob.size )} - ${ fileReturn.itemUrl.split('/').pop() }`;
+            fileReturn.unifiedPerformanceOps.fetch = summaryOp;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const analyticsWasExecuted = await saveViewAnalytics( 'FPS Photo Form', 'Creates', `Created Item ${listItemResponse.Id} and File: ${getSizeLabel (blob.size )} - ${ fileReturn.itemUrl.split('/').pop() }` , props as unknown as IFpsPhotoFormProps, false, summaryOp as any );
             alert('Item created and image uploaded successfully!');
         } else {
+            summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
+            fileReturn.unifiedPerformanceOps.fetch = summaryOp;
+            const analyticsWasExecuted = await saveViewAnalytics( 'FPS Photo Form', 'Creates', `Created Item ${listItemResponse.Id} BUT No file:  ${fileReturn.status} - ${fileReturn.status} ` , props as unknown as IFpsPhotoFormProps, false, summaryOp as any );
             alert('Failed to upload the image.');
         }
     };
@@ -368,10 +408,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
       }
     }
 
-    const { title, x, y, z, category1, category2, category3 } = formData;
-    const disableSubmit = wasSubmitted !== true && title && x !== null && y !== null && z !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
+    const { title, n1, n2, n3, category1, category2, category3 } = formData;
+    const disableSubmit = wasSubmitted !== true && title && n1 !== null && n2 !== null && n3 !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
 
-    const numberFields = ['x', 'y', 'z'];
+    const numberFields = ['n1', 'n2', 'n3'];
 
     const shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
 
@@ -394,7 +434,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                   <label>{field.toUpperCase()}</label>
                   <input
                     type="text"
-                    value={formData[ `${field}` as 'x' ]}
+                    value={formData[ `${field}` as 'n1' ]}
                     onChange={e => {
                       const value = e.target.value;
                       if (value === '' || /^-?\d*\.?\d*$/.test(value)) {
@@ -402,7 +442,7 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                       }
                     }}
                     onBlur={() => {
-                      setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'x' ]) });
+                      setFormData({ ...formData, [field]: Number(formData[ `${field}` as 'n1' ]) });
                     }}
                     style={{ width: '80%', paddingLeft: '.5em', marginLeft: '1em' }}
                   />
@@ -435,12 +475,12 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
               {/* <button className={ styles.submitButton }type="reset" onClick={ () => setFormData( EmptyFormData )}>Reset</button> */}
               <button className={ styles.clearButton }type="reset" onClick={ () => resetForm( )}>Reset</button>
 
-              <FPSToggle
+              {/* <FPSToggle
                 label="Reset on Create"
                 onText="Auto"
                 offText="Manual"
                 onChange={ handleToggleChange }
-              />
+              /> */}
 
               <FPSToggle
                 forceChecked={ fileMode === 'DropBox' ? true : false }
@@ -450,8 +490,9 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                 onChange={ handleFileToggle }
               />
 
-              <div>Current Toggle State: { `${autoClear}` }</div>
-              <div>FileName: { `${shortFileName}` }</div>
+              {/* <div>Current Toggle State: { `${autoClear}` }</div> */}
+              <label style={{ }}>FileName to create:</label>
+              <div>{ `${shortFileName}` }</div>
 
             </div>
             {/* {imageData && (

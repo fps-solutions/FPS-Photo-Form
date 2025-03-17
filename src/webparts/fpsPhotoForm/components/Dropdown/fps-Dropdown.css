@@ -1,5 +1,5 @@
 
-select[multiple] {
+.fps-Dropdown select[multiple] {
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 8px;
@@ -9,6 +9,6 @@ select[multiple] {
   font-size: 14px;
 }
 
-select[multiple] option {
+.fps-Dropdown select[multiple] option {
   padding: 4px;
 }

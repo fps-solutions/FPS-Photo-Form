@@ -14,9 +14,9 @@ import {
 import { IThisFPSWebPartClass } from '@mikezimm/fps-core-v7/lib/banner/FPSWebPartClass/IThisFPSWebPartClass1152';
 
 import { PropertyPaneMultiSelectDropdown } from '../components/Dropdown/fps-PropPaneMultiSelectDropdown';
-import { IOffice365SpecificMIMENames, Office365MIMENAME, Office365MIMENAMES, Specific_MIME_DropdownOptions } from '../components/Forms/FileDropBox/fps-FileDropTypes';
-import { IFileDropBoxWPProps } from '../components/Forms/FileDropBox/IFileDropBoxProps';
-import { FileSizeScaleOptions, FileSizeScaleRegex } from '../components/Forms/FileDropBox/convertFileSizeStringToNum';
+import { IOffice365SpecificMIMENames, Office365MIMENAME, Office365MIMENAMES, Specific_MIME_DropdownOptions } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/fps-FileDropTypes';
+import { IFileDropBoxWPProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';
+import { FileSizeScaleOptions, FileSizeScaleRegex } from '@mikezimm/fps-core-v7/lib/logic/Math/convertFileSizeStringToNum';
 
 export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass: IThisFPSWebPartClass ): IPropertyPaneGroup {
 

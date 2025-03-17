@@ -8,7 +8,7 @@ import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/fil
 import { EmptyStateSource, IStateSource, makeid } from '../../../fpsReferences';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
 import { extractImageLocationData, IImageLocationData } from '../FileDropBox/functions/getImageLocation';
-import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObject';
+import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObjectV2';
 require('./fps-Camera.css'); // Import your local CSS file
 
 export interface ICameraFormInput {
