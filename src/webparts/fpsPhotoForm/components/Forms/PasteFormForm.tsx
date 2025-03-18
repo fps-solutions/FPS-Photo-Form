@@ -45,6 +45,8 @@ export interface IMiscFormWPProps {
   maxFetchCount: string;
 
   defaultTab: IDefaultFormTab;
+
+  saveItemHandleBars: string;
 }
 
 export function buildMiscFormFromWPProps( wpProps: IMiscFormWPProps ): IMiscFormProps {
@@ -326,10 +328,13 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     // Handle form submission
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
-      if (!formData.title || ( fileMode === 'Paste' && !imageData ) || ( fileMode === 'DropBox' && !imageBlob )) {
-          alert('Please provide a title and paste/upload an image');
-          return;
-      }
+      if ( !formData.title ) { alert('Fill in Title'); return; }
+      if ( fileMode === 'Paste' && !imageData ) { alert('Paste in Image to save'); return; }
+      if ( fileMode === 'DropBox' && !imageBlob ) { alert('Upload in Image to save'); return; }
+      // if (!formData.title || ( fileMode === 'Paste' && !imageData ) || ( fileMode === 'DropBox' && !imageBlob )) {
+      //     alert('Please provide a title and paste/upload an image');
+      //     return;
+      // }
 
       let summaryOp = startPerformOp( 'createItem, uploadFile', null, true );
       const listItemResponse = await createListItem(formData.title);
