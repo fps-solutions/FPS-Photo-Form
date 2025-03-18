@@ -60,7 +60,7 @@ export function saveViewAnalytics( Title: string, ListOption: IAnalyticsOptions,
 
     } else {
     const { bannerProps } = parentProps;
-    const { fpsPinMenu, context, displayMode , analyticsProps } = bannerProps;
+    const { context, displayMode , analyticsProps } = bannerProps;
 
       // Do not save anlytics while in Edit Mode... only after save and page reloads
       if ( displayMode === DisplayMode.Edit ) { return; }

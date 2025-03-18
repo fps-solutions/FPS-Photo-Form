@@ -1,6 +1,6 @@
 
 import * as React from 'react';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ISiteUserInfo } from '@mikezimm/fps-core-v7/lib/types/@pnp/@2.14.0/sp/site-users';
 import './fps-People-Picker.css'; // Import the CSS file for styling
 import { IFpsSpHttpServiceMIN } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/Sp/IFpsSpHttpServiceMIN';
@@ -78,6 +78,7 @@ const FpsPeoplePicker: React.FC<IFpsPeoplePickerProps> = ({
       }
 
       const data = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let results = data.d.results.map((user: any) => ({
         ...user,
         imageUrl: `${window.location.origin}/_layouts/15/userphoto.aspx?size=${size}&accountname=${user.Email ? user.Email : user.AccountName}`,

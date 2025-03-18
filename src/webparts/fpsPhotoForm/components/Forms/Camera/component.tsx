@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 import { ActionButtons, ImageDisplay } from './pieces';
-import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
+// import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
 import { EmptyStateSource, IStateSource, makeid } from '../../../fpsReferences';
 import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-ImagePaste';
@@ -147,8 +147,11 @@ const CameraCapture: React.FC<ICameraFormInput> = (props) => {
   const saveImage = async ():Promise<void> => {
     const fileName = `${ `Camera_${ useFrontCamera ? 'User' : 'Back' }` }_${new Date().toISOString().replace(/[:.]/g, '-')}_${ `Camera` }.png`;
     const blob = base64ToBlob(image);
-    const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
-    const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, fileName, true, true ) as IStateSource;
+    // const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
+    // const fileReturn = await postSourceFilesAPI( ImagesSource, true, blob, fileName, true, true ) as IStateSource;
+
+    const fileReturn = await postSourceFilesAPI( ImagesSource, true, blob, fileName, true, true ) as IStateSource;
+
     setStateSource( fileReturn );
     // await uploadBase64ImageToLibrary( ImagesSource, image ,fileName );
   }

@@ -95,7 +95,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
     }
   };
 
-  const handleCheckboxChange = (user: ISiteUserInfo) => {
+  const handleCheckboxChange = (user: ISiteUserInfo): void => {
     if (multiSelect) {
       setSelectedUsers((prev) => {
         if (prev.some((u) => u.Id === user.Id)) {
@@ -108,7 +108,7 @@ const SharePointUserSearch: React.FC<SharePointUserSearchProps> = ({
     }
   };
 
-  const removeSelectedUser = (userId: number) => {
+  const removeSelectedUser = (userId: number): void => {
     setSelectedUsers((prev) => prev.filter((user) => user.Id !== userId));
   };
 

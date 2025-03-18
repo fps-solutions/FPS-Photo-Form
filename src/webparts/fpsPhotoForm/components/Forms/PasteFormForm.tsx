@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, FormEvent, useEffect, } from 'react';
-import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
+// import { getThisFPSDigestValueFromUrl } from '@mikezimm/fps-core-v7/lib/components/molecules/SpHttp/digestValues/fromUrl/getThisFPSDigestValueFromUrl';
 
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 
@@ -16,6 +16,8 @@ import ImagePaste from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Cli
 
 // import { postSourceFilesAPI } from './FileDropBox/functions/postSourceFilesAPI';
 import { postSourceFilesAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/files/postSourceFilesAPI';
+import { updateAnyItemAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/items/updateAnyItemAPI';
+import { postSourceItemAPI } from '@mikezimm/fps-core-v7/lib/restAPIs/lists/items/postSourceItemAPI';
 import { IFileDropBoxProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';  // Import the FileDropBox component
 import FileUploadContainer from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/FileDropBox/fps-FileDropContainer';
 import { DefaultFormTabsProduction, IDefaultFormTab, IFpsPhotoFormProps, IPrefabFormTemplates } from '../IFpsPhotoFormProps';
@@ -25,6 +27,7 @@ import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/Reac
 import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_SpecificObject, IMIMETypesObject } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/fps-FileDropTypes';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
+import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/IFpsItemsReturn';
 
 export interface IMiscFormWPProps {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
@@ -229,8 +232,8 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
 
     // Create list item in SharePoint
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const createListItem = async (title: string): Promise<any> => {
-      const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
+    const createListItem = async (title: string): Promise<IFpsItemsReturn> => {
+      // const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
 
       const saveItem = {
           Title: title,
@@ -256,123 +259,132 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
 
       console.log('Save Item:', saveItem);
 
-      try {
-          const response = await fetch(`${ListSource.absoluteWebUrl}/_api/web/lists/getbytitle('${ListSource.listTitle}')/items`, {
-              method: 'POST',
-              headers: {
-                  'Accept': 'application/json',
-                  'Content-Type': 'application/json',
-                  'X-RequestDigest': requestDigest
-              },
-              body: JSON.stringify(saveItem)
-          });
+      const itemResults = await postSourceItemAPI(  ListSource, saveItem, true, true );
+      return itemResults;
+      // try {
+      //     const response = await fetch(`${ListSource.absoluteWebUrl}/_api/web/lists/getbytitle('${ListSource.listTitle}')/items`, {
+      //         method: 'POST',
+      //         headers: {
+      //             'Accept': 'application/json',
+      //             'Content-Type': 'application/json',
+      //             'X-RequestDigest': requestDigest
+      //         },
+      //         body: JSON.stringify(saveItem)
+      //     });
 
-          if (!response.ok) {
-              const errorText = await response.text();
-              console.error('Error response:', errorText);
-              throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
-          }
+      //     if (!response.ok) {
+      //         const errorText = await response.text();
+      //         console.error('Error response:', errorText);
+      //         throw new Error(`Request failed with status ${response.status}: ${response.statusText}`);
+      //     }
 
-          const data = await response.json();
-          console.log('Response Data:', data);
-          return data;
-      } catch (error) {
-          console.error('Error creating list item:', error);
-          throw error;
-      }
+      //     const data = await response.json();
+      //     console.log('Response Data:', data);
+      //     return data;
+      // } catch (error) {
+      //     console.error('Error creating list item:', error);
+      //     throw error;
+      // }
+
+
     };
 
     // Update list item with image URL
     const updateListItemWithImage = async (itemId: number, imageUrl: string):Promise<void> => {
-        const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
-        const body = { ScreenshotUrl: imageUrl }; // Assuming ScreenshotUrl is the name of your image column
-        try {
-            const response = await fetch(`${ListSource.absoluteWebUrl}/_api/web/lists/getbytitle('${ListSource.listTitle}')/items(${itemId})`, {
-                method: 'PATCH',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-RequestDigest': requestDigest,
-                    // In your example, the If-Match: '*' simplifies the update process by ignoring ETag/versioning checks.
-                    // This is efficient but could lead to unintended overwrites if the list item is being concurrently modified
-                    // by other processes or users. If version control is critical in your application, you might want to fetch
-                    // and use the item's current ETag instead.
-                    'If-Match': '*'
-                },
-                body: JSON.stringify(body)
-            });
+      // const requestDigest = await getThisFPSDigestValueFromUrl(ListSource.absoluteWebUrl);
+      const body = { ScreenshotUrl: imageUrl }; // Assuming ScreenshotUrl is the name of your image column
 
-            if (!response.ok) {
-                throw new Error('Failed to update list item');
-            }
-        } catch (error) {
-            console.error('Error during list item update:', error);
-        }
+      const itemResults = await updateAnyItemAPI(  ListSource, body, itemId, true, true );
+
+      console.log('Updated item Item:', itemResults );
+
+      // try {
+      //     const response = await fetch(`${ListSource.absoluteWebUrl}/_api/web/lists/getbytitle('${ListSource.listTitle}')/items(${itemId})`, {
+      //         method: 'PATCH',
+      //         headers: {
+      //             'Accept': 'application/json',
+      //             'Content-Type': 'application/json',
+      //             'X-RequestDigest': requestDigest,
+      //             // In your example, the If-Match: '*' simplifies the update process by ignoring ETag/versioning checks.
+      //             // This is efficient but could lead to unintended overwrites if the list item is being concurrently modified
+      //             // by other processes or users. If version control is critical in your application, you might want to fetch
+      //             // and use the item's current ETag instead.
+      //             'If-Match': '*'
+      //         },
+      //         body: JSON.stringify(body)
+      //     });
+
+      //     if (!response.ok) {
+      //         throw new Error('Failed to update list item');
+      //     }
+      // } catch (error) {
+      //     console.error('Error during list item update:', error);
+      // }
     };
 
 
     // Handle form submission
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
-        e.preventDefault();
-        if (!formData.title || ( fileMode === 'Paste' && !imageData ) || ( fileMode === 'DropBox' && !imageBlob )) {
-            alert('Please provide a title and paste/upload an image');
-            return;
-        }
+      e.preventDefault();
+      if (!formData.title || ( fileMode === 'Paste' && !imageData ) || ( fileMode === 'DropBox' && !imageBlob )) {
+          alert('Please provide a title and paste/upload an image');
+          return;
+      }
 
-        let summaryOp = startPerformOp( 'createItem, uploadFile', null, true );
-        const listItemResponse = await createListItem(formData.title);
-        // const fileDesc = [ `${ Category1s[formData.category1 ]}` ];
-        // fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
-        // formData.category2.map( idx => { if ( formData.title.indexOf( Category2s[ idx ] ) < 0 ) fileDesc.push( Category2s[ idx ] ); });
-        // formData.category3.map( idx => { if ( formData.title.indexOf( Category3s[ idx ] ) < 0 ) fileDesc.push( Category3s[ idx ] ); });
-        // fileDesc.push( `${formData.title}` );
-        // {{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Comments}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Title}}
+      let summaryOp = startPerformOp( 'createItem, uploadFile', null, true );
+      const listItemResponse = await createListItem(formData.title);
+      // const fileDesc = [ `${ Category1s[formData.category1 ]}` ];
+      // fileDesc.push( `X${formData.x}_Y${formData.y}_Z${formData.z}` );
+      // formData.category2.map( idx => { if ( formData.title.indexOf( Category2s[ idx ] ) < 0 ) fileDesc.push( Category2s[ idx ] ); });
+      // formData.category3.map( idx => { if ( formData.title.indexOf( Category3s[ idx ] ) < 0 ) fileDesc.push( Category3s[ idx ] ); });
+      // fileDesc.push( `${formData.title}` );
+      // {{Today}}_{{Category1}}_{{Category2}}_{{Category3}}_{{Comments}}_X{{Number1}}_Y{{Number2}}_Z{{Number3}}_{{Title}}
 
-        let shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
+      let shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
 
-        const blob = fileMode === 'DropBox' ? imageBlob : base64ToBlob(imageData);
+      const blob = fileMode === 'DropBox' ? imageBlob : base64ToBlob(imageData);
 
-        /**
-         * 2025-03-15:  Migrate allMIMETypeSpecificObjects and getExtensionFromMIMEType to fps-core-v7
-         */
-        const allMIMETypeSpecificObjects: IMIMEType_SpecificObject[] = ([] as IMIMEType_SpecificObject[]).concat(...Common_MIME_Objects.map(obj => obj.types));
-        function getExtensionFromMIMEType(mimeType: string): string | undefined {
-          const foundObject = allMIMETypeSpecificObjects.find(obj => obj.type === mimeType);
-          return foundObject ? foundObject.ext : undefined; // Returns the extension or undefined if not found
-        }
-        const ext = getExtensionFromMIMEType( blob.type );
-        shortFileName += `.${ext}`;
+      /**
+       * 2025-03-15:  Migrate allMIMETypeSpecificObjects and getExtensionFromMIMEType to fps-core-v7  getMIMEObjectPropFromType
+       */
+      const allMIMETypeSpecificObjects: IMIMEType_SpecificObject[] = ([] as IMIMEType_SpecificObject[]).concat(...Common_MIME_Objects.map(obj => obj.types));
+      function getExtensionFromMIMEType(mimeType: string): string | undefined {
+        const foundObject = allMIMETypeSpecificObjects.find(obj => obj.type === mimeType);
+        return foundObject ? foundObject.ext : undefined; // Returns the extension or undefined if not found
+      }
+      const ext = getExtensionFromMIMEType( blob.type );
+      shortFileName += `.${ext}`;
 
-        // if ( blob && blob.type ) {
-        //   const ext = getExtensionFromMIMEType( blob.type );
-        //   const testThis = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-        //   const typeObject: IMIMETypesObject = getMIMEObjectPropFromType( testThis , 'EntireObject', 'fileType' ) as IMIMETypesObject;
-        //   const specificType = typeObject.types.filter( item => item.type === testThis );
-        //   console.log( 'typeObject', ext, allMIMETypeSpecificObjects, specificType, typeObject );
-        // }
+      // if ( blob && blob.type ) {
+      //   const ext = getExtensionFromMIMEType( blob.type );
+      //   const testThis = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+      //   const typeObject: IMIMETypesObject = getMIMEObjectPropFromType( testThis , 'EntireObject', 'fileType' ) as IMIMETypesObject;
+      //   const specificType = typeObject.types.filter( item => item.type === testThis );
+      //   console.log( 'typeObject', ext, allMIMETypeSpecificObjects, specificType, typeObject );
+      // }
 
-        const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
-        // const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, shortFileName, true, true );
-        const fileReturn = await postSourceFilesAPI( ImagesSource, true, blob, shortFileName, true, true );
+      // const requestDigest = await getThisFPSDigestValueFromUrl(ImagesSource.absoluteWebUrl as '');
+      // const fileReturn = await postSourceFilesAPI( { ...ImagesSource, ...{ digestValue: requestDigest } }, true, blob, shortFileName, true, true );
+      const fileReturn = await postSourceFilesAPI( ImagesSource, true, blob, shortFileName, true, true );
 
-        if (fileReturn.itemUrl ) {
-            await updateListItemWithImage(listItemResponse.Id, fileReturn.itemUrl);
-            setWasSubmitted( true );
-            if ( autoClear === true ) setFormData( EmptyFormData );
-            if ( autoClear === true ) setImageRefresh( makeid(5));
+      if (listItemResponse.item && fileReturn.itemUrl ) {
+          await updateListItemWithImage(listItemResponse.item.Id, fileReturn.itemUrl);
+          setWasSubmitted( true );
+          if ( autoClear === true ) setFormData( EmptyFormData );
+          if ( autoClear === true ) setImageRefresh( makeid(5));
 
-            summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
-            summaryOp.note = `Item ${listItemResponse.Id}|File: ${getSizeLabel (blob.size )} - ${ fileReturn.itemUrl.split('/').pop() }`;
-            fileReturn.unifiedPerformanceOps.fetch = summaryOp;
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const analyticsWasExecuted = await saveViewAnalytics( 'FPS Photo Form', 'Creates', `Created Item ${listItemResponse.Id} and File: ${getSizeLabel (blob.size )} - ${ fileReturn.itemUrl.split('/').pop() }` , props as unknown as IFpsPhotoFormProps, false, summaryOp as any );
-            alert('Item created and image uploaded successfully!');
-        } else {
-            summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
-            fileReturn.unifiedPerformanceOps.fetch = summaryOp;
-            const analyticsWasExecuted = await saveViewAnalytics( 'FPS Photo Form', 'Creates', `Created Item ${listItemResponse.Id} BUT No file:  ${fileReturn.status} - ${fileReturn.status} ` , props as unknown as IFpsPhotoFormProps, false, summaryOp as any );
-            alert('Failed to upload the image.');
-        }
+          summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
+          summaryOp.note = `Item ${listItemResponse.item.Id}|File: ${getSizeLabel (blob.size )} - ${ fileReturn.itemUrl.split('/').pop() }`;
+          fileReturn.unifiedPerformanceOps.fetch = summaryOp;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const analyticsWasExecuted = await saveViewAnalytics( 'FPS Photo Form', 'Creates', `Created Item ${listItemResponse.item.Id} and File: ${getSizeLabel (blob.size )} - ${ fileReturn.itemUrl.split('/').pop() }` , props as unknown as IFpsPhotoFormProps, false, summaryOp as any );
+          alert('Item created and image uploaded successfully!');
+      } else {
+          summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
+          fileReturn.unifiedPerformanceOps.fetch = summaryOp;
+          const analyticsWasExecuted = await saveViewAnalytics( 'FPS Photo Form', 'Creates', `Created Item ${listItemResponse.item.Id} BUT No file:  ${fileReturn.status} - ${fileReturn.status} ` , props as unknown as IFpsPhotoFormProps, false, summaryOp as any );
+          alert('Failed to upload the image.');
+      }
     };
 
     const handleCategory23Click = (cat: number ,index: number, ): void => {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { IPropertyPaneField, IPropertyPaneCustomFieldProps } from '@microsoft/sp-property-pane';
-import FpsPeoplePicker, { IFpsPeoplePickerProps, ISharePointUserPreFilterRule } from './fps-PeoplePicker'; // Assuming this is the location of your custom People Picker
+import FpsPeoplePicker, { IFpsPeoplePickerProps } from './fps-PeoplePicker'; // Assuming this is the location of your custom People Picker
 import { ISiteUserInfo } from '@mikezimm/fps-core-v7/lib/types/@pnp/@2.14.0/sp/site-users';
 
 // Properties interface for the custom property pane control

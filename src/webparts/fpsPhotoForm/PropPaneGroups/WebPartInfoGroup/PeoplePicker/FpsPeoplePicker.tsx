@@ -52,6 +52,7 @@ const FpsPeoplePicker: React.FC<FpsPeoplePickerProps> = ({
       }
 
       const data = await response.json();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       let results = data.d.results.map((user: any) => ({
         ...user,
         imageUrl: `${window.location.origin}/_layouts/15/userphoto.aspx?size=${size}&accountname=${user.Email ? user.Email : user.AccountName}`,
