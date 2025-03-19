@@ -65,6 +65,11 @@ export function buildListColumnsGroup( thisWPClass: IThisFPSWebPartClass ): IPro
         label: 'HTML Color column',
         description: '',
       }),
+
+      PropertyPaneTextField('axis_createItemHandleBars', {
+        label: 'List Item Save Handlebars',
+        description: 'See prop pane help (Yellow button)',
+      }),
       // PropertyPaneTextField('axis_Shape', {
       //   label: '',
       //   description: '',

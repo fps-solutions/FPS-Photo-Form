@@ -24,7 +24,7 @@ import { DefaultFormTabsProduction, IDefaultFormTab, IFpsPhotoFormProps, IPrefab
 import { buildPhotoFormFileName } from "./FileDropBox/buildPhotoFormFileName";
 import { extractImageLocationData, IImageLocationData } from './FileDropBox/functions/getImageLocation';
 import { FPSReactJSON } from '@mikezimm/fps-library-v2/lib/components/atoms/ReactJSON/ReactJSONObjectV2';
-import { Common_MIME_Objects, getMIMEObjectPropFromType, IMIMEType_SpecificObject, IMIMETypesObject } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/fps-FileDropTypes';
+import { Common_MIME_Objects, getExtensionFromMIMEType, getMIMEObjectPropFromType, IMIMEType_SpecificObject, IMIMETypesObject } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/fps-FileDropTypes';
 import { saveViewAnalytics } from '../../CoreFPS/Analytics';
 import { getSizeLabel } from "@mikezimm/fps-core-v7/lib/logic/Math/labels";
 import { IFpsItemsReturn } from '@mikezimm/fps-core-v7/lib/components/molecules/process-results/IFpsItemsReturn';
@@ -46,7 +46,7 @@ export interface IMiscFormWPProps {
 
   defaultTab: IDefaultFormTab;
 
-  saveItemHandleBars: string;
+  createItemHandleBars: string;
 }
 
 export function buildMiscFormFromWPProps( wpProps: IMiscFormWPProps ): IMiscFormProps {
@@ -101,11 +101,15 @@ export interface IPhotoFormForm  {
   // https://github.com/fps-solutions/FPS-Photo-Form/issues/24
   imageSubfolder2: string;
 
-  Category1s: string[];
-  Category2s: string[];
-  Category3s: string[];
+  Category1s: string[];  // Option values for Category1
+  Category2s: string[];  // Option values for Category2
+  Category3s: string[];  // Option values for Category3
+
   fileDropBoxProps: IFileDropBoxProps;
   ListSource: ISourceProps;
+
+  createItemHandleBars: string;
+
   ImagesSource: ISourceProps;
 
   miscFormProps: IMiscFormProps;
@@ -127,10 +131,16 @@ export interface IPhotoFormFormInterface {
   n1: number;
   n2: number;
   n3: number;
+
+  d1: string;
+  t1: string;
+
+  d2: string;
+  t2: string;
 }
 
 const PlaceHolderCategories: string[] = [ "TBD", "NA", ];
-const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', n1: null, n2: null, n3: null };
+const EmptyFormData: IPhotoFormFormInterface = { category1: null, category2: [], category3: [], title: '', comments: '', n1: null, n2: null, n3: null, d1: '', t1: '', d2: '', t2: '' };
 
 /***
  *    .d8888. d888888b  .d8b.  d8888b. d888888b      db   db  .d88b.   .d88b.  db   dD
@@ -352,11 +362,11 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
       /**
        * 2025-03-15:  Migrate allMIMETypeSpecificObjects and getExtensionFromMIMEType to fps-core-v7  getMIMEObjectPropFromType
        */
-      const allMIMETypeSpecificObjects: IMIMEType_SpecificObject[] = ([] as IMIMEType_SpecificObject[]).concat(...Common_MIME_Objects.map(obj => obj.types));
-      function getExtensionFromMIMEType(mimeType: string): string | undefined {
-        const foundObject = allMIMETypeSpecificObjects.find(obj => obj.type === mimeType);
-        return foundObject ? foundObject.ext : undefined; // Returns the extension or undefined if not found
-      }
+      // const allMIMETypeSpecificObjects: IMIMEType_SpecificObject[] = ([] as IMIMEType_SpecificObject[]).concat(...Common_MIME_Objects.map(obj => obj.types));
+      // function getExtensionFromMIMEType(mimeType: string): string | undefined {
+      //   const foundObject = allMIMETypeSpecificObjects.find(obj => obj.type === mimeType);
+      //   return foundObject ? foundObject.ext : undefined; // Returns the extension or undefined if not found
+      // }
       const ext = getExtensionFromMIMEType( blob.type );
       shortFileName += `.${ext}`;
 

@@ -286,6 +286,8 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
         Category2s: getStringArrayFromString( this.properties.category2s, ',or;', true, null, true ),
         Category3s:  getStringArrayFromString( this.properties.category3s, ',or;', true, null, true ),
 
+        createItemHandleBars: this.properties.createItemHandleBars,
+
         imageSubfolder2: this.properties.imageSubfolder2,
 
         axisMap: AxisMap,
@@ -462,13 +464,14 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
           label: 'Image Library Folder',
         })
       );
+
       const ListPickerGroup = FPSListItemPickerGroup( 'List Picker', false, thisAsAny, '' );
       ListPickerGroup.groupFields.push(
         PropertyPaneTextField('maxFetchCount', {
           label: 'Max items to fetch for views',
           description: '',
         })
-      )
+      );
       groups.push( ListPickerGroup );
       groups.push( LibraryGroup );
 

@@ -5,7 +5,7 @@ import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 import { IPrefabFormTemplates } from "../IFpsPhotoFormProps";
 
-export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth', 'Value1', 'Value2', 'Value3' ].map( (str => `axis_${str}`));
+export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth', 'Value1', 'Value2', 'Value3', `axis_createItemHandleBars` ].map( (str => `axis_${str}`));
 
 export interface IAxisMapWPProps {
   axis_type: IPrefabFormTemplates;
@@ -29,6 +29,10 @@ export interface IAxisMapWPProps {
   // Added for expense type tracking lists or date X-Axis scale
   axis_Date1?: string;
   axis_Date2?: string;
+  axis_Time1?: string;
+  axis_Time2?: string;
+
+  axis_createItemHandleBars?: string; // Create item object map
 }
 
 export interface IPhotoButtonStyle {
@@ -59,6 +63,8 @@ export interface IAxisMap {
   Time1?: string;
   Date2?: string;
   Time2?: string;
+
+  createItemHandleBars?: string;
 
 }
 
