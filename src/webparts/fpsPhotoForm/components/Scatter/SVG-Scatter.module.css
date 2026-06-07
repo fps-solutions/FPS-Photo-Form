@@ -32,6 +32,10 @@
   circle {
     opacity: .5;
   }
+  circle title {
+    transition: opacity 0.3s ease; /* Smooth transition */
+    opacity: 0;
+  }
 }
 
 .svg-scatter-container .no-fade * {
@@ -42,6 +46,15 @@
   circle {
     opacity: 1;
   }
+  circle title {
+    transition: opacity 0.3s ease; /* Smooth transition */
+    opacity: .7;
+  }
+}
+
+/* Make the text non-selectable due to mouse dragging */
+.svg-scatter-container g text {
+  user-select: none;
 }
 
 .svg-scatter-container .scatter-point:hover {
@@ -136,4 +149,22 @@
   color: #373737;
   font-size: 14px;
   padding-bottom: 4px;
+}
+
+/* Top-left variant for preview card */
+.svg-scatter-container .preview-card.top-left {
+  left: 8px;
+  right: auto;
+}
+
+/* Hover title shown near dot when onDotHover='title' */
+.svg-scatter-container .hover-title {
+  opacity: 0;
+  transition: opacity 140ms ease-in-out;
+  pointer-events: none;
+  font-size: 12px;
+  color: black;
+}
+.svg-scatter-container .hover-title.visible {
+  opacity: 1;
 }

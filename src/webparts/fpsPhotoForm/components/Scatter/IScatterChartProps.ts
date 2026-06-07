@@ -206,6 +206,10 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   snapStep?: number; // 0 = no snapping (smooth), 1 = snap to gridStep, <1 sub-grid, >1 coarser. Default handled in component.
   // Optional multiplier to adjust horizontal pan sensitivity (divide/multiply dx→units). Default handled in component.
   panXMultiplier?: number;
+  // Hover behavior: 'card' shows preview card, 'title' shows title text near dot
+  onDotHover?: 'title' | 'card';
+  // Location of hover preview card when onDotHover==='card'
+  hoverPanelLocation?: 'top-left' | 'top-right';
 
 }
 

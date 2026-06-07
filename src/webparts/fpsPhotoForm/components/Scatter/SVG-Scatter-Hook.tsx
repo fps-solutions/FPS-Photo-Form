@@ -36,6 +36,9 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     snapStep = 0,
     // 2026-06-08: optional horizontal pan multiplier to tune sensitivity
     panXMultiplier = 2.75,
+    // Hover options
+    onDotHover = 'card', // 'title' | 'card'
+    hoverPanelLocation = 'top-right', // 'top-left' | 'top-right'
 
   } = props;
 
@@ -45,6 +48,15 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   const rafRef = React.useRef<number | null>(null); // 2026-06-06
   const lastSentRef = React.useRef({ x: NaN, y: NaN }); // 2026-06-06
   const [hoveredId, setHoveredId] = React.useState<any>(null);
+  const [altPressed, setAltPressed] = React.useState<boolean>(false);
+
+  React.useEffect(() => {
+    const kd = (e: KeyboardEvent) => { if (e.altKey === true || e.key === 'Alt') setAltPressed(true); };
+    const ku = (e: KeyboardEvent) => { if (!e.altKey && e.key === 'Alt') setAltPressed(false); if (!e.altKey) setAltPressed(false); };
+    window.addEventListener('keydown', kd);
+    window.addEventListener('keyup', ku);
+    return () => { window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); };
+  }, []);
 
   const hoveredItem = React.useMemo(() => {
     return stateSource?.itemsY?.find(i => i.Id === hoveredId) ?? null;
@@ -334,20 +346,25 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
               fill={ Scatter.Color ? Scatter.Color : 'blue'}
               onClick={(event) => onDotClick( item.Id, 'DotClick', item, event )}
             >
+              {/* 2026-06-06:  This is the title text for the circle... */}
+              {/* Unable to get it to fade in or have opacity though. */}
               <title>
                 {`Title: ${Scatter.Title}, Category: ${JSON.stringify( Scatter.Category2 ) }, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
               </title>
             </circle>
 
-            <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize }
-              fontSize={displaySize * 2} fill="black" className={ autoFadeText === true ? 'faded-text' : '' }>{Scatter.Title}</text>
+            {/* Show title only when onDotHover==='title' and this item is hovered */}
+            { onDotHover === 'title' && hoveredId === item.Id && (
+              <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize }
+                fontSize={displaySize * 2} fill="black" className={ `hover-title ${ autoFadeText === true ? 'faded-text' : '' } visible` }>{Scatter.Title}</text>
+            ) }
           </g>
         );
         })}
       </svg>
 
-      {/* Overlay preview card in upper-right (pointer-events none so it doesn't block dots) */}
-      <div className={ `preview-card ${ hoveredItem ? 'visible' : '' }` }>
+      {/* Overlay preview card (pointer-events none so it doesn't block dots) */}
+      <div className={ `preview-card ${ hoveredItem && onDotHover === 'card' ? 'visible' : '' } ${ hoverPanelLocation === 'top-left' ? 'top-left' : '' } ${ (altPressed && hoveredItem && onDotHover === 'card') ? 'large' : '' }` }>
         {hoveredItem ? (
           <>
             {(() => {

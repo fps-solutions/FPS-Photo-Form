@@ -359,6 +359,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
         show={ show }
         axisMap={ axisMap }
+        onDotHover={ 'card' }
+        hoverPanelLocation={ 'top-left' }
 
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
         chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
