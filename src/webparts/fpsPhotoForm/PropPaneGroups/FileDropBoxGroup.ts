@@ -64,7 +64,7 @@ export function buildFileDropBoxGroup( wpProps: IFileDropBoxWPProps, thisWPClass
       key: 'fileTypes',
       label: 'Choose File Types',
       description: 'See Yellow Webpart Help for details',
-      multiple: true,
+      // multiple: true,
       maxVsibleRows: 10,
       options: Specific_MIME_DropdownOptions,
       selectedKeys: wpProps.fileTypes || [],

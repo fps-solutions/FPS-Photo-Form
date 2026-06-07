@@ -128,6 +128,7 @@ import { buildFileDropBoxGroup } from './PropPaneGroups/FileDropBoxGroup';
 import { buildMiscFormFromWPProps } from './components/Forms/PasteFormForm';
 import { PartialWBPropsMineCraft, PartialWBPropsSubnautica } from './CoreFPS/PreConfigSettingsMC';
 import { convertFileDropToFileDropBoxProps } from './components/Forms/FileDropBox/convertFileDropWPPropsToFileDropBoxProps';
+import { IWebpartBannerProps } from './fpsReferences';
 
 const wpTDBaseLeft = `performanceObj.`;
 const wpTDLeft = [ `${wpTDBaseLeft}ms`,  `${wpTDBaseLeft}c` ];
@@ -238,7 +239,7 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
 
   public render(): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, SPPermission );
+    const bannerProps = runFPSWebPartRender( this as any, strings, WebPartAnalyticsChanges, WebPartPanelChanges, SPPermission, this._isLimited );
 
     // In calling this, you need to replace the last instance if 'List' since it is using the ListPicker which will add List to the EntityTypeName
     const AxisMap: IAxisMap = createAxisMap( this.properties );
@@ -316,6 +317,11 @@ export default class FpsPhotoFormWebPart extends FPSBaseClass<IFpsPhotoFormWebPa
     );
 
     ReactDom.render(element, this.domElement);
+  }
+
+  private _isLimited( bannerProps: IWebpartBannerProps ): boolean {
+    const isLim = !bannerProps.FPSUser.simFPT;
+    return isLim;
   }
 
   private _getEnvironmentMessage(): Promise<string> {
