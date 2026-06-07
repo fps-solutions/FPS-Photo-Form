@@ -204,6 +204,8 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   onPanEnd?: () => void; // called when panning ends
   onZoom?: ( newGridStep: number, focusX?: number, focusY?: number ) => void; // called on wheel zoom; newGridStep is numeric grid step value
   snapStep?: number; // 0 = no snapping (smooth), 1 = snap to gridStep, <1 sub-grid, >1 coarser. Default handled in component.
+  // Optional multiplier to adjust horizontal pan sensitivity (divide/multiply dx→units). Default handled in component.
+  panXMultiplier?: number;
 
 }
 

@@ -248,10 +248,10 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     verticalMax: roundToNearestMultiple( centerY + maxRange/2, 1 ),
   }
 
-  console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
-  console.log(`Scatter Range V Grid:  C ${centerY} min ${ScatterSize.verticalMin} to ${ScatterSize.verticalMax}`);
+  // console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
+  // console.log(`Scatter Range V Grid:  C ${centerY} min ${ScatterSize.verticalMin} to ${ScatterSize.verticalMax}`);
 
-  const sliderStyle: React.CSSProperties = { minWidth: '300px' };
+  const sliderStyle: React.CSSProperties = { minWidth: '100px' };
 
   const brightSpan = ( str: string ): JSX.Element => {
     return  <span className='fade-bright' style={highlightCSS}>{ str }</span>
@@ -347,8 +347,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     // Not sure why but have to make this a little smaller here ;(
     <div style={{ width: '97%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
+        {/* <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } /> */}
         <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
         { favoriteElement }
       </div>

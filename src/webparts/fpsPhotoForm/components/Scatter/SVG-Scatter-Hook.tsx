@@ -34,6 +34,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     onPan, onPanEnd, onZoom,
     // 2026-06-06: snapStep controls snapping unit; default 0 for smooth
     snapStep = 0,
+    // 2026-06-08: optional horizontal pan multiplier to tune sensitivity
+    panXMultiplier = 2.75,
 
   } = props;
 
@@ -93,8 +95,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     : verticalMax - i * gridStep; // Reverse the order of vertical labels
   });
 
-  console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
-  console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
+  // console.log(`H Grid (SVG Left to Right): ${horizontalMin} to ${horizontalMax}`, horzGridLines);
+  // console.log(`V Grid (SVG Top to Bottom): ${verticalMin} to ${verticalMax}`, vertGridLines);
 
   if ( check4This( 'tracePerformance=true' ) === true ) {
     console.log( 'reverseVerticalAxis=', reverseVerticalAxis );
@@ -173,7 +175,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     const rect = svg.getBoundingClientRect();
     const dx = e.clientX - dragRef.current.startX;
     const dy = e.clientY - dragRef.current.startY;
-    const unitsPerPixelX = (horizontalMax - horizontalMin) / (rect.width || 1);
+    const unitsPerPixelX = (horizontalMax - horizontalMin) / (rect.width || 1) * (panXMultiplier || 1);
     const unitsPerPixelY = (verticalMax - verticalMin) / (rect.height || 1);
     // 2026-06-06: compute new centers (dragging moves content opposite to pointer)
     const newCenterX = dragRef.current.startCenterX - dx * unitsPerPixelX;
@@ -200,6 +202,11 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   };
 
   const handleWheel = (e: React.WheelEvent<SVGSVGElement>): void => {
+    // 2026-06-06: DISABLED - wheel zoom is causing conflicts with native page scrolling
+    // and sometimes triggers when scrolling the page to move the component. Commenting
+    // out the implementation until a robust solution (e.g., modifier key or explicit
+    // UI control) is implemented to avoid interfering with normal page scroll.
+    /*
     e.preventDefault();
     // 2026-06-06: simple zoom factor by doubling/halving gridStep
     const direction = e.deltaY > 0 ? 1 : -1;
@@ -208,6 +215,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     // compute focus point chart coords
     const { chartX, chartY } = clientToChart(e.clientX, e.clientY);
     if (onZoom) onZoom(newGridStep, chartX, chartY);
+    */
+    // no-op: allow native page scrolling to occur
   };
 
   /***
