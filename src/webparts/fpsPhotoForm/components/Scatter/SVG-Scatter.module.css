@@ -32,6 +32,10 @@
   circle {
     opacity: .5;
   }
+  circle title {
+    transition: opacity 0.3s ease; /* Smooth transition */
+    opacity: 0;
+  }
 }
 
 .svg-scatter-container .no-fade * {
@@ -42,6 +46,15 @@
   circle {
     opacity: 1;
   }
+  circle title {
+    transition: opacity 0.3s ease; /* Smooth transition */
+    opacity: .7;
+  }
+}
+
+/* Make the text non-selectable due to mouse dragging */
+.svg-scatter-container g text {
+  user-select: none;
 }
 
 .svg-scatter-container .scatter-point:hover {
@@ -75,4 +88,98 @@
         In fact, translate(8.3%, -1.5%) was working well for a point @ -8,000 + 1600  */
         /* transform: scale(1.2) translate(8.3%, -1.5%); */
 
+}
+
+/* Thumbnail preview for scatter point hover */
+.svg-scatter-container .thumbnail-image {
+  opacity: 0;
+  transition: opacity 180ms ease-in-out;
+  pointer-events: none; /* kept for backward compat if still used */
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.35));
+}
+
+.svg-scatter-container .thumbnail-image.visible {
+  opacity: 1;
+}
+
+/* Preview card shown in upper-right of the component */
+.svg-scatter-container .preview-card {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 280px;
+  max-width: 40%;
+  background: #fff;
+  color: #222;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 400ms ease, transform 400ms ease;
+  pointer-events: none; /* prevent blocking underlying SVG interactions */
+  display: flex;
+  flex-direction: column;
+}
+
+.svg-scatter-container .preview-card.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.svg-scatter-container .preview-card .preview-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: #f4f4f4;
+}
+
+.svg-scatter-container .preview-card .preview-body {
+  padding: 8px 10px;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.svg-scatter-container .preview-card .preview-title {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.svg-scatter-container .preview-card .preview-meta {
+  color: #373737;
+  font-size: 14px;
+  padding-bottom: 4px;
+}
+
+/* Top-left variant for preview card */
+.svg-scatter-container .preview-card.top-left {
+  left: 8px;
+  right: auto;
+}
+
+/* Hover title shown near dot when onDotHover='title' */
+.svg-scatter-container .hover-title {
+  opacity: 0;
+  transition: opacity 140ms ease-in-out;
+  pointer-events: none;
+  font-size: 12px;
+  color: black;
+}
+.svg-scatter-container .hover-title.visible {
+  opacity: 1;
+}
+
+/* Large variant when Alt is pressed while hovering */
+.svg-scatter-container .preview-card.large {
+  transform: translateY(0) scale(1.5);
+  /* transform 220ms ease,  */
+  transition: opacity 200ms ease;
+}
+
+/* Ensure transform origin matches placement */
+.svg-scatter-container .preview-card.large {
+  transform-origin: top right;
+}
+.svg-scatter-container .preview-card.top-left.large {
+  transform-origin: top left;
 }

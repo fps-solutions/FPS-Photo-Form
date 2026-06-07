@@ -233,16 +233,25 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
    */
 
   const ScatterSize: IScatterChartSize = {
+      // 2026-06-06: keep a rounded ScatterSize for logic if needed
       horizontalMin: roundToNearestMultiple( centerX - maxRange/2, gridGaps[ gridScale ] ),
       horizontalMax: roundToNearestMultiple( centerX + maxRange/2, gridGaps[ gridScale ] ),
       verticalMin: roundToNearestMultiple( centerY - maxRange/2, gridGaps[ gridScale ] ),
       verticalMax: roundToNearestMultiple( centerY + maxRange/2, gridGaps[ gridScale ] ),
   }
 
-  console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
-  console.log(`Scatter Range V Grid:  C ${centerY} min ${ScatterSize.verticalMin} to ${ScatterSize.verticalMax}`);
+  // 2026-06-06: also provide a raw (unrounded) scatter size for smooth rendering in SVG
+  const ScatterSizeRaw: IScatterChartSize = {
+    horizontalMin: roundToNearestMultiple( centerX - maxRange/2, 1 ),
+    horizontalMax: roundToNearestMultiple( centerX + maxRange/2, 1 ),
+    verticalMin: roundToNearestMultiple( centerY - maxRange/2, 1 ),
+    verticalMax: roundToNearestMultiple( centerY + maxRange/2, 1 ),
+  }
 
-  const sliderStyle: React.CSSProperties = { minWidth: '300px' };
+  // console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
+  // console.log(`Scatter Range V Grid:  C ${centerY} min ${ScatterSize.verticalMin} to ${ScatterSize.verticalMax}`);
+
+  const sliderStyle: React.CSSProperties = { minWidth: '100px' };
 
   const brightSpan = ( str: string ): JSX.Element => {
     return  <span className='fade-bright' style={highlightCSS}>{ str }</span>
@@ -338,8 +347,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
     // Not sure why but have to make this a little smaller here ;(
     <div style={{ width: '97%', }}>
       <div style={ { display: 'flex', gap: '2em' } }>
-        <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
-        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } />
+        {/* <FPSSlider label={ axisMap.horz } initial={ hCenter } min={ hCenter - (diameter) } max={ hCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleHScroll } style={ sliderStyle } />
+        <FPSSlider label={ axisMap.vert } initial={ vCenter } min={ vCenter - (diameter) } max={ vCenter + (diameter) } step={ gridGaps[ gridScale ] } onChange={ handleVScroll } style={ sliderStyle } /> */}
         <FPSSlider label={ 'Scale' } initial={ gridScale } min={ null } max={ null } step={ null } values={ gridGaps } onChange={ handleScaleScroll } style={ sliderStyle } />
         { favoriteElement }
       </div>
@@ -350,6 +359,8 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
         show={ show }
         axisMap={ axisMap }
+        onDotHover={ 'card' }
+        hoverPanelLocation={ 'top-left' }
 
         // const { diameter, gridStep, gridlineType, reverseVerticalAxis = false, displaySize, } = chartDisplay;
         chartDisplay={{  ...chartDisplay, ...{ displaySize: useDisplaySize, gridStep: gridGaps[ gridScale ] } }}
@@ -359,7 +370,25 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         onDotClick={ onDotClick }
         onLineClick={ null }
 
-        scatterSize={ScatterSize}
+        // 2026-06-06: wire pan/zoom callbacks and default to smooth (snapStep=0)
+        onPan={ (cx:number, cy:number) => { setCenterX(cx); setCenterY(cy); } }
+        onPanEnd={ () => {} }
+        onZoom={ (newGridStep:number, focusX?:number, focusY?:number) => {
+          // convert newGridStep value into nearest index in gridGaps
+          const idx = gridGaps.indexOf( newGridStep );
+          if ( idx > -1 ) {
+            setGridScale( idx );
+          } else {
+            // try to find closest
+            let closest = 0; let minDiff = Infinity;
+            gridGaps.forEach( (g, i) => { const d = Math.abs(g - newGridStep); if ( d < minDiff ) { minDiff = d; closest = i; } });
+            setGridScale( closest );
+          }
+        } }
+        snapStep={0}
+
+        // pass raw (unrounded) scatter size for smooth SVG rendering
+        scatterSize={ScatterSizeRaw}
         // horizontalMin={ horizontalMin }
         // horizontalMax={ horizontalMax }
         // verticalMin={ verticalMin }
@@ -367,7 +396,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
       />
       <FpsTileComponent
-        reactStyles={ {} }
+        reactStyles={ {marginBottom: '5em'} }
         componentClassName={ undefined }
         tilesClassName={ undefined }
         header={ HistoryHeader }

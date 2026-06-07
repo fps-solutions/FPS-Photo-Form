@@ -5,7 +5,7 @@ import { IFPSItem } from "@mikezimm/fps-core-v7/lib/components/molecules/AnyCont
 import { IFPSTileElementExtras, IFPSTileElementProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/components/FPSTile/IFPSTileElementProps';
 import { IPrefabFormTemplates } from "../IFpsPhotoFormProps";
 
-export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth', 'Value1', 'Value2', 'Value3' ].map( (str => `axis_${str}`));
+export const changesAxis: string[] = [ 'type', 'Title', 'Comments', 'Category1', 'Category2', 'Category3', 'Color', 'Shape', 'Screenshot', 'horz', 'vert', 'depth', 'Value1', 'Value2', 'Value3', `axis_createItemHandleBars` ].map( (str => `axis_${str}`));
 
 export interface IAxisMapWPProps {
   axis_type: IPrefabFormTemplates;
@@ -29,6 +29,10 @@ export interface IAxisMapWPProps {
   // Added for expense type tracking lists or date X-Axis scale
   axis_Date1?: string;
   axis_Date2?: string;
+  axis_Time1?: string;
+  axis_Time2?: string;
+
+  axis_createItemHandleBars?: string; // Create item object map
 }
 
 export interface IPhotoButtonStyle {
@@ -59,6 +63,8 @@ export interface IAxisMap {
   Time1?: string;
   Date2?: string;
   Time2?: string;
+
+  createItemHandleBars?: string;
 
 }
 
@@ -193,6 +199,17 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   divHeight?: string; // '90vh'
 
   highlightIds: number[]; // Pass in array of Ids to show highlight - either skip fading, or somehow highlight.
+  // 2026-06-06: optional pan/zoom callbacks and snapping control
+  onPan?: ( centerX: number, centerY: number ) => void; // called during dragging/panning
+  onPanEnd?: () => void; // called when panning ends
+  onZoom?: ( newGridStep: number, focusX?: number, focusY?: number ) => void; // called on wheel zoom; newGridStep is numeric grid step value
+  snapStep?: number; // 0 = no snapping (smooth), 1 = snap to gridStep, <1 sub-grid, >1 coarser. Default handled in component.
+  // Optional multiplier to adjust horizontal pan sensitivity (divide/multiply dx→units). Default handled in component.
+  panXMultiplier?: number;
+  // Hover behavior: 'card' shows preview card, 'title' shows title text near dot
+  onDotHover?: 'title' | 'card';
+  // Location of hover preview card when onDotHover==='card'
+  hoverPanelLocation?: 'top-left' | 'top-right';
 
 }
 

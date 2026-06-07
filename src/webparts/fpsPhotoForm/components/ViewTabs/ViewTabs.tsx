@@ -25,8 +25,8 @@ import CameraCapture from '../Forms/Camera/component';
 import ParentForm from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/ClipboardImage/fps-MultiImageParent';
 import ListHook from '../ListHook/ListHook';
 import ParentComponent from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/FileDropBox/ParentFileSample';
-import FpsPeoplePicker from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker/FpsPeoplePicker';
-import FpsPeoplePicker2 from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker2/fps-PeoplePicker';
+import FpsPeoplePicker from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/PeoplePicker/fps-PeoplePicker';
+// import FpsPeoplePicker2 from '../../PropPaneGroups/WebPartInfoGroup/PeoplePicker2/fps-PeoplePicker';
 
 import { stringifyFpsSpServiceObj } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/createSources/cloneSourceProps';
 
@@ -201,8 +201,8 @@ export default class ViewTabs extends React.Component<IViewTabsProps, IViewTabsS
 
         { this.props.tab === 'Files' ? <ParentComponent fileDropBoxProps={ this.props.fileDropBoxProps } FilesSource={ this.props.ImagesSource }/> : undefined }
         { this.props.tab === 'Geo' ? <FpsGpsLocationForm heading=''/> : undefined }
-        { this.props.tab === 'Geo' ? <FpsPeoplePicker typeToShow={ false } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl}/> : undefined }
-        { this.props.tab === 'Geo' ? <FpsPeoplePicker2 typeToShow={ true } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl } key='xyz' fpsSpService={ this.props.bannerProps.fpsSpService }/> : undefined }
+        { this.props.tab === 'Geo' ? <FpsPeoplePicker label='fps-library-v2 PeoplePicker' typeToShow={ false } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl} key='abc' fpsSpService={ this.props.bannerProps.fpsSpService }/> : undefined }
+        {/* { this.props.tab === 'Geo' ? <FpsPeoplePicker2 typeToShow={ true } preFilter='All' siteUrl={ this.props.bannerProps.context.pageContext.web.absoluteUrl } key='xyz' fpsSpService={ this.props.bannerProps.fpsSpService }/> : undefined } */}
 
 
         { this.props.tab === 'Camera' ? <CameraCapture ImagesSource={ this.props.ImagesSource }/> : undefined }

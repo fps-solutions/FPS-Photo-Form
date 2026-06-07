@@ -12,8 +12,8 @@
  *
  */
 import { IMinWPBannerProps } from '@mikezimm/fps-core-v7/lib/banner/interfaces/MinWP/IMinWPBannerProps';
-import { IFPSListItemPickerWPProps2, changeListItemPickers2 } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
-import { changeListItemPickers } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
+import { IFPSListItemPickerWPProps2 } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/IFPSListItemPickerWPProps';
+import { changeListItemPickers, changeListItemPickers2 } from '@mikezimm/fps-core-v7/lib/banner/components/ItemPicker/interfaces/changeListItemPickers14';
 import { changesAxis, changesChartFeature, changesChartGrid, IAxisMapWPProps, IChartTabWPProps } from './components/Scatter/IScatterChartProps';
 import { changesFpsTileComp, IFpsTileComponentWPProps } from '@mikezimm/fps-library-v2/lib/components/molecules/FPSTiles/webPart/IFpsTileComponentWPProps';
 import { changesFileDropBox, IFileDropBoxWPProps } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/FileDropBox/IFileDropBoxProps';
