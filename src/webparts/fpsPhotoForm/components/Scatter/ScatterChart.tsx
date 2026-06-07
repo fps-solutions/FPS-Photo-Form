@@ -233,10 +233,19 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
    */
 
   const ScatterSize: IScatterChartSize = {
+      // 2026-06-06: keep a rounded ScatterSize for logic if needed
       horizontalMin: roundToNearestMultiple( centerX - maxRange/2, gridGaps[ gridScale ] ),
       horizontalMax: roundToNearestMultiple( centerX + maxRange/2, gridGaps[ gridScale ] ),
       verticalMin: roundToNearestMultiple( centerY - maxRange/2, gridGaps[ gridScale ] ),
       verticalMax: roundToNearestMultiple( centerY + maxRange/2, gridGaps[ gridScale ] ),
+  }
+
+  // 2026-06-06: also provide a raw (unrounded) scatter size for smooth rendering in SVG
+  const ScatterSizeRaw: IScatterChartSize = {
+    horizontalMin: roundToNearestMultiple( centerX - maxRange/2, 1 ),
+    horizontalMax: roundToNearestMultiple( centerX + maxRange/2, 1 ),
+    verticalMin: roundToNearestMultiple( centerY - maxRange/2, 1 ),
+    verticalMax: roundToNearestMultiple( centerY + maxRange/2, 1 ),
   }
 
   console.log(`Scatter Range H Grid:  C ${centerX} min ${ScatterSize.horizontalMin} to ${ScatterSize.horizontalMax}`);
@@ -359,7 +368,25 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
         onDotClick={ onDotClick }
         onLineClick={ null }
 
-        scatterSize={ScatterSize}
+        // 2026-06-06: wire pan/zoom callbacks and default to smooth (snapStep=0)
+        onPan={ (cx:number, cy:number) => { setCenterX(cx); setCenterY(cy); } }
+        onPanEnd={ () => {} }
+        onZoom={ (newGridStep:number, focusX?:number, focusY?:number) => {
+          // convert newGridStep value into nearest index in gridGaps
+          const idx = gridGaps.indexOf( newGridStep );
+          if ( idx > -1 ) {
+            setGridScale( idx );
+          } else {
+            // try to find closest
+            let closest = 0; let minDiff = Infinity;
+            gridGaps.forEach( (g, i) => { const d = Math.abs(g - newGridStep); if ( d < minDiff ) { minDiff = d; closest = i; } });
+            setGridScale( closest );
+          }
+        } }
+        snapStep={0}
+
+        // pass raw (unrounded) scatter size for smooth SVG rendering
+        scatterSize={ScatterSizeRaw}
         // horizontalMin={ horizontalMin }
         // horizontalMax={ horizontalMax }
         // verticalMin={ verticalMin }

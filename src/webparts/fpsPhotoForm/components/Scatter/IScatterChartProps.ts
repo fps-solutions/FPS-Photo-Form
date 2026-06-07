@@ -199,6 +199,11 @@ export interface ISVGScatterHookProps extends IScatterChartSettings {
   divHeight?: string; // '90vh'
 
   highlightIds: number[]; // Pass in array of Ids to show highlight - either skip fading, or somehow highlight.
+  // 2026-06-06: optional pan/zoom callbacks and snapping control
+  onPan?: ( centerX: number, centerY: number ) => void; // called during dragging/panning
+  onPanEnd?: () => void; // called when panning ends
+  onZoom?: ( newGridStep: number, focusX?: number, focusY?: number ) => void; // called on wheel zoom; newGridStep is numeric grid step value
+  snapStep?: number; // 0 = no snapping (smooth), 1 = snap to gridStep, <1 sub-grid, >1 coarser. Default handled in component.
 
 }
 
