@@ -172,7 +172,8 @@
 /* Large variant when Alt is pressed while hovering */
 .svg-scatter-container .preview-card.large {
   transform: translateY(0) scale(1.5);
-  transition: transform 220ms ease, opacity 200ms ease;
+  /* transform 220ms ease,  */
+  transition: opacity 200ms ease;
 }
 
 /* Ensure transform origin matches placement */

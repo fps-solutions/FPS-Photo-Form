@@ -396,7 +396,7 @@ const ScatterChart: React.FC<IScatterChartProps> = ({
 
       />
       <FpsTileComponent
-        reactStyles={ {} }
+        reactStyles={ {marginBottom: '5em'} }
         componentClassName={ undefined }
         tilesClassName={ undefined }
         header={ HistoryHeader }

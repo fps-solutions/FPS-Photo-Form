@@ -53,6 +53,9 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   const [hoveredId, setHoveredId] = React.useState<any>(null);
   // Track whether Alt is currently pressed so we can enlarge the preview card.
   const [altPressed, setAltPressed] = React.useState<boolean>(false);
+  // Synchronous ref to reflect Alt key during the mouse event so the initial
+  // render of the preview card can use the correct size immediately.
+  const altPressedRef = React.useRef<boolean>(false);
 
   // Alt handling now uses per-event detection on mouse events so the preview
   // size is determined when the pointer enters a dot (simpler than global key listeners).
@@ -339,9 +342,9 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
           <g
             className={ highlightIds.indexOf( item.Id ) > -1 ? 'no-fade' : '' }
             key={index}
-            onMouseEnter={(e: React.MouseEvent) => { setHoveredId(item.Id); setAltPressed(e.altKey); }}
-            onMouseMove={(e: React.MouseEvent) => { if (hoveredId === item.Id) setAltPressed(e.altKey); }}
-            onMouseLeave={() => { if (hoveredId === item.Id) { setHoveredId(null); setAltPressed(false); } }}
+            onMouseEnter={(e: React.MouseEvent) => { altPressedRef.current = e.altKey; setAltPressed(e.altKey); setHoveredId(item.Id); }}
+            onMouseMove={(e: React.MouseEvent) => { if (hoveredId === item.Id) { altPressedRef.current = e.altKey; setAltPressed(e.altKey); } }}
+            onMouseLeave={() => { if (hoveredId === item.Id) { altPressedRef.current = false; setAltPressed(false); setHoveredId(null); } }}
           >
             <circle className={ `scatter-point ${scatterHoverScale}` }
               key={index}
@@ -370,7 +373,10 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
 
       {/* Overlay preview card (pointer-events none so it doesn't block dots) */}
       {/* The 'large' class is applied when Alt is pressed while hovering a dot */}
-      <div className={ `preview-card ${ hoveredItem && onDotHover === 'card' ? 'visible' : '' } ${ hoverPanelLocation === 'top-left' ? 'top-left' : '' } ${ (altPressed && hoveredItem && onDotHover === 'card') ? 'large' : '' }` }>
+        {( () => {
+          const isLarge = (altPressedRef.current || altPressed) && hoveredItem && onDotHover === 'card';
+          return (
+            <div className={ `preview-card ${ hoveredItem && onDotHover === 'card' ? 'visible' : '' } ${ hoverPanelLocation === 'top-left' ? 'top-left' : '' } ${ isLarge ? 'large' : '' }` }>
         {hoveredItem ? (
           <>
             {(() => {
@@ -391,7 +397,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
           </>
         ) : null }
       </div>
-
+          );
+        })() }
     </div>
   );
 };
