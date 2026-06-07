@@ -30,7 +30,7 @@ Add new Web part to solution fps-photo-form.
 ? Which template would you like to use? React
 
 ## Installed these pacakges
-npm install @mikezimm/fps-library-v2@2.0.17
+npm install @mikezimm/fps-library-v2@2.1.170
 npm install webpack-bundle-analyzer@4.6.1 --save-dev
 
 ## Updated these areas

@@ -44,6 +44,11 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   const dragRef = React.useRef({ dragging: false, startX: 0, startY: 0, startCenterX: 0, startCenterY: 0 }); // 2026-06-06
   const rafRef = React.useRef<number | null>(null); // 2026-06-06
   const lastSentRef = React.useRef({ x: NaN, y: NaN }); // 2026-06-06
+  const [hoveredId, setHoveredId] = React.useState<any>(null);
+
+  const hoveredItem = React.useMemo(() => {
+    return stateSource?.itemsY?.find(i => i.Id === hoveredId) ?? null;
+  }, [hoveredId, stateSource && stateSource.itemsY]);
 
   const { diameter, gridStep, displaySize, autoFadeDots, autoFadeText, gridlineColor = 'lightgray', gridlineType = 'Solid', reverseVerticalAxis = false, divStyle = {} } = chartDisplay;
   const { horizontalMin, horizontalMax, verticalMin, verticalMax, ratio = 1, } = scatterSize;
@@ -111,6 +116,11 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   };
 
   // 2026-06-06: compute chart coords from client pixel coords
+  // 2026-06-06: DISABLED - wheel zoom is causing conflicts with native page scrolling
+  // and sometimes triggers when scrolling the page to move the component. Commenting
+  // out the implementation until a robust solution (e.g., modifier key or explicit
+  // UI control) is implemented to avoid interfering with normal page scroll.
+  /*
   const clientToChart = (clientX: number, clientY: number): { chartX: number; chartY: number; unitsPerPixelX: number; unitsPerPixelY: number } => {
     const svg = svgRef.current;
     if (!svg) return { chartX: 0, chartY: 0, unitsPerPixelX: 0, unitsPerPixelY: 0 };
@@ -127,6 +137,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
       : verticalMax - py * unitsPerPixelY;
     return { chartX, chartY, unitsPerPixelX, unitsPerPixelY };
   };
+  */
 
   // 2026-06-06: pan handler (batched) - send raw values during drag for smoothness
   const schedulePan = (x: number, y: number): void => {
@@ -294,8 +305,27 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
             console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
           }
 
+        // thumbnail sizing and positioning
+        const thumbH = Math.max(50, displaySize * 6);
+        const thumbW = thumbH; // square thumbnail for simplicity
+        const pad = 4;
+        let imageX = cHorizontal + displaySize * 1.5;
+        // flip to left side if too close to right edge
+        if (imageX + thumbW + pad > diameter) {
+          imageX = cHorizontal - displaySize * 1.5 - thumbW;
+        }
+        if (imageX < pad) imageX = pad;
+        let imageY = cVertical - thumbH / 2;
+        if (imageY < pad) imageY = pad;
+        if (imageY + thumbH + pad > diameter * (ratio || 1)) imageY = Math.max(pad, diameter * (ratio || 1) - thumbH - pad);
+
         return (
-          <g className={ highlightIds.indexOf( item.Id ) > -1 ? 'no-fade' : '' } key={index}>
+          <g
+            className={ highlightIds.indexOf( item.Id ) > -1 ? 'no-fade' : '' }
+            key={index}
+            onMouseEnter={() => { setHoveredId(item.Id); }}
+            onMouseLeave={() => { if (hoveredId === item.Id) setHoveredId(null); }}
+          >
             <circle className={ `scatter-point ${scatterHoverScale}` }
               key={index}
               cx={cHorizontal}
@@ -308,12 +338,37 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
                 {`Title: ${Scatter.Title}, Category: ${JSON.stringify( Scatter.Category2 ) }, X: ${Scatter.horz}, Y: ${Scatter.vert}`}
               </title>
             </circle>
+
             <text x={cHorizontal + displaySize * 1.5 } y={cVertical  + displaySize }
               fontSize={displaySize * 2} fill="black" className={ autoFadeText === true ? 'faded-text' : '' }>{Scatter.Title}</text>
           </g>
         );
         })}
       </svg>
+
+      {/* Overlay preview card in upper-right (pointer-events none so it doesn't block dots) */}
+      <div className={ `preview-card ${ hoveredItem ? 'visible' : '' }` }>
+        {hoveredItem ? (
+          <>
+            {(() => {
+              const imageUrl = hoveredItem.FPSItem?.Image?.src || null;
+              return imageUrl ? (
+                <img className="preview-image" src={ imageUrl } alt={ hoveredItem.FPSItem?.Scatter?.Title || 'Preview' } />
+              ) : (
+                <div className="preview-image" />
+              );
+            })()}
+
+            <div className="preview-body">
+              <div className="preview-title">{ hoveredItem.FPSItem?.Scatter?.Title || hoveredItem.Title || 'Untitled' }</div>
+              <div className="preview-meta">{ hoveredItem.FPSItem?.Scatter?.Category2 ? JSON.stringify(hoveredItem.FPSItem.Scatter.Category2) : '' }</div>
+              <div className="preview-meta">{ `X: ${hoveredItem.FPSItem?.Scatter?.horz}, Y: ${hoveredItem.FPSItem?.Scatter?.vert}` }</div>
+              <div className="preview-meta">{ hoveredItem.FPSItem?.Stamp?.created?.dayYYYYMMDD ? hoveredItem.FPSItem.Stamp.created.dayYYYYMMDD : '' }</div>
+            </div>
+          </>
+        ) : null }
+      </div>
+
     </div>
   );
 };
