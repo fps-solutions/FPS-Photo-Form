@@ -124,7 +124,7 @@
 
 .svg-scatter-container .preview-card.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
 }
 
 .svg-scatter-container .preview-card .preview-image {
@@ -167,4 +167,18 @@
 }
 .svg-scatter-container .hover-title.visible {
   opacity: 1;
+}
+
+/* Large variant when Alt is pressed while hovering */
+.svg-scatter-container .preview-card.large {
+  transform: translateY(0) scale(1.5);
+  transition: transform 220ms ease, opacity 200ms ease;
+}
+
+/* Ensure transform origin matches placement */
+.svg-scatter-container .preview-card.large {
+  transform-origin: top right;
+}
+.svg-scatter-container .preview-card.top-left.large {
+  transform-origin: top left;
 }

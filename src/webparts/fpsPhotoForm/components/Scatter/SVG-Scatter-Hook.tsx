@@ -36,7 +36,9 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
     snapStep = 0,
     // 2026-06-08: optional horizontal pan multiplier to tune sensitivity
     panXMultiplier = 2.75,
-    // Hover options
+    // Hover options: control hover UX
+    // - `onDotHover`: 'card' shows the overlay preview card (default), 'title' shows inline title text
+    // - `hoverPanelLocation`: where the overlay card appears when `onDotHover` is 'card'
     onDotHover = 'card', // 'title' | 'card'
     hoverPanelLocation = 'top-right', // 'top-left' | 'top-right'
 
@@ -47,17 +49,15 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
   const dragRef = React.useRef({ dragging: false, startX: 0, startY: 0, startCenterX: 0, startCenterY: 0 }); // 2026-06-06
   const rafRef = React.useRef<number | null>(null); // 2026-06-06
   const lastSentRef = React.useRef({ x: NaN, y: NaN }); // 2026-06-06
+  // Track which item (by Id) is currently hovered. Used to render the preview card or inline title.
   const [hoveredId, setHoveredId] = React.useState<any>(null);
+  // Track whether Alt is currently pressed so we can enlarge the preview card.
   const [altPressed, setAltPressed] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    const kd = (e: KeyboardEvent) => { if (e.altKey === true || e.key === 'Alt') setAltPressed(true); };
-    const ku = (e: KeyboardEvent) => { if (!e.altKey && e.key === 'Alt') setAltPressed(false); if (!e.altKey) setAltPressed(false); };
-    window.addEventListener('keydown', kd);
-    window.addEventListener('keyup', ku);
-    return () => { window.removeEventListener('keydown', kd); window.removeEventListener('keyup', ku); };
-  }, []);
+  // Alt handling now uses per-event detection on mouse events so the preview
+  // size is determined when the pointer enters a dot (simpler than global key listeners).
 
+  // Memoize the hovered item lookup to avoid repeated array scans on every render.
   const hoveredItem = React.useMemo(() => {
     return stateSource?.itemsY?.find(i => i.Id === hoveredId) ?? null;
   }, [hoveredId, stateSource && stateSource.itemsY]);
@@ -317,6 +317,8 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
             console.log(`coords: ${index}:`, cHorizontal, cVertical, item);
           }
 
+        // Legacy thumbnail positioning (kept for reference). We now use a
+        // single overlay preview card instead of per-item thumbnails.
         // thumbnail sizing and positioning
         const thumbH = Math.max(50, displaySize * 6);
         const thumbW = thumbH; // square thumbnail for simplicity
@@ -331,12 +333,15 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
         if (imageY < pad) imageY = pad;
         if (imageY + thumbH + pad > diameter * (ratio || 1)) imageY = Math.max(pad, diameter * (ratio || 1) - thumbH - pad);
 
+        // Ensure we set/clear hoveredId on pointer enter/leave so the preview
+        // (title or card) updates based on which dot the user is over.
         return (
           <g
             className={ highlightIds.indexOf( item.Id ) > -1 ? 'no-fade' : '' }
             key={index}
-            onMouseEnter={() => { setHoveredId(item.Id); }}
-            onMouseLeave={() => { if (hoveredId === item.Id) setHoveredId(null); }}
+            onMouseEnter={(e: React.MouseEvent) => { setHoveredId(item.Id); setAltPressed(e.altKey); }}
+            onMouseMove={(e: React.MouseEvent) => { if (hoveredId === item.Id) setAltPressed(e.altKey); }}
+            onMouseLeave={() => { if (hoveredId === item.Id) { setHoveredId(null); setAltPressed(false); } }}
           >
             <circle className={ `scatter-point ${scatterHoverScale}` }
               key={index}
@@ -364,6 +369,7 @@ const SVGScatterHook: React.FC<ISVGScatterHookProps> = ( props ) => {
       </svg>
 
       {/* Overlay preview card (pointer-events none so it doesn't block dots) */}
+      {/* The 'large' class is applied when Alt is pressed while hovering a dot */}
       <div className={ `preview-card ${ hoveredItem && onDotHover === 'card' ? 'visible' : '' } ${ hoverPanelLocation === 'top-left' ? 'top-left' : '' } ${ (altPressed && hoveredItem && onDotHover === 'card') ? 'large' : '' }` }>
         {hoveredItem ? (
           <>
