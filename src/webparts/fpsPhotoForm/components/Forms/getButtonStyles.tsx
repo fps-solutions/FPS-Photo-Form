@@ -16,7 +16,12 @@ const PlaceholderButtons: IPhotoButtonStyle[] = [
   }
 ];
 
+// 2026-09-28: Added Minecraft Category 2 labels and styles for issue #126.
 export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
+  {
+    label: 'Dappled',
+    styles: { background: 'darkorange', color: 'yellow' }
+  },
   {
     label: 'Desert',
     styles: { background: 'yellow', color: 'black' }
@@ -28,6 +33,10 @@ export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
   {
     label: 'Bamboo',
     styles: { background: 'green', color: 'yellow' }
+  },
+  {
+    label: 'Icebergs',
+    styles: { background: 'lightblue', color: 'darkblue' }
   },
   {
     label: 'Mountain',
@@ -54,6 +63,10 @@ export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
     styles: { background: 'lightblue', color: 'darkblue' }
   },
   {
+    label: 'Frozen Ocean',
+    styles: { background: 'darkblue', color: 'lightblue' }
+  },
+  {
     label: 'Warm Ocean',
     styles: { background: 'Aquamarine', color: 'magenta' }
   },
@@ -68,6 +81,10 @@ export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
   {
     label: 'Dark Oak',
     styles: { background: '#110A02', color: '#851313' }
+  },
+  {
+    label: 'Pale Gardens',
+    styles: { background: 'dimgray', color: 'orange' }
   },
   {
     label: 'Tiaga',
@@ -102,8 +119,32 @@ export const ButtonStylesMinecraftBiomes: IPhotoButtonStyle[] = [
     styles: { background: 'black', color: 'orange' }
   },
   {
+    label: 'Lava Sea',
+    styles: { background: 'orangered', color: 'yellow' }
+  },
+  {
+    label: 'Sulfer',
+    styles: { background: 'orange', color: 'yellow' }
+  },
+  {
     label: 'Nether Forest',
     styles: { background: 'teal', color: 'darkred' }
+  },
+  {
+    label: 'Plains',
+    styles: { background: 'lightgreen', color: 'darkbrown' }
+  },
+  {
+    label: 'Birch',
+    styles: { background: 'white', color: 'black' }
+  },
+  {
+    label: 'Oak',
+    styles: { background: 'green', color: 'saddlebrown' }
+  },
+  {
+    label: 'River',
+    styles: { background: 'darkblue', color: 'khaki' }
   },
   ...PlaceholderButtons,
 ];
@@ -121,10 +162,39 @@ export const ButtonStylesMinecraftDimensions: IPhotoButtonStyle[] = [
     styles: { background: 'gray', color: 'yellow' }
   },
 ];
+// 2026-09-28: Added Minecraft Category 3 labels and styles for issue #126.
 export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
   {
     label: 'Village',
     styles: { background: '', color: '' }
+  },
+  {
+    label: 'Pup',
+    styles: { background: 'pink', color: 'brown' }
+  },
+  {
+    label: 'Lore',
+    styles: { background: 'orange', color: 'black' }
+  },
+  {
+    label: 'Henge',
+    styles: { background: 'lightgray', color: 'black' }
+  },
+  {
+    label: 'Trader',
+    styles: { background: 'pink', color: 'brown' }
+  },
+  {
+    label: 'Oasis',
+    styles: { background: 'yellow', color: 'darkbrown' }
+  },
+  {
+    label: 'Camp',
+    styles: { background: 'green', color: '#FFDD00' }
+  },
+  {
+    label: 'Future',
+    styles: { background: 'lightgray', color: 'black' }
   },
   {
     label: 'Mineshaft',
@@ -149,6 +219,10 @@ export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
   {
     label: 'Buzz Base',
     styles: { background: 'green', color: 'yellow' }
+  },
+  {
+    label: 'Elevator',
+    styles: { background: 'gray', color: 'black' }
   },
   {
     label: 'Cat Base',
@@ -218,6 +292,10 @@ export const ButtonStylesMinecraftStructures: IPhotoButtonStyle[] = [
   {
     label: 'Witch',
     styles: { background: '#1E220A', color: 'khaki' }
+  },
+  {
+    label: 'Ice Spikes',
+    styles: { background: 'lightblue', color: 'darkblue' }
   },
   {
     label: 'Ruin',

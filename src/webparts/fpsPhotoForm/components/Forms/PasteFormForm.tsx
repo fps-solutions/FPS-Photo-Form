@@ -5,6 +5,7 @@ import { useState, FormEvent, useEffect, } from 'react';
 import { ISourceProps } from '@mikezimm/fps-core-v7/lib/components/molecules/source-props/ISourceProps';
 
 import styles from '../FpsPhotoForm.module.scss';
+import { Icon } from '@fluentui/react/lib/Icon';
 import FPSToggle from '@mikezimm/fps-library-v2/lib/components/atoms/Inputs/Toggle/component';
 import { IPhotoButtonStyle } from '../Scatter/IScatterChartProps';
 import { base64ToBlob, } from '@mikezimm/fps-core-v7/lib/components/atoms/Inputs/ClipboardImage/ImageSave';
@@ -165,6 +166,11 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const [fileMode, setFileMode ] = useState< 'DropBox' | 'Paste' >( props.fileDropBoxProps.useDropBox === true ? 'DropBox' : 'Paste' );
     const [autoClear, setAutoClear ] = useState<boolean>( true );
     const [resetId, setResetId ] = useState<string>( props.fileDropBoxProps.resetId );
+    /**
+     * 2026-09-27: GitHub issue #141 - Store the optional bulk coordinate input
+     * separately so it can populate the three numeric coordinate fields.
+     */
+    const [bulkCoordinates, setBulkCoordinates ] = useState<string>( '' );
 
     const [wasSubmitted, setWasSubmitted ] = useState<boolean>(false);
 
@@ -222,11 +228,26 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
 
     const resetForm = (): void => {
       setFormData( EmptyFormData );
+      setBulkCoordinates( '' );
       setImageData( null );
       setImageBlob( null );
       setImageInfo( null );
       setImageRefresh( makeid(5));
       setResetId( makeid(5));
+    }
+
+    /**
+     * 2026-09-27: GitHub issue #141 - Provide a quick way to clear all three
+     * coordinate values without resetting the rest of the photo form.
+     */
+    const clearCoordinates = (): void => {
+      setBulkCoordinates( '' );
+      setFormData(previousFormData => ({
+        ...previousFormData,
+        n1: null,
+        n2: null,
+        n3: null,
+      }));
     }
 
     // useEffect(() => {
@@ -385,7 +406,10 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
       if (listItemResponse.item && fileReturn.itemUrl ) {
           await updateListItemWithImage(listItemResponse.item.Id, fileReturn.itemUrl);
           setWasSubmitted( true );
-          if ( autoClear === true ) setFormData( EmptyFormData );
+          if ( autoClear === true ) {
+            setFormData( EmptyFormData );
+            setBulkCoordinates( '' );
+          }
           if ( autoClear === true ) setImageRefresh( makeid(5));
 
           summaryOp = updatePerformanceEnd( summaryOp, true,  2 );
@@ -439,6 +463,14 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
     const disableSubmit = wasSubmitted !== true && title && n1 !== null && n2 !== null && n3 !== null && typeof category1 === 'number' && category1 > -1 && category2.length > 0  && category3.length > 0 ? false : true;
 
     const numberFields = ['n1', 'n2', 'n3'];
+    /**
+     * 2026-09-27: GitHub issue #141 - Use flex ratios so the bulk coordinate
+     * input is twice the width of each individual coordinate input.
+     */
+    const coordinateValues = bulkCoordinates.split(/[;,]/).map(value => value.trim());
+    const coordinateNumberPattern = /^[+-]?(?:\d+\.?\d*|\.\d+)$/;
+    const bulkCoordinatesAreValid = coordinateValues.length === 3
+      && coordinateValues.every(value => coordinateNumberPattern.test(value) && Number.isFinite(Number(value)));
 
     const shortFileName = buildPhotoFormFileName( formData, props, imageBlob ? imageBlob.name: '', fileDropBoxProps.fileNameHandleBars );
 
@@ -457,11 +489,12 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
 
             <div className={ styles.coordinates }>
               {numberFields.map(field => (
-                <div key={field} style={{ margin: '1em 1em 1em 0em' }}>
+                <div key={field} style={{ flex: '1 1 0', margin: '1em 1em 1em 0em' }}>
                   <label>{field.toUpperCase()}</label>
                   <input
                     type="text"
-                    value={formData[ `${field}` as 'n1' ]}
+                    // 2026-09-27: GitHub issue #141 - Render cleared numeric values as an empty string so React updates the visible input.
+                    value={formData[ `${field}` as 'n1' ] ?? ''}
                     onChange={e => {
                       const value = e.target.value;
                       if (value === '' || /^-?\d*\.?\d*$/.test(value)) {
@@ -475,6 +508,56 @@ const PhotoFormInput: React.FC<IPhotoFormInput> = ( props ) => {
                   />
                 </div>
               ))}
+              <div style={{ flex: '2 1 0', margin: '1em 1em 1em 0em' }}>
+                <label htmlFor="bulkCoordinates">Coordinates</label>
+                <div>
+                  <button
+                    type="button"
+                    aria-label="Clear coordinates"
+                    title="Clear coordinates"
+                    onMouseDown={event => {
+                      // 2026-09-27: GitHub issue #141 - Prevent a focused coordinate input's onBlur from restoring its old value.
+                      event.preventDefault();
+                      clearCoordinates();
+                    }}
+                    onClick={clearCoordinates}
+                    style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: '0 .25em' }}
+                  >
+                    <Icon iconName="Delete" />
+                  </button>
+                  <input
+                    id="bulkCoordinates"
+                    type="text"
+                    value={bulkCoordinates}
+                    placeholder="2000, -1234; +43"
+                    aria-invalid={bulkCoordinates.length > 0 && !bulkCoordinatesAreValid}
+                    aria-describedby="bulkCoordinatesMessage"
+                    onChange={e => {
+                      const value = e.target.value;
+                      setBulkCoordinates(value);
+
+                      const values = value.split(/[;,]/).map(coordinate => coordinate.trim());
+                      if (values.length === 3 && values.every(coordinate => coordinateNumberPattern.test(coordinate) && Number.isFinite(Number(coordinate)))) {
+                        setFormData(previousFormData => ({
+                          ...previousFormData,
+                          n1: Number(values[0]),
+                          n2: Number(values[1]),
+                          n3: Number(values[2]),
+                        }));
+                      }
+                    }}
+                    style={{
+                      width: '80%',
+                      paddingLeft: '.5em',
+                      marginLeft: '1em',
+                      backgroundColor: bulkCoordinates.length > 0 && !bulkCoordinatesAreValid ? '#fff2cc' : undefined,
+                    }}
+                  />
+                </div>
+                {bulkCoordinates.length > 0 && !bulkCoordinatesAreValid && (
+                  <div id="bulkCoordinatesMessage" role="alert">Enter exactly 3 numbers separated by commas or semicolons.</div>
+                )}
+              </div>
             </div>
 
             <div className={ styles.comments }style={{  }}>
