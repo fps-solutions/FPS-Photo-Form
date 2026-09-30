@@ -1,5 +1,5 @@
 {
-  "extends": "./node_modules/@microsoft/rush-stack-compiler-4.5/includes/tsconfig-web.json",
+  "extends": "./node_modules/@microsoft/spfx-web-build-rig/profiles/default/tsconfig-base.json",
   "compilerOptions": {
     "target": "es6",
     "forceConsistentCasingInFileNames": true,
@@ -36,6 +36,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
-, "src/webparts/fpsPhotoForm/components/Forms/Camera/ClipboardImage"  ]
+    "src/**/*.tsx",
+    "src/webparts/fpsPhotoForm/components/Forms/Camera/ClipboardImage"
+  ]
 }
